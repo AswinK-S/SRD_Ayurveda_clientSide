@@ -1,13 +1,9 @@
-/* .text-shadow-md{
-    box-shadow: 0 4px 6px rgba(234, 73, 73, 0.1), 0 1px 3px rgba(107, 231, 177, 0.1);
-
-} */
 
 
-/* In your nav.css file */
 
 
-.items-center {
+
+/* .items-center {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,24 +14,28 @@
     display: flex;
     align-items: center;
     gap: 1rem; 
-  }
+  } */
 
-  @media screen and (max-width: 768px) {
+  /* @media screen and (max-width: 768px) { */
     /* Adjust the main container for smaller screens */
-    .justify-between {
+
+
+    /* .justify-between {
       flex-direction: column; 
     }
-  
+   */
     /* Adjust spacing for navigation links and login button */
-    .text-black {
+
+    /* .text-black {
       margin: 1rem 0; 
       gap: 0; 
     }
-  
+   */
     /* Responsive padding for small screens */
-    .text-black p,
+
+    /* .text-black p,
     .text-black button {
       padding: 0.5rem 1rem; 
     }
   }
-  
+   */
