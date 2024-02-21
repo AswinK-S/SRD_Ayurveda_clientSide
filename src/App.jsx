@@ -2,6 +2,7 @@ import Home from "./pages/user/home/home"
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Treatment from "./pages/user/treatment/treatment"
 import OnlineBooking from "./pages/user/onlineBooking.jsx/onlineBooking"
+import Login from "./pages/user/login/login"
 
 
  
@@ -12,8 +13,9 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path ='/' element ={<Home/>} />
+      <Route path ='/login' element ={<Login/>} />
       <Route path = '/treatment' element = {<Treatment/>} />
-      <Route path ='booking'  element ={<OnlineBooking/>}/>
+      <Route path ='/booking'  element ={<OnlineBooking/>}/>
     </Routes>
     </BrowserRouter>
       

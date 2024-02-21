@@ -5,7 +5,7 @@ import './body.css'
 const Body = () => {
     return (
         <>
-            <div className="container  rounded-xl shadow-lg  py-5 px-4  ">
+            <div className="container   shadow-lg  py-5 px-4  ">
 
                 <div className='flex w-full items-center flex-col gap-3  lg:p-4'>
 
