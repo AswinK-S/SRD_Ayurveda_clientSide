@@ -7,7 +7,7 @@ const Body = () => {
         <>
             <div className="container   shadow-lg  py-5 px-4  ">
 
-                <div className='flex w-full items-center flex-col gap-3  lg:p-4'>
+                <div className='flex w-full items-center flex-col gap-10  lg:p-4'>
 
                     <div className="flex  justify-evenly items-center p-2 shadow-2xl  rounded-3xl  " >
 

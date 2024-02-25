@@ -7,7 +7,7 @@ const Home = ()=>{
         <>
         <Nav/>
         <div className="">
-            <img className="w-full object-fill lg:h-96 rounded-xl " src='/hmImg1.jpg' alt=''/>
+            <img className="w-full object-fill lg:h-96 rounded-xl " src='/hmImg1-transformed.jpeg' alt=''/>
         </div>
         <Body/>
         <Footer/>
