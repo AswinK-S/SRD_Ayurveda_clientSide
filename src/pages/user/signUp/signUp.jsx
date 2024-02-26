@@ -1,10 +1,18 @@
+import { useState } from "react";
 import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
+import { signup } from "../../../api/userApi";
 
 const SignUp = ()=>{
 
-    
+    const [formData,setFormData] = useState({
+        name:'',
+        email:'',
+        mob:'',
+        password:''
+    })
+
     const backgroundImage = {
         backgroundImage: 'url("ayurveda.jpeg")',
         backgroundSize: 'cover',
@@ -15,8 +23,27 @@ const SignUp = ()=>{
     };
 
     const handleSubmit =async (e)=>{
-        e.preventdefault()
+        e.preventDefault()
+
+
+        try{
+            const registerData = formData
+            const response = await signup(registerData)
+            if(response.status==200){
+                console.log('user data send to back end');
+            }
+        }catch(err){
+            console.log(err.message);
+        }
+
     }
+
+    const handleChange = async(e )=>{
+        const {name,value}=e.target 
+        setFormData({...formData,[name]:value})
+        console.log('register dat ',formData);
+    }
+
 
     return(
 
@@ -39,7 +66,7 @@ const SignUp = ()=>{
 
                 <div className="w-full p-10 m-auto  rounded-md shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
-                        Sign in
+                        Sign Up
                     </h1>
 
                     <form className=" bg-transparent mt-6" onSubmit={handleSubmit} >
@@ -47,7 +74,7 @@ const SignUp = ()=>{
                         <div className="mb-2 bg-transparent">
                             <label  htmlFor="name" className=" block text-sm bg-transparent font-semibold  "> Full Name </label>
                             <input type="text" name="name" placeholder="Enter your full name"
-                            className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md"  />
+                            className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md" onChange={handleChange}  />
                         </div>
 
 
@@ -56,7 +83,7 @@ const SignUp = ()=>{
                                 
                             
                             <input type="email" name="email" placeholder="enter your email address"  
-                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " />
+                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange}/>
                                 
                           
                         </div>
@@ -67,7 +94,7 @@ const SignUp = ()=>{
                                 
                             
                             <input type="number" name="mob" placeholder="enter your valid mobile number"  
-                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " />
+                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange}/>
                                 
                           
                         </div>
@@ -81,7 +108,7 @@ const SignUp = ()=>{
                             </label>
                             <input
                                 type="password" name="password" placeholder="enter password" 
-                                className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
+                                className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md " onChange={handleChange}
                             />
                         </div>
 
@@ -93,7 +120,7 @@ const SignUp = ()=>{
                                confirm Password
                             </label>
                             <input
-                                type="password" name="password" placeholder="confirm your password" 
+                                type="password" name="confirmPassword" placeholder="confirm your password" 
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
                             />
                         </div>
@@ -114,7 +141,7 @@ const SignUp = ()=>{
 
                     <div className="flex  mt-4 gap-x-2">
                         <button
-                            type="button"   
+                          
                             className="flex bg-[#CEB047] items-center justify-center w-full p-2 border border-gray-600 rounded-md "
                         >
                             <svg

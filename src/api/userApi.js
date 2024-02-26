@@ -12,3 +12,14 @@ export const login = async (loginData)=>{
         console.log("axios error :",error.message);
     }
 }
+
+
+export const signup = async (resgisterData)=>{
+    try{
+        console.log('register details :',resgisterData);
+        let response = await axiosApi.post(userRoutes.signup,resgisterData)
+        return response
+    }catch(error){
+        console.log('register err :',error.message);
+    }
+}

@@ -1,6 +1,9 @@
 
 const userRoutes = {
-    login:"/user/login"
+    login:"/user/login",
+    signup: "/user/signup"
 }
+
+
 
 export default userRoutes
