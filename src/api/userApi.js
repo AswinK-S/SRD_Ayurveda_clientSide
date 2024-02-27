@@ -18,8 +18,9 @@ export const signup = async (resgisterData)=>{
     try{
         console.log('register details :',resgisterData);
         let response = await axiosApi.post(userRoutes.signup,resgisterData)
+        console.log('signup response',response);
         return response
     }catch(error){
-        console.log('register err :',error.message);
+        console.log('register err  :',error.message);
     }
 }

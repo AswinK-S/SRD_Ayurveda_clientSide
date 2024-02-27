@@ -4,15 +4,27 @@ import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
 import { signup } from "../../../api/userApi";
 
-const SignUp = ()=>{
+const SignUp = () => {
 
-    const [formData,setFormData] = useState({
-        name:'',
-        email:'',
-        mob:'',
-        password:''
+
+    const [showPassword, setShowPassword] = useState(false)
+
+    //useState to show otp field
+    const [showOtpInput,setShowOtpInput] =useState(false)
+    const [otpValue,setOtpValue] = useState('')
+
+
+
+
+    //formData 
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        mob: '',
+        password: ''
     })
 
+    //background image style 
     const backgroundImage = {
         backgroundImage: 'url("ayurveda.jpeg")',
         backgroundSize: 'cover',
@@ -22,33 +34,48 @@ const SignUp = ()=>{
 
     };
 
-    const handleSubmit =async (e)=>{
+    //show password
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword)
+    }
+
+    //function to submit the data of form
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
 
-        try{
+        try {
+
+            if(showOtpInput){
+              // Process OTP submission logic here
+              console.log('Submitted OTP:', otpValue);  
+            }else{
             const registerData = formData
             const response = await signup(registerData)
-            if(response.status==200){
+            if (response.status == 200) {
                 console.log('user data send to back end');
+                setShowOtpInput(true)
             }
-        }catch(err){
+          }
+        } catch (err) {
             console.log(err.message);
         }
 
     }
 
-    const handleChange = async(e )=>{
-        const {name,value}=e.target 
-        setFormData({...formData,[name]:value})
-        console.log('register dat ',formData);
+    // take the data from the form 
+    const handleChange = async (e) => {
+        const { name, value } = e.target
+        setFormData({ ...formData, [name]: value })
+        console.log('register dat ', formData);
     }
 
+    
 
-    return(
+    return (
 
         <div>
-            <Nav/>
+            <Nav />
             <div>
                 <div className="flex lg:h-[200px]  items-center justify-center p-5" style={backgroundImage}>
                     <div className="text-white text-5xl font-bold  bg-transparent">
@@ -66,37 +93,39 @@ const SignUp = ()=>{
 
                 <div className="w-full p-10 m-auto  rounded-md shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
-                        Sign Up
+                       
+                        {/* /signup/ */}
+                        {showOtpInput ? "Submit OTP" : "Sign Up"}
                     </h1>
 
                     <form className=" bg-transparent mt-6" onSubmit={handleSubmit} >
 
                         <div className="mb-2 bg-transparent">
-                            <label  htmlFor="name" className=" block text-sm bg-transparent font-semibold  "> Full Name </label>
+                            <label htmlFor="name" className=" block text-sm bg-transparent font-semibold  "> Full Name </label>
                             <input type="text" name="name" placeholder="Enter your full name"
-                            className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md" onChange={handleChange}  />
+                                className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md" onChange={handleChange} />
                         </div>
 
 
                         <div className="mb-2 bg-transparent">
                             <label htmlFor="email" className="block text-sm bg-transparent  font-semibold"> Email </label>
-                                
-                            
-                            <input type="email" name="email" placeholder="enter your email address"  
-                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange}/>
-                                
-                          
+
+
+                            <input type="email" name="email" placeholder="enter your email address"
+                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
+
+
                         </div>
 
-                        
+
                         <div className="mb-2 bg-transparent">
                             <label htmlFor="" className="block text-sm bg-transparent  font-semibold"> Mob </label>
-                                
-                            
-                            <input type="number" name="mob" placeholder="enter your valid mobile number"  
-                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange}/>
-                                
-                          
+
+
+                            <input type="number" name="mob" placeholder="enter your valid mobile number"
+                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
+
+
                         </div>
 
                         <div className="mb-2 bg-transparent">
@@ -106,10 +135,27 @@ const SignUp = ()=>{
                             >
                                 Password
                             </label>
-                            <input
-                                type="password" name="password" placeholder="enter password" 
-                                className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md " onChange={handleChange}
-                            />
+
+                            {/*password eye*/}
+                            <div className="relative rounded-md">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password" placeholder="enter password"
+                                    className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md " onChange={handleChange}
+                                />
+                                <span
+                                    className="absolute top-2 right-4 cursor-pointer"
+                                    onClick={handleTogglePassword}>
+                                    {showPassword ? (
+                                        <i className="fas fa-eye-slash text-gray-600"></i>
+                                    ) : (
+                                        <i className="fas fa-eye text-gray-600"></i>
+                                    )}
+                                </span>
+
+                            </div>
+
+
                         </div>
 
                         <div className="mb-2 bg-transparent">
@@ -117,20 +163,50 @@ const SignUp = ()=>{
                                 htmlFor="password"
                                 className="block bg-transparent text-sm font-semibold text-gray-800"
                             >
-                               confirm Password
+                                confirm Password
                             </label>
+
+                            <div className="relative rounded-md">
+
                             <input
-                                type="password" name="confirmPassword" placeholder="confirm your password" 
+                                type={showPassword?'text':'password'} name="confirmPassword" placeholder="confirm your password"
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
                             />
+
+                            <span 
+                            className="absolute top-2 right-4"
+                            onClick={handleTogglePassword}>
+                                {showPassword?(<i className="fas fa-eye-slash "/>):(<i className="fas fa-eye"/>)}
+                            </span>
+
+                            </div>
+                            
                         </div>
 
-                       
+                        {/* Conditional rendering of OTP input */}
+                        {showOtpInput && (
+                            <div className="mb-2 bg-transparent">
+                                <label htmlFor="otp" className="block text-sm bg-transparent font-semibold">
+                                    OTP
+                                </label>
+                                <input
+                                    type="text"
+                                    name="otp"
+                                    placeholder="enter OTP"
+                                    className="block w-full bg-[white] px-4 py-2 mt-2 border rounded-md "
+                                    value={otpValue}
+                                    onChange={(e) => setOtpValue(e.target.value)}
+                                />
+                            </div>
+                        )}
 
                         <div className="mt-6 bg-transparent">
-                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md ">
-                                Sign Up
+                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md " 
+                           >
+                                {showOtpInput ? "Enter OTP" : "Sign Up"}
                             </button>
+
+                            
                         </div>
 
                     </form>
@@ -141,7 +217,7 @@ const SignUp = ()=>{
 
                     <div className="flex  mt-4 gap-x-2">
                         <button
-                          
+
                             className="flex bg-[#CEB047] items-center justify-center w-full p-2 border border-gray-600 rounded-md "
                         >
                             <svg
@@ -157,14 +233,14 @@ const SignUp = ()=>{
 
                     <p className="mt-8 text-sm bg-transparent font-normal text-center text-gray-700">
                         {" "}
-                         have an account?{" "}
-                        
-                           <Link to='/login'> Login  </Link> 
+                        have an account?{" "}
+
+                        <Link to='/login'> Login  </Link>
                     </p>
                 </div>
             </div>
 
-            <Footer/>
+            <Footer />
         </div>
     )
 }
