@@ -57,7 +57,7 @@ const Login = () => {
 
 
 
-            <div className="relative flex flex-col justify-center min-h-screen shadow-2xl  overflow-hidden">
+            <div className="relative flex flex-col justify-center min-h-screen shadow-2xl p-5  overflow-hidden">
 
                 <div className="w-full p-10 m-auto  rounded-md shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">

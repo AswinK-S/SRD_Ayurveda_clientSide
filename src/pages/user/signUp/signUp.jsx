@@ -3,11 +3,14 @@ import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
 import { signup } from "../../../api/userApi";
+import { registerUser } from "../../../api/userApi";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
 
 
     const [showPassword, setShowPassword] = useState(false)
+    const navigate = useNavigate()
 
     //useState to show otp field
     const [showOtpInput,setShowOtpInput] =useState(false)
@@ -23,6 +26,8 @@ const SignUp = () => {
         mob: '',
         password: ''
     })
+
+
 
     //background image style 
     const backgroundImage = {
@@ -49,6 +54,10 @@ const SignUp = () => {
             if(showOtpInput){
               // Process OTP submission logic here
               console.log('Submitted OTP:', otpValue);  
+              let res =await registerUser(otpValue)
+              if(res.status ===200){
+                navigate('/login')
+              }
             }else{
             const registerData = formData
             const response = await signup(registerData)
@@ -67,7 +76,7 @@ const SignUp = () => {
     const handleChange = async (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
-        console.log('register dat ', formData);
+        console.log('register date ', formData);
     }
 
     
