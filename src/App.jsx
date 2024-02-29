@@ -5,7 +5,11 @@ import OnlineBooking from "./pages/user/onlineBooking.jsx/onlineBooking"
 import Login from "./pages/user/login/login"
 import SignUp from "./pages/user/signUp/signUp"
 
+// admin
 import AdminLogin from "./pages/admin/admin"
+
+// doctor
+import DoctorLogin from "./pages/doctor/doctorLogin"
 
 
  
@@ -24,6 +28,9 @@ function App() {
 
       {/* admin */}
       <Route path="/admin" element={<AdminLogin/>}/>
+
+      {/* doctor */}
+      <Route path="/doctor" element={<DoctorLogin/>}/>
     </Routes>
     </BrowserRouter>
       
