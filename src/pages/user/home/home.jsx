@@ -2,7 +2,10 @@ import Footer from "../../../components/footer/footer";
 import Body from "../../../components/homeBody/body";
 import Nav from "../../../components/navbar/nav";
 
+
 const Home = ()=>{
+
+   
     return(
         <>
         <Nav/>

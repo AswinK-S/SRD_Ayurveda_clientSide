@@ -1,7 +1,6 @@
 import userRoutes from "../services/endpoints/userRoutes";
 import axiosApi from "../services/api";
-// import toast from "react-hot-toast";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 //login route
 export const login = async (loginData)=>{

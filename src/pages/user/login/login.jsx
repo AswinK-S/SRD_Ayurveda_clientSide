@@ -1,15 +1,29 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../components/footer/footer"
 import Nav from "../../../components/navbar/nav"
 import { login } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-import {Toaster} from "react-hot-toast";
 
 
 const Login = () => {
+
+    useEffect(()=>{
+        const token = localStorage.getItem('token')
+        if(token){
+            const decode = jwtDecode(token)
+            if(decode.role=="user"){
+                navigate('/')
+            }else{
+                navigate('/login')
+            }
+        }else{
+            navigate('/login')
+        }
+    },[])
 
     const backgroundImage = {
         backgroundImage: 'url("ayurveda.jpeg")',
@@ -35,6 +49,7 @@ const Login = () => {
             console.log('response===>',response);
 
             if(response?.status ==200){
+                localStorage.setItem('token',response.data.token)
                 navigate('/')
             }else{
                 console.log('invalid ',response);
@@ -48,7 +63,6 @@ const Login = () => {
 
     return (
         <div>
-                    {/* <Toaster/> */}
             <Nav />
 
             <div>
