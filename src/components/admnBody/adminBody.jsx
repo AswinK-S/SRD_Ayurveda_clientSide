@@ -1,8 +1,34 @@
+import { useState } from "react"
 import { login } from "../../api/adminApi"
+import { useNavigate } from "react-router-dom"
 
 
 
 const AdmnBody = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+
+            let loginData = { email, password }
+            let response = await login(loginData)
+            console.log('ressss ----------,',response);
+            if (response?.status == 200) {
+                console.log('login success');
+                navigate('/admin/dashboard')
+            } else {
+                console.log('invalid',response?.data?.message);
+            }
+        } catch (err) {
+            console.log(err.message);
+        }
+
+    }
 
     return (
         <div>
@@ -11,10 +37,10 @@ const AdmnBody = () => {
 
                 <div className="w-full p-20 m-auto   shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
-                      Admin  
+                        Admin
                     </h1>
 
-                    <form className=" bg-transparent mt-6" >
+                    <form className=" bg-transparent mt-6" onSubmit={handleSubmit}>
                         <div className="mb-2 bg-transparent">
                             <label
                                 htmlFor="email"
@@ -25,6 +51,7 @@ const AdmnBody = () => {
 
                             <input
                                 type="email" name="email" placeholder="enter your email address"
+                                value={email} onChange={(e) => { setEmail(e.target.value) }}
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md "
                             />
                         </div>
@@ -37,12 +64,13 @@ const AdmnBody = () => {
                                 Password
                             </label>
                             <input
-                                type="password" name="password" placeholder="enter password" 
+                                type="password" name="password" placeholder="enter password"
+                                value={password} onChange={(e) => { setPassword(e.target.value) }}
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
                             />
                         </div>
 
-                        
+
 
                         <div className="mt-6 flex justify-center bg-transparent">
                             <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
@@ -52,8 +80,8 @@ const AdmnBody = () => {
 
                     </form>
 
-    
-                   
+
+
                 </div>
 
             </div>

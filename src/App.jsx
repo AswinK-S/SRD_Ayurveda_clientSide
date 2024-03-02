@@ -7,6 +7,7 @@ import SignUp from "./pages/user/signUp/signUp"
 
 // admin
 import AdminLogin from "./pages/admin/admin"
+import AdminDash from "./pages/admin/adminDash"
 
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
@@ -28,6 +29,7 @@ function App() {
 
       {/* admin */}
       <Route path="/admin" element={<AdminLogin/>}/>
+      <Route path="admin/dashboard" element ={<AdminDash/>}/>
 
       {/* doctor */}
       <Route path="/doctor" element={<DoctorLogin/>}/>

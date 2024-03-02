@@ -1,9 +1,12 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import Footer from "../../../components/footer/footer"
 import Nav from "../../../components/navbar/nav"
 import { login } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+import {Toaster} from "react-hot-toast";
 
 
 const Login = () => {
@@ -17,6 +20,7 @@ const Login = () => {
 
     };
 
+
     const navigate =useNavigate()
 
     const [email,setEmail] = useState('')
@@ -28,11 +32,12 @@ const Login = () => {
         try{
             const formData = {email,password}
             const response = await login(formData)
+            console.log('response===>',response);
 
             if(response?.status ==200){
                 navigate('/')
             }else{
-                console.log('invalid credentials');
+                console.log('invalid ',response);
             }
 
         }catch(err){
@@ -43,6 +48,7 @@ const Login = () => {
 
     return (
         <div>
+                    {/* <Toaster/> */}
             <Nav />
 
             <div>
@@ -65,8 +71,8 @@ const Login = () => {
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
                         Sign in
                     </h1>
-
                     <form className=" bg-transparent mt-6" onSubmit={handleSubmit}>
+
                         <div className="mb-2 bg-transparent">
                             <label
                                 htmlFor="email"
@@ -106,9 +112,9 @@ const Login = () => {
 
                     </form>
 
-                    <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-                        {/* <div className="absolute bg-transparent px-5 ">Or</div> */}
-                    </div>
+                    {/* <div className="relative flex items-center justify-center w-full mt-6 border border-t">
+                        <div className="absolute bg-transparent px-5 ">Or</div>
+                    </div> */}
 
                     <div className="flex  mt-4 gap-x-2">
                         <button
