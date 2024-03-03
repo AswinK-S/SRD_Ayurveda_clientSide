@@ -17,9 +17,10 @@ const AdmnBody = () => {
 
             let loginData = { email, password }
             let response = await login(loginData)
-            console.log('ressss ----------,',response);
+            console.log('ressss ----------,');
             if (response?.status == 200) {
-                console.log('login success');
+                console.log('login success --admin');
+                localStorage.setItem('token',response.data.token)
                 navigate('/admin/dashboard')
             } else {
                 console.log('invalid',response?.data?.message);

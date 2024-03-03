@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 // eslint-disable-next-line react/prop-types
-const ProtectedRoute = ({ children, allowedRole }) => {
+const UserProtectedRoute = ({ children, allowedRole }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null); // Update the type accordingly
@@ -17,6 +17,8 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     try {
       if (token) {
         const decode = jwtDecode(token);
+        console.log('ttttt user',decode.role);
+        console.log('allowed role user',allowedRole);
         setRole(decode.role);
 
         if (decode.role !== allowedRole) {
@@ -36,6 +38,8 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     }
   }, [token, navigate, allowedRole]);
 
+  
+
   // Render the content based on conditions
   if (loading) {
     return <p>Loading...</p>; // Adjust the loading state as needed
@@ -49,4 +53,5 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   return <p>You do not have the required role to access this page.</p>; // Adjust the message as needed
 }
 
-export default ProtectedRoute
+export default UserProtectedRoute
+  

@@ -1,7 +1,9 @@
+import AdmnNav from "../../components/adminNav/admnNav"
+
 const AdminDash = ()=>{
     return(
         <div>
-            <h1>Admin Dash</h1>
+            <AdmnNav/>
         </div>
     )
 }

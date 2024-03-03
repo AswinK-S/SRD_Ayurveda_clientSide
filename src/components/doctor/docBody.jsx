@@ -1,5 +1,27 @@
+import { jwtDecode } from "jwt-decode"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+
+
 
 const DocBody =()=>{
+
+    const navigate=useNavigate();
+
+    
+
+    useEffect(()=>{
+        const token = localStorage.getItem('token')
+        if(token){
+            const decode = jwtDecode(token)
+            if(decode.role =='admin'){
+                navigate('admin/dashboard')
+            }else{
+                navigate('/admin')
+            }
+        }
+    },[])
+
 
     return(
         <div>
