@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Define the type for the allowedRole prop
 
@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line react/prop-types
 const AdmnProtectedRoute = ({ children, allowedRole }) => {
   const navigate = useNavigate();
+  const location = useLocation()
+
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null); // Update the type accordingly
 
@@ -25,11 +27,33 @@ const AdmnProtectedRoute = ({ children, allowedRole }) => {
         if (decode.role !== allowedRole) {
           // Navigate to a different page or show an error message
           navigate('/admin')
+        }else{
+          switch(location.pathname){
+
+          case '/admin/users':
+            navigate('/admin/users')
+            break;
+          
+          case '/admin/patients':
+            navigate('/admin/patients')
+            break;
+            
+          case '/admin/treatments':
+            navigate('/admin/treatments')
+            break;  
+
+          case '/admin/doctors':
+            navigate('/admin/doctors')
+            break;
+          default:    
+          navigate('/admin/dashboard')
+          }
         }
       } else {
         // If there's no token, navigate to the login page
         navigate('/admin');
       }
+
     } catch (error) {
       console.error('Error decoding token:', error);
       // Handle error if necessary, e.g., redirect to a login page
@@ -37,7 +61,7 @@ const AdmnProtectedRoute = ({ children, allowedRole }) => {
     } finally {
       setLoading(false);
     }
-  }, [token, navigate, allowedRole]);
+  }, [token, navigate, allowedRole,location]);
 
   
 

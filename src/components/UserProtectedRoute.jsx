@@ -27,7 +27,7 @@ const UserProtectedRoute = ({ children, allowedRole }) => {
         }
       } else {
         // If there's no token, navigate to the login page
-        navigate('/');
+        navigate('/login');
       }
     } catch (error) {
       console.error('Error decoding token:', error);
