@@ -15,3 +15,15 @@ export const login = async (loginData)=>{
         toast.error(err?.response?.data?.message)
     }
 }
+
+// get users 
+export const users = async ()=>{
+    try{
+        console.log('get users req');
+        let response = await axiosApi.get(adminRoutes.users)
+        console.log('res frm user',response);
+        return response
+    }catch(err){
+        console.log(err.message)
+    }
+}

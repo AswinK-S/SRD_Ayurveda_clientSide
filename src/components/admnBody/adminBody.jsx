@@ -23,7 +23,6 @@ const AdmnBody = () => {
           const decode = jwtDecode(token)
           console.log('admn token :', decode.role);
           if (decode.role == 'admin') {
-            // setadmin(true)
             navigate('/admin/dashboard')
             return
           }
@@ -101,8 +100,6 @@ const AdmnBody = () => {
                         </div>
 
                     </form>
-
-
 
                 </div>
 
