@@ -27,3 +27,11 @@ export const users = async ()=>{
         console.log(err.message)
     }
 }
+
+//user status
+export const userStatus = async(id)=>{
+    console.log('api usrsts ---',id);
+    let res = await axiosApi.post(`${adminRoutes.userStatus}/${id}`)
+    console.log('res usrsts--',res);
+    return res
+}
