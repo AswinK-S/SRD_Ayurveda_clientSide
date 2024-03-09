@@ -1,6 +1,7 @@
-import {  useState } from "react"
+import {  useEffect, useState } from "react"
 import { login } from "../../api/adminApi"
 import { useNavigate } from "react-router-dom"
+import { jwtDecode } from "jwt-decode"
 // import { jwtDecode } from "jwt-decode"
 
 
@@ -12,6 +13,24 @@ const AdmnBody = () => {
 
 
     const navigate = useNavigate()
+
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        console.log('admn nav tkn :',token);
+        
+        if (token) {
+          const decode = jwtDecode(token)
+          console.log('admn token :', decode.role);
+          if (decode.role == 'admin') {
+            // setadmin(true)
+            navigate('/admin/dashboard')
+            return
+          }
+        }else{
+          navigate('/admin')
+        }
+      },[navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault()

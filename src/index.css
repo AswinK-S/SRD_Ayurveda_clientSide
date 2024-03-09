@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+/* {
   background-color: #F9FFE1;
+} */
+
+body {
+  background-color: #F9FFE1;
+}
+
+button {
+  background-color: #E7EE9D;
+}
+
+/* Add a specific rule for button text to avoid inheriting global background color */
+button span {
+  background-color: initial;
 }

@@ -1,5 +1,7 @@
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 
+
+        
 //user
 import Home from "./pages/user/home/home"
 import Treatment from "./pages/user/treatment/treatment"
@@ -26,6 +28,7 @@ function App() {
 
   return (
     <>
+
     <BrowserRouter>
     <Routes>
       {/* users */}
@@ -40,7 +43,7 @@ function App() {
       <Route path="/admin" element={<AdminLogin/>}/>
 
       <Route  path="/admin/dashboard"  element={<AdmnProtectedRoute allowedRole='admin'> <AdminDash/> </AdmnProtectedRoute>}/>
-      <Route path='/admin/users'  element={<AdmnProtectedRoute allowedRole='admin'> <Users/></AdmnProtectedRoute>}/>
+      <Route path='/admin/users'  element={<AdmnProtectedRoute allowedRole='admin'> <Users/> </AdmnProtectedRoute>}/>
       <Route path="/admin/patients"  element={<AdmnProtectedRoute allowedRole='admin'> <Patients/> </AdmnProtectedRoute>}/>
       <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments/>  </AdmnProtectedRoute>}/>
       <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors/> </AdmnProtectedRoute>} />
@@ -50,7 +53,7 @@ function App() {
       <Route path="/doctor" element={<DoctorLogin/>}/>
     </Routes>
     </BrowserRouter>
-      
+
     </>
   )
 }
