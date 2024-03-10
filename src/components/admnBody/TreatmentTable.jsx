@@ -26,9 +26,9 @@ const TreatmentTable = () => {
 
   return (
     <>
-      <div className="bg-[#cd6c79] mt-5 p-5">
-        <div className="flex items-center justify-center mb-5 bg-black">
-          <div className="bg-[#E7EE9D] flex flex-col items-center rounded-lg shadow-md p-3 w-1/2 ">
+      <div className=" mt-5 p-5">
+        <div className="flex items-center justify-center mb-5 ">
+          <div className="bg-[#d3dd64] flex flex-col items-center rounded-lg shadow-md p-3 w-1/2 ">
             <h1>TREATMENTS</h1>
           </div>
         </div>

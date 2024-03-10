@@ -84,7 +84,7 @@ const AdmnNav = () => {
                   Doctors
                 </Link>
                 <button
-                  className="bg-[#E7EE9D] px-4 py-2 rounded-lg shadow-lg hover:border-b-2"
+                  className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-lg hover:border-b-2"
                   onClick={logout}
                 >
                   Logout

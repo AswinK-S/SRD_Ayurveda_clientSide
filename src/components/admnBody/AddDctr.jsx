@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { addDoctor, treatments } from "../../api/adminApi"
-// import { toast } from 'react-toastify'
+import { toast } from 'react-toastify'
+import { useNavigate } from "react-router-dom";
 
 const AddDctr = () => {
 
@@ -9,6 +10,7 @@ const AddDctr = () => {
     const [selectedSubTreatment, setSelectedSubTreatment] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const navigate= useNavigate()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -75,16 +77,20 @@ const AddDctr = () => {
 
         if (!name || !email || !mob || !password || !confirm_password || !address || !experience || !doctor_id || !treatment || !subTreatment) {
             console.error('Please fill in all the fields.');
+            toast.error('Please fill in all the fields.')
             return;
         }
 
-        if (mob.length !== 10) {
+        const mobRegex = /^\d+$/;
+        if (!mobRegex.test(mob) || mob.length !== 10) {
             console.error('Mobile number should have exactly 10 digits.');
+            toast.error('Mobile number should have exactly 10 digits.')
             return;
         }
 
         if (password !== confirm_password) {
             console.error('Password and Confirm Password do not match.');
+            toast.error('Password and Confirm Password do not match.')
             return;
         }
 
@@ -93,7 +99,12 @@ const AddDctr = () => {
 
             // Add your logic for submitting the form data to the server here
             const res = await addDoctor(formData);
-            console.log('ddddd---', res);
+            if(res?.data?.message ==='added new doctor'){
+                toast.success('added new doctor')
+                navigate('/admin/doctors')
+            }
+            console.log('ddddd---', res.data.message);
+
         } catch (error) {
             console.log(error.message);
         }

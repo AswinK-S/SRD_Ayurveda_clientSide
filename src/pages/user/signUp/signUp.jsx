@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { signup } from "../../../api/userApi";
 import { registerUser } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify'
+
 
 const SignUp = () => {
 
@@ -13,8 +15,8 @@ const SignUp = () => {
     const navigate = useNavigate()
 
     //useState to show otp field
-    const [showOtpInput,setShowOtpInput] =useState(false)
-    const [otpValue,setOtpValue] = useState('')
+    const [showOtpInput, setShowOtpInput] = useState(false)
+    const [otpValue, setOtpValue] = useState('')
 
 
 
@@ -24,7 +26,8 @@ const SignUp = () => {
         name: '',
         email: '',
         mob: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     })
 
 
@@ -51,21 +54,48 @@ const SignUp = () => {
 
         try {
 
-            if(showOtpInput){
-              // Process OTP submission logic here
-              console.log('Submitted OTP:', otpValue);  
-              let res =await registerUser(otpValue)
-              if(res.status ===200){
-                navigate('/login')
-              }
-            }else{
-            const registerData = formData
-            const response = await signup(registerData)
-            if (response.status == 200) {
-                console.log('user data send to back end');
-                setShowOtpInput(true)
+            const { name, email, mob, password, confirmPassword } = formData;
+
+            if (!name || !email || !mob || !password || !confirmPassword) {
+                console.error('Please fill in all the fields.');
+                toast.error('Please fill in all the fields.')
+                return;
             }
-          }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                console.error('Please enter a valid email address.');
+                toast.error('Please enter a valid email address.')
+                return;
+            }
+
+            if (mob.length !== 10) {
+                console.error('Mobile number should have exactly 10 digits.');
+                toast.error('Mobile number should have exactly 10 digits.')
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                console.error('Password and Confirm Password do not match.');
+                toast.error('Password and Confirm Password do not match.')
+                return;
+            }
+
+            if (showOtpInput) {
+                // Process OTP submission logic here
+                console.log('Submitted OTP:', otpValue);
+                let res = await registerUser(otpValue)
+                if (res.status === 200) {
+                    navigate('/login')
+                }
+            } else {
+                const registerData = formData
+                const response = await signup(registerData)
+                if (response.status == 200) {
+                    console.log('user data send to back end');
+                    setShowOtpInput(true)
+                }
+            }
         } catch (err) {
             console.log(err.message);
         }
@@ -79,7 +109,7 @@ const SignUp = () => {
         console.log('register data', formData);
     }
 
-    
+
 
     return (
 
@@ -102,7 +132,7 @@ const SignUp = () => {
 
                 <div className="w-full p-10 m-auto  rounded-md shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
-                       
+
                         {/* /signup/ */}
                         {showOtpInput ? "Submit OTP" : "Sign Up"}
                     </h1>
@@ -177,19 +207,19 @@ const SignUp = () => {
 
                             <div className="relative rounded-md">
 
-                            <input
-                                type={showPassword?'text':'password'} name="confirmPassword" placeholder="confirm your password"
-                                className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
-                            />
+                                <input
+                                    type={showPassword ? 'text' : 'password'} name="confirmPassword" placeholder="confirm your password"
+                                    className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md " onChange={handleChange}
+                                />
 
-                            <span 
-                            className="absolute top-2 right-4"
-                            onClick={handleTogglePassword}>
-                                {showPassword?(<i className="fas fa-eye-slash "/>):(<i className="fas fa-eye"/>)}
-                            </span>
+                                <span
+                                    className="absolute top-2 right-4"
+                                    onClick={handleTogglePassword}>
+                                    {showPassword ? (<i className="fas fa-eye-slash " />) : (<i className="fas fa-eye" />)}
+                                </span>
 
                             </div>
-                            
+
                         </div>
 
                         {/* Conditional rendering of OTP input */}
@@ -210,12 +240,12 @@ const SignUp = () => {
                         )}
 
                         <div className="mt-6 bg-transparent">
-                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md " 
-                           >
+                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
+                            >
                                 {showOtpInput ? "Enter OTP" : "Sign Up"}
                             </button>
 
-                            
+
                         </div>
 
                     </form>

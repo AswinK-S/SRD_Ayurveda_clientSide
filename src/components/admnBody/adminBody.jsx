@@ -56,7 +56,7 @@ const AdmnBody = () => {
 
             <div className="relative flex flex-col justify-center min-h-screen shadow-2xl   overflow-hidden">
 
-                <div className="w-full p-20 m-auto   shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
+                <div className="w-full p-20 m-auto rounded-xl  shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
                         Admin
                     </h1>
