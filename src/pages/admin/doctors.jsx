@@ -1,12 +1,14 @@
 import AdmnNav from "../../components/adminNav/admnNav"
+import { DoctorTable } from "../../components/admnBody/DoctorTable"
 
-const Doctors = ()=>{
+const Users=()=>{
+
     return(
         <div>
-        <AdmnNav/>
-        <h1>Doctors</h1>
+            <AdmnNav/>
+            <DoctorTable/>
         </div>
     )
 }
 
-export default Doctors
+export default Users
