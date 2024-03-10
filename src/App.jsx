@@ -15,10 +15,11 @@ import AdmnProtectedRoute from './components/admnPrtctdRoute'
 // admin
 import AdminLogin from "./pages/admin/admin"
 import AdminDash from './pages/admin/adminDash'
-import Users from "./pages/admin/users"
-import Patients from "./pages/admin/patients"
-import Treatments from "./pages/admin/treatments"
-import Doctors from "./pages/admin/doctors"
+import Users from "./pages/admin/users/users"
+import Patients from "./pages/admin/patients/patients"
+import Treatments from "./pages/admin/treatments/treatments"
+import Doctors from "./pages/admin/doctor/doctors"
+import AddDoctor from "./pages/admin/doctor/AddDoctor"
 
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
@@ -47,7 +48,7 @@ function App() {
       <Route path="/admin/patients"  element={<AdmnProtectedRoute allowedRole='admin'> <Patients/> </AdmnProtectedRoute>}/>
       <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments/>  </AdmnProtectedRoute>}/>
       <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors/> </AdmnProtectedRoute>} />
-
+      <Route path="/admin/addDoc" element={<AdmnProtectedRoute allowedRole='admin'> <AddDoctor/> </AdmnProtectedRoute>} />
 
       {/* doctor */}
       <Route path="/doctor" element={<DoctorLogin/>}/>

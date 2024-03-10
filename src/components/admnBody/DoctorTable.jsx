@@ -4,6 +4,7 @@ import styles from '../../tailwind.module.css'
 import { useEffect, useState } from "react";
 import { doctors,doctorStatus } from "../../api/adminApi";
 import ConfirmationModals from "../modals/confirmationModals";
+import { AddBtn } from "./AddBtn";
 
 
 const TABLE_HEAD = ["Name", "Email", "Phone", "Status"];
@@ -48,6 +49,9 @@ export function DoctorTable() {
             <h1>USERS</h1>
           </div>
         </div>
+
+        {/* add doctor button  */}
+        <AddBtn/>
 
         <div className="mt-5 p-5 ">
           <Card className="h-full w-full overflow-scroll shadow-lg ">

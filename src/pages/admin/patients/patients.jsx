@@ -1,4 +1,4 @@
-import AdmnNav from "../../components/adminNav/admnNav"
+import AdmnNav from "../../../components/adminNav/admnNav"
 
 const Patients = () => {
   return (

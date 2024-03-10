@@ -1,5 +1,5 @@
-import AdmnNav from "../../components/adminNav/admnNav"
-import { UserTable } from "../../components/admnBody/usersTable"
+import AdmnNav from "../../../components/adminNav/admnNav"
+import { UserTable } from "../../../components/admnBody/usersTable"
 
 const Users=()=>{
 
