@@ -16,6 +16,41 @@ export const login = async (loginData) => {
     }
 }
 
+//get Treatments
+export const treatments = async ()=>{
+    try {
+        console.log('req for trtmnt in api');
+        const res = await axiosApi.get(adminRoutes.treatments)
+        console.log('res in api',res);
+        return res
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+//add Treatments
+export const addTreatments = async(data)=>{
+    try {
+        console.log('add trtmnt',data);
+        const res =await axiosApi.post(adminRoutes.addTreat,data)
+        console.log(res);
+        return res
+    } catch (error) {
+        console.log('err frm addtrnmnts',error.message);
+    }
+}
+
+//add Doctors
+export const addDoctor = async(doctorData)=>{
+    try {
+        console.log('doc data to submit--',doctorData);
+        const res = await axiosApi.post(adminRoutes.addDoctor,doctorData)
+        console.log('add doc res',res);
+        return res
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //get doctors
 export const doctors = async () => {
     try {

@@ -20,7 +20,7 @@ import Patients from "./pages/admin/patients/patients"
 import Treatments from "./pages/admin/treatments/treatments"
 import Doctors from "./pages/admin/doctor/doctors"
 import AddDoctor from "./pages/admin/doctor/AddDoctor"
-
+import AddTreatment from './pages/admin/treatments/AddTreatment'
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
 
@@ -49,6 +49,8 @@ function App() {
       <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments/>  </AdmnProtectedRoute>}/>
       <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors/> </AdmnProtectedRoute>} />
       <Route path="/admin/addDoc" element={<AdmnProtectedRoute allowedRole='admin'> <AddDoctor/> </AdmnProtectedRoute>} />
+      <Route path="/admin/addTreat" element={<AdmnProtectedRoute allowedRole='admin'> <AddTreatment/> </AdmnProtectedRoute>} />
+
 
       {/* doctor */}
       <Route path="/doctor" element={<DoctorLogin/>}/>

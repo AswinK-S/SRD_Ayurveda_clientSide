@@ -7,3 +7,12 @@ export const AddBtn = () => {
     </div>
   )
 }
+
+
+export const AddTBtn =()=>{
+  return (
+    <div>
+        <button className="bg-[#E7EE9D] flex flex-col items-center rounded-lg shadow-md p-3 ml-5" ><Link to='/admin/addTreat'>Add Treatment</Link> </button>
+    </div>
+  )
+}

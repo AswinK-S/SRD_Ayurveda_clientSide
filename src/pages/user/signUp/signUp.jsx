@@ -76,7 +76,7 @@ const SignUp = () => {
     const handleChange = async (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
-        console.log('register date ', formData);
+        console.log('register data', formData);
     }
 
     
