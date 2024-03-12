@@ -8,10 +8,13 @@ const AddTreatments = () => {
   const [errorMessage,setErrorMessage] = useState('')
 
   const navigate = useNavigate()
+
   const handleTreatmentNameChange = (e) => {
     setTreatmentName(e.target.value);
+
   };
 
+  //adding subTreatments and checking if there is any duplicate values 
   const handleSubTreatmentChange = (index, value) => {
     const newSubTreatments = [...subTreatments];
     const isDuplicate = newSubTreatments.some((subTreatment, i) => i !== index && subTreatment === value);
@@ -28,20 +31,29 @@ const AddTreatments = () => {
     
   };
 
+  //limiting the length of subtreatments and prevent empty fields
   const handleAddSubTreatment = () => {
     console.log('sub trtmnts---------- :',subTreatments);
     if(subTreatments.length == 5){
       console.log('subT lngth----',subTreatments.length);
         setErrorMessage('SubTreatments limit is only five')
     }
+    
+    // show error message when we enter an empty treatment 
+    const subtrtmnt = subTreatments.some((element)=>element.trim()=='')
+    console.log('ssss---', subtrtmnt);
+    if(subtrtmnt)setErrorMessage('fields should not be empty')  
+
     if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '') && subTreatments.length<=5) {
       setSubTreatments([...subTreatments, '']);
-      // setErrorMessage('')
     }
   };
 
   const handleSubmit = (e) => {
+   
     e.preventDefault();
+
+   
   
     if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '')) {
       const newTreatmentData = {

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { addDoctor, treatments } from "../../api/adminApi"
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
+import { generatePassword } from "../../utils/admin/generatePsswrd";
+import { generateDocId } from "../../utils/admin/generateId";
+import { formValidation } from "../../utils/admin/AddDoctorFormVldtn";
 
 const AddDctr = () => {
 
@@ -9,14 +12,16 @@ const AddDctr = () => {
     const [selectedTreatment, setSelectedTreatment] = useState({});
     const [selectedSubTreatment, setSelectedSubTreatment] = useState('');
     const [loading, setLoading] = useState(true);
+    const [errors,setErrors] =useState('')
 
-    const navigate= useNavigate()
+    const navigate = useNavigate()
+
+    //get the values from the form
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         mob: '',
         password: '',
-        confirm_password: '',
         address: '',
         experience: '',
         doctor_id: '',
@@ -24,6 +29,7 @@ const AddDctr = () => {
         subTreatment: ''
     });
 
+    // fetching the data to fill select fields 
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -41,6 +47,23 @@ const AddDctr = () => {
         fetchData();
     }, []);
 
+    //password generation
+    const handlePassword = async () => {
+        const generatedPassword = await generatePassword()
+        if (generatePassword) {
+            setFormData({ ...formData, password: generatedPassword })
+            console.log('psswrd-----', formData);
+        }
+    }
+
+    //generate random id
+    const handleDocId = async () => {
+        const docId = await generateDocId()
+        if (docId) {
+            setFormData({ ...formData, doctor_id: docId })
+        }
+    }
+
     const handleTreatmentChange = (event) => {
         const selectedTreatmentId = event.target.value;
         const selectedTreatment = treatmentData.find((treatment) => treatment._id === selectedTreatmentId);
@@ -56,6 +79,7 @@ const AddDctr = () => {
         }));
     };
 
+
     const handleSubTreatmentChange = (event) => {
         const selectedSubTreatment = event.target.value;
 
@@ -69,47 +93,41 @@ const AddDctr = () => {
         }));
     };
 
+    // form submition
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Validate form data
-        const { name, email, mob, password, confirm_password, address, experience, doctor_id, treatment, subTreatment } = formData;
+        console.log('form data to send for vldtn----', formData);
+        const validationErrors = await formValidation(formData)
 
-        if (!name || !email || !mob || !password || !confirm_password || !address || !experience || !doctor_id || !treatment || !subTreatment) {
-            console.error('Please fill in all the fields.');
-            toast.error('Please fill in all the fields.')
-            return;
+        if (Object.keys(validationErrors).length > 0) {
+            // If there are errors, set them and do not proceed with form submission
+            console.log('Errors--', validationErrors);
+            setErrors(validationErrors);
+        } else {
+            // If there are no errors, proceed with form submission
+            const sendData = async (formData) => {
+                try {
+                    const res = await addDoctor(formData);
+                    console.log('result of adding doc---',res.data);
+                    if (res.data.message=== 'mail send to doctor ,added new doctor') {
+                        toast.success('Added a doctor');
+                        navigate('/admin/doctors');
+                    }else if(res.data ==='doctor exists'){
+                        toast.error(res.data)
+                    }
+                } catch (err) {
+                    console.log(err.message);
+                }
+            };
+            sendData(formData);
         }
+        
 
-        const mobRegex = /^\d+$/;
-        if (!mobRegex.test(mob) || mob.length !== 10) {
-            console.error('Mobile number should have exactly 10 digits.');
-            toast.error('Mobile number should have exactly 10 digits.')
-            return;
-        }
-
-        if (password !== confirm_password) {
-            console.error('Password and Confirm Password do not match.');
-            toast.error('Password and Confirm Password do not match.')
-            return;
-        }
-
-        try {
-            console.log('formdata to send --', formData);
-
-            // Add your logic for submitting the form data to the server here
-            const res = await addDoctor(formData);
-            if(res?.data?.message ==='added new doctor'){
-                toast.success('added new doctor')
-                navigate('/admin/doctors')
-            }
-            console.log('ddddd---', res.data.message);
-
-        } catch (error) {
-            console.log(error.message);
-        }
     };
 
+    // get data to the formData 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -128,6 +146,7 @@ const AddDctr = () => {
 
                         <div className="flex flex-row  gap-5  justify-around">
                             <div className="  w-1/2">
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
                                         Name
@@ -140,6 +159,7 @@ const AddDctr = () => {
                                         className="border rounded-md p-2 w-full"
                                     />
                                 </div>
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
@@ -153,6 +173,7 @@ const AddDctr = () => {
                                         className="border  rounded-md p-2 w-full"
                                     />
                                 </div>
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.mob}</p>}
 
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
@@ -167,6 +188,8 @@ const AddDctr = () => {
                                     />
                                 </div>
 
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
+
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
                                         Password
@@ -176,25 +199,22 @@ const AddDctr = () => {
                                         id="password"
                                         name="password"
                                         onChange={handleChange}
+                                        value={formData.password}
                                         className="border  rounded-md p-2 w-full"
                                     />
+                                </div>
+                                <div className="mb-4 flex justify-center">
+                                    <button className="  p-2 rounded-md text-indigo-500 text-sm  "
+                                        onClick={handlePassword}
+                                    >create password</button>
                                 </div>
 
-                                <div className="mb-4">
-                                    <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
-                                        Confirm Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        id="confirm_password"
-                                        name="confirm_password"
-                                        onChange={handleChange}
-                                        className="border  rounded-md p-2 w-full"
-                                    />
-                                </div>
+
                             </div>
 
                             <div className=" w-1/2">
+                            {errors && <p className="text-red-500 text-sm mb-2">{errors.address}</p>}
+
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
                                         Address
@@ -208,6 +228,7 @@ const AddDctr = () => {
                                     />
                                 </div>
 
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.experience}</p>}
 
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
@@ -222,6 +243,8 @@ const AddDctr = () => {
                                     />
                                 </div>
 
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.doctor_id}</p>}
+
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
                                         Doctors Id
@@ -230,16 +253,25 @@ const AddDctr = () => {
                                         type="text"
                                         id="doctor_id"
                                         name="doctor_id"
+                                        value={formData.doctor_id}
                                         onChange={handleChange}
                                         className="border  rounded-md p-2 w-full"
                                     />
                                 </div>
+                                <div className="mb-4 flex justify-center">
+                                    <button className="  p-2 rounded-md text-indigo-500 text-sm  "
+                                        onClick={handleDocId}
+                                    >generate ID</button>
+                                </div>
+
 
                                 <div>
                                     {loading ? (
                                         <p>Loading...</p>
                                     ) : (
                                         <>
+                                               {errors && <p className="text-red-500 text-sm mb-2">{errors.treatment}</p>}
+
                                             <div className="mb-4">
                                                 <label htmlFor="treatments" className="block text-gray-600 text-sm font-medium mb-2">
                                                     Treatment
@@ -247,17 +279,20 @@ const AddDctr = () => {
                                                 <select
                                                     id="treatments"
                                                     name="treatment"
-                                                    value={selectedTreatment._id || ''}
+                                                    value={selectedTreatment?._id || ''}
                                                     onChange={handleTreatmentChange}
                                                     className="border rounded-md p-2 w-full"
                                                 >
+                                                    <option value="">Select Treatment</option>
                                                     {treatmentData.map((treatment) => (
-                                                        <option key={treatment._id} value={treatment._id}>
-                                                            {treatment.name}
+                                                        <option key={treatment?._id} value={treatment?._id}>
+                                                            {treatment?.name}
                                                         </option>
                                                     ))}
                                                 </select>
+
                                             </div>
+                                            {errors && <p className="text-red-500 text-sm mb-2">{errors.subTreatment}</p>}
 
                                             <div className="mb-4">
                                                 <label htmlFor="subTreatments" className="block text-gray-600 text-sm font-medium mb-2">
@@ -270,18 +305,20 @@ const AddDctr = () => {
                                                     onChange={handleSubTreatmentChange}
                                                     className="border rounded-md p-2 w-full"
                                                 >
-                                                    {selectedTreatment.subTreatments ? (
-                                                        selectedTreatment.subTreatments
-                                                            .filter((subTreatment) => subTreatment.status === true)
+                                                    <option value="">Select Sub Treatment</option>
+                                                    {selectedTreatment?.subTreatments ? (
+                                                        selectedTreatment?.subTreatments
+                                                            .filter((subTreatment) => subTreatment?.status === true)
                                                             .map((filteredSubTreatment) => (
-                                                                <option key={filteredSubTreatment.name} value={filteredSubTreatment.name}>
-                                                                    {filteredSubTreatment.name}
+                                                                <option key={filteredSubTreatment?.name} value={filteredSubTreatment?.name}>
+                                                                    {filteredSubTreatment?.name}
                                                                 </option>
                                                             ))
                                                     ) : (
                                                         <option value="">Select Treatment First</option>
                                                     )}
                                                 </select>
+
                                             </div>
                                         </>
                                     )}
