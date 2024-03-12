@@ -1,23 +1,23 @@
 
-
+import '../../tailwind.module.css'
 import './body.css'
 
 const Body = () => {
     return (
         <>
-            <div className="container   shadow-lg  py-5 px-4  ">
+            <div className="container   py-5 px-4  ">
 
-                <div className='flex w-full items-center flex-col gap-10  lg:p-4'>
+                <div className='flex w-full   items-center flex-col gap-10  lg:p-4'>
 
-                    <div className="flex  justify-evenly items-center p-2 shadow-2xl  rounded-3xl  " >
+                    <div className="flex  justify-evenly items-center p-2     " >
 
                         <div className='m-4  '>
-                            <img className='rounded-3xl img-fluid h-[400px] w-[500px] hoverable cursor-pointer shadow-lg' src="/product-bg.jpg" alt="" />
+                            <img className='rounded-3xl img-fluid h-[350px] w-[500px] hover:translate-y-4 cursor-pointer shadow-xl shadow-blue-gray-200' src="/product-bg.jpg" alt="" />
                         </div>
 
-                        <div className=' border-b-4 p-4 bg-[#E7EE9D] rounded-3xl shadow-lg h-full m-4  w-3/6'>
+                        <div className=' p-10 bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 rounded-3xl shadow-lg shadow-blue-gray-200   h-full m-4  w-3/6'>
 
-                            <p className='text-lg  bg-[#E7EE9D]'>
+                            <p className='text-md  '>
                                 SRD AYURVEDA
                                 Under the guidance of Ashtavaidyan Pulamanthol Mooss, the pioneer of Ayurveda in Kerala, <br />
                                 SRD Ayurveda Hospital started its operations in the year 1988. Backed by the centuries old tradition, <br />
@@ -32,11 +32,11 @@ const Body = () => {
                     </div>
 
 
-                    <div className="flex  justify-evenly items-center p-2 shadow-2xl  rounded-3xl">
+                    <div className="flex  justify-evenly items-center p-2  ">
 
-                        <div className=' border-b-4 p-4 bg-[#E7EE9D] rounded-3xl shadow-lg h-full m-4  w-3/6 '>
+                        <div className='  p-10 bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 rounded-3xl shadow-lg shadow-blue-gray-200 h-full m-4  w-3/6 '>
 
-                            <p className='text-lg  bg-[#E7EE9D]'>
+                            <p className='text-md transition-transform transform hover:animate-shake '>
                                 Ayurveda is India’s contribution to the world in the field of medicine. Ayurveda has been in practice
                                 from time immemorial. Even though there are some references about Ayurveda in ancient texts and Vedas,
                                 the exact time period at which the practice started is still a topic of debate among the experts.
@@ -49,7 +49,7 @@ const Body = () => {
                         </div>
 
                         <div className='m-4  '>
-                            <img className='rounded-3xl img-fluid hoverable cursor-pointer shadow-lg h-[400px] w-[500px]' src=" /hmImg2.jpg" alt="" />
+                            <img className='rounded-3xl img-fluid  cursor-pointer shadow-xl shadow-blue-gray-200 h-[350px] w-[500px] hover:translate-x-4' src=" /hmImg2.jpg" alt="" />
                         </div>
 
                     </div>

@@ -46,7 +46,7 @@ export function DoctorTable() {
 
         <div className="flex items-center justify-center mb-5 ">
           <div className="bg-[#d3dd64] flex flex-col items-center rounded-lg shadow-md p-3 w-1/2 ">
-            <h1>USERS</h1>
+            <h1>DOCTORS</h1>
           </div>
         </div>
 

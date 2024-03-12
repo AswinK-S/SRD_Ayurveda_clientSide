@@ -1,15 +1,20 @@
+import ImgComponent from "../../../components/imgCmpnt/ImgComponent"
 import Nav from "../../../components/navbar/nav"
+import TreatmentCard from "./TreatmentCard"
 
-const Treatment =()=>{
+const Treatment = () => {
 
-    return (
-      <>
-         <Nav/>
-         <div>
-            <h1>Treatment</h1>
-         </div>
-      </>  
-    )
+  return (
+    <>
+      <div className=" flex justify-center">
+        <Nav />
+      </div>
+      <ImgComponent text='TREATMENTS'/>
+      <div>
+        <TreatmentCard />
+      </div>
+    </>
+  )
 }
 
 export default Treatment

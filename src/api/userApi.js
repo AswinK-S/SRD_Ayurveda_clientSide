@@ -18,6 +18,15 @@ export const login = async (loginData)=>{
     }
 }
 
+export const treatments = async ()=>{
+    try {
+        let res = await axiosApi.get(userRoutes.treatments)
+        return res
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //otp submition route
 export const registerUser = async (otp)=>{
     console.log('otp data :',otp);

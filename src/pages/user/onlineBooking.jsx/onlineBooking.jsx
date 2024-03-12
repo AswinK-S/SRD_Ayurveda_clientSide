@@ -4,7 +4,9 @@ const OnlineBooking = ()=>{
     
     return(
         <>
-            <Nav/>
+             <div className=" flex justify-center">
+                <Nav />
+                </div>
             <div>
                 <h1>Online Booking</h1>
             </div>

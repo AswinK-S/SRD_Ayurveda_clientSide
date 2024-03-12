@@ -23,6 +23,7 @@ import AddDoctor from "./pages/admin/doctor/AddDoctor"
 import AddTreatment from './pages/admin/treatments/AddTreatment'
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
+import TreatmentDetail from './components/User/TreatmentDetail'
 
  
 function App() {
@@ -37,6 +38,7 @@ function App() {
       <Route path ='/booking' element ={<UserProtectedRoute allowedRole='user'> <OnlineBooking/> </UserProtectedRoute>} />
       <Route path="/signup" element ={<SignUp/>}/>
       <Route path = '/treatment' element = {<Treatment/>} />
+      <Route path = '/treatment/:id' element = {<TreatmentDetail/>} />
       <Route path ='/login'  element ={<Login/>}/>
 
 

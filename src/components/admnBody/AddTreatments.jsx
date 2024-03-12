@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const AddTreatments = () => {
   const [treatmentName, setTreatmentName] = useState(null);
   const [subTreatments, setSubTreatments] = useState(['']);
+  const [errorMessage,setErrorMessage] = useState('')
 
   const navigate = useNavigate()
   const handleTreatmentNameChange = (e) => {
@@ -13,13 +14,29 @@ const AddTreatments = () => {
 
   const handleSubTreatmentChange = (index, value) => {
     const newSubTreatments = [...subTreatments];
+    const isDuplicate = newSubTreatments.some((subTreatment, i) => i !== index && subTreatment === value);
+
+    if (isDuplicate) {
+        setErrorMessage('Same data exists');
+        return; // Exit the function if a duplicate is found
+    }else{
+      setErrorMessage('')
+    }
+    console.log('nw subTrtmnts:----', newSubTreatments);
     newSubTreatments[index] = value;
-    setSubTreatments(newSubTreatments);
+    if(subTreatments.length<=5)setSubTreatments(newSubTreatments);
+    
   };
 
   const handleAddSubTreatment = () => {
-    if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '')) {
+    console.log('sub trtmnts---------- :',subTreatments);
+    if(subTreatments.length == 5){
+      console.log('subT lngth----',subTreatments.length);
+        setErrorMessage('SubTreatments limit is only five')
+    }
+    if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '') && subTreatments.length<=5) {
       setSubTreatments([...subTreatments, '']);
+      // setErrorMessage('')
     }
   };
 
@@ -30,7 +47,7 @@ const AddTreatments = () => {
       const newTreatmentData = {
         name: treatmentName,
         subTreatments: subTreatments.map(subTreatment => ({ name: subTreatment })),
-      };
+      }
   
       console.log('New Treatment Data:', newTreatmentData);
       const sendData = async(newTreatmentData)=>{
@@ -45,6 +62,9 @@ const AddTreatments = () => {
         }
       }
       sendData(newTreatmentData)
+    }else{
+      setSubTreatments([''])
+      setErrorMessage('')
     }
   };
 
@@ -73,8 +93,10 @@ const AddTreatments = () => {
                     className="border rounded-md p-2 w-full"
                   />
                 </div>
+                {errorMessage && <p className='text-red-500 text-sm'> {errorMessage}</p>}
 
                 {subTreatments.map((subTreatment, index) => (
+                  
                   <div className="mb-4" key={index}>
                     <label htmlFor={`subTreatment${index}`} className="block text-gray-600 text-sm font-medium mb-2">
                       Add SubTreatments
