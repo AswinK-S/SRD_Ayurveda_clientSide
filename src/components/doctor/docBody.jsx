@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { docLogin } from "../../api/doctorApi";
 
 
 
@@ -8,20 +9,41 @@ const DocBody =()=>{
 
     const navigate=useNavigate();
 
-    
+    const [email,setEmail]= useState('')
+    const [password,setPassword] = useState('')
 
     useEffect(()=>{
         const token = localStorage.getItem('token')
         if(token){
             const decode = jwtDecode(token)
-            if(decode.role =='admin'){
-                navigate('admin/dashboard')
+            if(decode.role =='doctor'){
+                navigate('doctor/dashboard')
             }else{
-                navigate('/admin')
+                navigate('/doctor')
             }
         }
     },[])
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+
+            let loginData = { email, password }
+            let response = await docLogin(loginData)
+            console.log('ressss ----------,');
+            if (response?.data.message==='doctor logged in') {
+                console.log('login success --admin');
+                localStorage.setItem('token',response.data.token)
+                navigate('/doctor/overView')
+            } else {
+                console.log('invalid',response?.data?.message);
+                navigate('/doctor')
+            }
+        } catch (err) {
+            console.log(err.message);
+        }
+
+    }
 
     return(
         <div>
@@ -33,7 +55,7 @@ const DocBody =()=>{
                       Doctor
                     </h1>
 
-                    <form className=" bg-transparent mt-6" >
+                    <form className=" bg-transparent mt-6" onClick={handleSubmit} >
                         <div className="mb-2 bg-transparent">
                             <label
                                 htmlFor="email"
@@ -45,6 +67,8 @@ const DocBody =()=>{
                             <input
                                 type="email" name="email" placeholder="enter your email address"
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md "
+                                value={email}
+                                onChange={(e)=>{setEmail(e.target.value)}}
                             />
                         </div>
 
@@ -58,6 +82,7 @@ const DocBody =()=>{
                             <input
                                 type="password" name="password" placeholder="enter password" 
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
+                                value={password} onChange={(e)=>{setPassword(e.target.value)}}
                             />
                         </div>
 

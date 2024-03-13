@@ -1,10 +1,10 @@
-import AdmnNav from "../../components/adminNav/admnNav"
 import DocBody from "../../components/doctor/docBody"
+import DocNav from "../../components/doctor/docNav"
 
 const DoctorLogin = ()=>{
     return(
         <div>
-            <AdmnNav/>
+            <DocNav/>
             <DocBody/>
         </div>
     )

@@ -7,7 +7,11 @@ import { AddTBtn } from "./AddBtn";
 const TABLE_HEAD = ["Main Treatment Name", "Sub Treatments"];
 
 const TreatmentTable = () => {
+  //state variable to show on table
   const [treatmentData, setTreatmentData] = useState([]);
+  const [searchTerm,setSearchTerm]=useState('')   //state variable to get the serch value
+  const [currentPage,setCurrentPage] = useState(1)   //state variable to get the pagination details
+  const [itemsPerPage]=useState(3)
 
   // get the treatments when the page is loaded
   useEffect(() => {
@@ -16,6 +20,7 @@ const TreatmentTable = () => {
         const res = await treatments();
         console.log('treatment list for table --', res.data);
         setTreatmentData(res.data);
+        paginationData()
       } catch (error) {
         console.error('Error fetching treatments:', error);
       }
@@ -23,6 +28,50 @@ const TreatmentTable = () => {
 
     getTreatments();
   }, []);
+
+  //get the search data
+  const handleSearch =(event)=>{
+    setSearchTerm(event.target.value)
+  }
+
+  const filteredTreatments = treatmentData.filter((item)=>{
+    const trtmntName = `${item.name}`.toLowerCase()
+    const searchT = `${searchTerm}`.toLowerCase()
+
+    return (trtmntName.includes(searchT))
+  })
+
+
+  //get pagination data
+  const paginationData = ()=>{
+    const startIndex =(currentPage -1)*itemsPerPage
+    const endIndex = startIndex +itemsPerPage
+    return filteredTreatments.slice(startIndex,endIndex)
+  }
+
+  const totalPages = Math.ceil(treatmentData.length/itemsPerPage)
+
+
+  //function to implement pagination
+
+  const PaginationControls =()=>{
+
+    const handlePrev =()=>{
+        setCurrentPage((prevPage)=>prevPage >1?prevPage-1:1)
+    }
+
+    const handleNext =()=>{
+        setCurrentPage(( prevPage)=>prevPage<totalPages?prevPage+1:totalPages)
+    }
+
+    return(
+      <div className="flex justify-center  mt-4 mb-4">
+        <button className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black" onClick={handlePrev} disabled={currentPage===1}>prev</button>
+        <button className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black  " onClick={handleNext} disabled={currentPage===totalPages}>next</button>
+      </div>
+    )
+  }
+
 
   return (
     <>
@@ -34,7 +83,7 @@ const TreatmentTable = () => {
         </div>
 
         {/* add treatment button */}
-        <AddTBtn />
+        <AddTBtn handleSearch={handleSearch} searchTerm={searchTerm} />
 
         <div className="mt-5 p-5 ">
           <Card className="h-full w-full overflow-scroll shadow-lg ">
@@ -55,7 +104,7 @@ const TreatmentTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {treatmentData.map(({ _id, name, subTreatments }, index) => {
+                {paginationData().map(({ _id, name, subTreatments }, index) => {
                   const isLast = index === treatmentData.length - 1;
                   const cellClass = isLast
                     ? styles.tableCellLast
@@ -95,6 +144,8 @@ const TreatmentTable = () => {
             </table>
           </Card>
         </div>
+
+        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange ={setCurrentPage}/>
       </div>
     </>
   );

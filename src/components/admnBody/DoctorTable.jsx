@@ -61,7 +61,6 @@ export function DoctorTable() {
     return(
       name.includes(searchTermLower) || subTreatment.includes(searchTermLower) ||mob.includes(searchTermLower)
     )
-
   })
 
   // getting the data per page 
@@ -86,16 +85,16 @@ export function DoctorTable() {
     };
 
     return (
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 mb-4  ">
         <button
-          className="px-4 py-2 mr-2 bg-gray-200 rounded"
+          className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black"
           onClick={handlePrevClick}
           disabled={currentPage === 1}
         >
-          Previous
+          Prev
         </button>
         <button
-          className="px-4 py-2 bg-gray-200 rounded"
+          className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black"
           onClick={handleNextClick}
           disabled={currentPage === totalPages}
         >
@@ -137,8 +136,8 @@ export function DoctorTable() {
               </thead>
               <tbody>
                 {getPaginationData().map(({ _id, name, email, mob, status }, index) => {
-                  const isLast = index === doctor.length - 1;
-                  const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
+                    const isLast = index === doctor.length - 1;
+                    const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
 
                   return (
                     <tr key={_id}>
