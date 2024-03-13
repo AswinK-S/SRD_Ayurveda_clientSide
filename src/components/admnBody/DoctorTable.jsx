@@ -15,8 +15,11 @@ export function DoctorTable() {
   const [showModal, setShowModal] = useState(false)
   const [editId, setEditId] = useState(null)
 
+  //state variables for pagination
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(4)
+
+  const [searchTerm,setSearchTerm] = useState('')
 
   //get the users when the page is loaded
   useEffect(() => {
@@ -27,7 +30,7 @@ export function DoctorTable() {
       getPaginationData()
     }
     getDoctors()
-  }, [showModal, currentPage, itemsPerPage])
+  }, [showModal])
 
   const handleStatus = async () => {
     // console.log('usrSts id', id);
@@ -42,14 +45,37 @@ export function DoctorTable() {
     setEditId(id)
   }
 
+  //take the search value
+  const handleSearchChange =(event)=>{
+    setSearchTerm(event.target.value)
+  }
+
+  // filter the data according to search 
+  const filteredDoctors = doctor.filter((doc)=>{
+
+    const name = `${doc.name}`.toLowerCase()
+    const subTreatment =`${doc.subTreatment}`.toLowerCase()
+    const mob =`${doc.mob}`.toLowerCase()
+    const searchTermLower = searchTerm.toLowerCase()
+
+    return(
+      name.includes(searchTermLower) || subTreatment.includes(searchTermLower) ||mob.includes(searchTermLower)
+    )
+
+  })
+
+  // getting the data per page 
   const getPaginationData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
-    return doctor.slice(startIndex, endIndex)
+    return filteredDoctors.slice(startIndex, endIndex)
   }
 
   const totalPages = Math.ceil(doctor.length / itemsPerPage)
 
+  
+
+  // function that defines pagination logic 
   const PaginationControls = () => {
     const handlePrevClick = () => {
       setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
@@ -92,9 +118,8 @@ export function DoctorTable() {
         </div>
 
         {/* add doctor button  */}
-        <AddBtn />
-
-
+        <AddBtn handleSearchChange={handleSearchChange} searchTerm={searchTerm} />
+        
 
         <div className="mt-5 p-5 ">
           <Card className="h-full w-full overflow-scroll shadow-lg ">
