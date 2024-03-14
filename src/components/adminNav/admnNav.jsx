@@ -42,7 +42,7 @@ const AdmnNav = () => {
 
   return (
     <>
-      <div className="container p-3">
+      <div className="container ">
         <div className="flex flex-col sm:flex-row items-center justify-between">
           <div className="mb-4 sm:mb-0">
             <img className="h-[100px]" src="/logo.png" alt="" />

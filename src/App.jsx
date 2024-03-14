@@ -24,8 +24,8 @@ import AddTreatment from './pages/admin/treatments/AddTreatment'
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
 import TreatmentDetail from './components/User/TreatmentDetail'
-import DocOverView from './components/doctor/DocOverView'
-
+import Overview from './pages/doctor/Overview'
+import DoctorPro from './pages/doctor/DoctorPro'
  
 function App() {
 
@@ -56,7 +56,8 @@ function App() {
 
     {/* doctor */}
     <Route path="/doctor" element={<DoctorLogin/>}/>
-    <Route path ='/doctor/overView' element ={<DocOverView/>} />
+    <Route path ='/doctor/overView' element ={<Overview/>} />
+    <Route path ='/doctor/profile' element={<DoctorPro/>}/>
     </Routes>
     </BrowserRouter>
 
