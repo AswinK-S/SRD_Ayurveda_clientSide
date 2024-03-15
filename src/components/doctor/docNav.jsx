@@ -41,7 +41,7 @@ const DocNav = () => {
         <>
 
 
-            <div className=" flex justify-center">
+            <div className=" flex justify-center shadow-lg shadow-blue-gray-300 py-1">
                 <div className="container">
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <div className="mb-4 sm:mb-0">
@@ -66,7 +66,7 @@ const DocNav = () => {
                             {doctor ? (
                                 <>
                                     <button
-                                        className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-lg hover:border-b-2"
+                                        className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-md shadow-gray-700 hover:border-b-2"
                                         onClick={logout}
                                     >
                                         Logout

@@ -6,9 +6,14 @@
   background-color: #F9FFE1;
 } */
 
+/* body {
+  background-color:linear-gradient(to right, #dfea7d, #d9f182);
+} */
+
 body {
-  background-color: #F9FFE1;
+  background-image: linear-gradient(to right, #eff6c2, #eaeedb);
 }
+
 
 button {
   background-color: #E7EE9D;

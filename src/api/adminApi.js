@@ -1,5 +1,5 @@
 import adminRoutes from "../services/endpoints/adminRoutes";
-import axiosApi from "../services/api";
+import { axiosApi } from "../services/api";
 import { toast } from 'react-toastify'
 
 //login

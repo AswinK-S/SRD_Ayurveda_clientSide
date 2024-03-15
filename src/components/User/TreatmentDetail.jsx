@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axiosApi from '../../services/api'
 import Nav from '../navbar/nav'
+import { axiosApi } from '../../services/api'
 
 const TreatmentDetail = () => {
     const { id } = useParams()

@@ -1,5 +1,5 @@
 import userRoutes from "../services/endpoints/userRoutes";
-import axiosApi from "../services/api";
+import { axiosApi } from "../services/api";
 import { toast } from 'react-toastify';
 
 //login route

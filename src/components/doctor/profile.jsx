@@ -31,24 +31,24 @@ const Profile = () => {
       };
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800 antialiased rounded-md p-3">
       <div className="md:w-1/2 p-4">
         <h2 className="text-lg font-bold mb-4">Personal Information</h2>
         <div className="mb-4">
-          <label htmlFor="image" className="block text-gray-700 font-bold mb-2">
-            Profile Image
+          <label htmlFor="email" className="block text-gray-900  mb-2">
+            Name
           </label>
           <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
+            type="name"
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleInputChange}
             className="border border-gray-400 rounded-md p-2 w-full"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="email" className="block text-gray-900 mb-2">
             Email
           </label>
           <input
@@ -61,7 +61,7 @@ const Profile = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="mobile" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="mobile" className="block text-gray-900  mb-2">
             Mobile
           </label>
           <input
@@ -73,32 +73,9 @@ const Profile = () => {
             className="border border-gray-400 rounded-md p-2 w-full"
           />
         </div>
+
         <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className="border border-gray-400 rounded-md p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Change Password
-          </button>
-        </div>
-      </div>
-      <div className="md:w-1/2 p-4">
-        <h2 className="text-lg font-bold mb-4">Additional Information</h2>
-        <div className="mb-4">
-          <label htmlFor="address" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="address" className="block text-gray-900  mb-2">
             Address
           </label>
           <textarea
@@ -109,8 +86,13 @@ const Profile = () => {
             className="border border-gray-400 rounded-md p-2 w-full"
           ></textarea>
         </div>
+       
+      </div>
+      <div className="md:w-1/2 p-4">
+        <h2 className="text-lg font-bold mb-4">Additional Information</h2>
+        
         <div className="mb-4">
-          <label htmlFor="experience" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="experience" className="block text-gray-900  mb-2">
             Experience
           </label>
           <input
@@ -123,7 +105,7 @@ const Profile = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="doctorId" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="doctorId" className="block text-gray-900  mb-2">
             Doctor ID
           </label>
           <input
@@ -136,7 +118,7 @@ const Profile = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="treatment" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="treatment" className="block text-gray-900  mb-2">
             Treatment
           </label>
           <input
@@ -149,7 +131,7 @@ const Profile = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="subTreatment" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="subTreatment" className="block text-gray-900  mb-2">
             Sub Treatment
           </label>
           <input
@@ -161,24 +143,12 @@ const Profile = () => {
             className="border border-gray-400 rounded-md p-2 w-full bg-gray-200"
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="document" className="block text-gray-700 font-bold mb-2">
-            Upload Document
-          </label>
-          <input
-            type="file"
-            id="document"
-            name="document"
-            accept=".pdf,.doc,.docx"
-            onChange={handleInputChange}
-            className="border border-gray-400 rounded-md p-2 w-full"
-          />
-        </div>
+        
         <div className="flex justify-end">
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#BEC944] hover:bg-[#e8df87] text-black font-bold py-2 px-4 rounded shadow-md shadow-gray-800 antialiased "
           >
             Submit
           </button>
