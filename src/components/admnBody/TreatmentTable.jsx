@@ -1,17 +1,22 @@
 import { Card, Typography } from "@material-tailwind/react";
 import styles from '../../tailwind.module.css';
 import { useEffect, useState } from "react";
-import { treatments } from "../../api/adminApi";
+import { treatments, trtMntStatus } from "../../api/adminApi";
 import { AddTBtn } from "./AddBtn";
+import ConfirmationModals from "../modals/confirmationModals";
 
-const TABLE_HEAD = ["Main Treatment Name", "Sub Treatments"];
+const TABLE_HEAD = ["Main Treatment", "Actions", "Status", "Sub Treatments"];
 
 const TreatmentTable = () => {
   //state variable to show on table
   const [treatmentData, setTreatmentData] = useState([]);
-  const [searchTerm,setSearchTerm]=useState('')   //state variable to get the serch value
-  const [currentPage,setCurrentPage] = useState(1)   //state variable to get the pagination details
-  const [itemsPerPage]=useState(3)
+  const [searchTerm, setSearchTerm] = useState('')   //state variable to get the serch value
+  const [currentPage, setCurrentPage] = useState(1)   //state variable to get the pagination details
+  const [itemsPerPage] = useState(3)
+
+  //state variables for modal and to get id
+  const [showModal, setShowModal] = useState(false)
+  const [id, setId] = useState('')
 
   // get the treatments when the page is loaded
   useEffect(() => {
@@ -27,14 +32,14 @@ const TreatmentTable = () => {
     };
 
     getTreatments();
-  }, []);
+  }, [showModal]);
 
   //get the search data
-  const handleSearch =(event)=>{
+  const handleSearch = (event) => {
     setSearchTerm(event.target.value)
   }
 
-  const filteredTreatments = treatmentData.filter((item)=>{
+  const filteredTreatments = treatmentData.filter((item) => {
     const trtmntName = `${item.name}`.toLowerCase()
     const searchT = `${searchTerm}`.toLowerCase()
 
@@ -43,31 +48,44 @@ const TreatmentTable = () => {
 
 
   //get pagination data
-  const paginationData = ()=>{
-    const startIndex =(currentPage -1)*itemsPerPage
-    const endIndex = startIndex +itemsPerPage
-    return filteredTreatments.slice(startIndex,endIndex)
+  const paginationData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredTreatments.slice(startIndex, endIndex)
   }
 
-  const totalPages = Math.ceil(treatmentData.length/itemsPerPage)
+  const totalPages = Math.ceil(treatmentData.length / itemsPerPage)
 
+  // subTreatment edit status modal confirmation 
+  const modalConfirmation = async (editId) => {
+    console.log('id', editId);
+    setId(editId)
+    setShowModal(true)
+  }
+
+  // handle status 
+  const handleStatus = async () => {
+    const res = await trtMntStatus(id)
+    console.log(res);
+    setShowModal(false)
+  }
 
   //function to implement pagination
 
-  const PaginationControls =()=>{
+  const PaginationControls = () => {
 
-    const handlePrev =()=>{
-        setCurrentPage((prevPage)=>prevPage >1?prevPage-1:1)
+    const handlePrev = () => {
+      setCurrentPage((prevPage) => prevPage > 1 ? prevPage - 1 : 1)
     }
 
-    const handleNext =()=>{
-        setCurrentPage(( prevPage)=>prevPage<totalPages?prevPage+1:totalPages)
+    const handleNext = () => {
+      setCurrentPage((prevPage) => prevPage < totalPages ? prevPage + 1 : totalPages)
     }
 
-    return(
+    return (
       <div className="flex justify-center  mt-4 mb-4">
-        <button className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black" onClick={handlePrev} disabled={currentPage===1}>prev</button>
-        <button className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black  " onClick={handleNext} disabled={currentPage===totalPages}>next</button>
+        <button className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black" onClick={handlePrev} disabled={currentPage === 1}>prev</button>
+        <button className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black  " onClick={handleNext} disabled={currentPage === totalPages}>next</button>
       </div>
     )
   }
@@ -85,7 +103,7 @@ const TreatmentTable = () => {
         {/* add treatment button */}
         <AddTBtn handleSearch={handleSearch} searchTerm={searchTerm} />
 
-        <div className="mt-5 p-5 ">
+        <div className="mt-5 px-20 ">
           <Card className="h-full w-full overflow-scroll shadow-lg ">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
@@ -95,7 +113,7 @@ const TreatmentTable = () => {
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none opacity-70"
+                        className="font-normal leading-none opacity-70  "
                       >
                         {head}
                       </Typography>
@@ -104,7 +122,7 @@ const TreatmentTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginationData().map(({ _id, name, subTreatments }, index) => {
+                {paginationData().map(({ _id, name, status,subTreatments }, index) => {
                   const isLast = index === treatmentData.length - 1;
                   const cellClass = isLast
                     ? styles.tableCellLast
@@ -121,6 +139,23 @@ const TreatmentTable = () => {
                           {name}
                         </Typography>
                       </td>
+                      {/* status and edit  */}
+
+                      <td className={cellClass}>
+                        <button className="px-2 py-1 bg-blue-500 text-white rounded">
+                          Edit
+                        </button>
+                      </td>
+                      <td className={cellClass}>
+                        <button
+                          onClick={()=>{modalConfirmation(_id)}}
+                          className={`px-2 py-1 rounded ${status ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                            }`}
+                        >
+                          {status ? "Active" : "Not Active"}
+                        </button>
+                      </td>
+
                       <td className={cellClass}>
                         <Typography
                           as="div"
@@ -137,6 +172,7 @@ const TreatmentTable = () => {
                           </ul>
                         </Typography>
                       </td>
+
                     </tr>
                   );
                 })}
@@ -145,8 +181,10 @@ const TreatmentTable = () => {
           </Card>
         </div>
 
-        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange ={setCurrentPage}/>
+        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       </div>
+
+      {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
     </>
   );
 };

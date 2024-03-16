@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Card } from '@material-tailwind/react';
 import { docImage } from '../../api/doctorApi';
+import { jwtDecode } from 'jwt-decode';
 
 
 const FileSec = () => {
     const [profileImage, setProfileImage] = useState(null);
     const [fileUpload, setFileUpload] = useState(null)
 
-    // const upload_preset = 'hkdfkbsg'
-    // const cloud_name = 'djmr6njuu'
 
     const handleFileChange = (e) => {
         console.log('files   --', e.target);
@@ -27,18 +26,13 @@ const FileSec = () => {
         console.log('files   --', e.target.files[0]);
         const file = e.target.files[0];
         console.log(file)
-        // if (file) {
-        //     const reader = new FileReader()
-        //     reader.readAsDataURL(file)
+        if (file) {
 
-        //     reader.onloadend = () => {
-        //         setProfileImage(reader.result)
-        //     }
-        //     console.log('prfl img',profileImage);
-        // } else {
-        //     setProfileImage(null)
-        // }
-        setProfileImage(file)
+            setProfileImage(file)
+
+        } else {
+            setProfileImage(null)
+        }
     };
 
     const uploadImage = (e) => {
@@ -54,10 +48,20 @@ const FileSec = () => {
         }
 
         if (profileImage) {
-            console.log('img name ---',profileImage);
-            const formData = new FormData();
-            formData.append('image', profileImage);      
-            res(formData)
+            console.log('img name ---', profileImage);
+
+            const token = localStorage.getItem('token')
+            if (token) {
+                const decode = jwtDecode(token)
+                console.log('token ', decode);
+                const id = decode.id
+                const formData = new FormData();
+                formData.append('image', profileImage);
+                formData.append('id',id)
+                res(formData)
+            }
+
+
 
         } else {
             console.error('No image selected or selected file is not an image');

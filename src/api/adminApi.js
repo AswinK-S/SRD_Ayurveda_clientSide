@@ -39,6 +39,17 @@ export const addTreatments = async(data)=>{
     }
 }
 
+//change treatment Status
+export const trtMntStatus = async(id)=>{
+    try {
+        console.log('trt id ---',id);
+        const result = await axiosApi.patch(`${adminRoutes.treatmentStatus}/${id}`)
+        return result
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //add Doctors
 export const addDoctor = async(doctorData)=>{
     try {
