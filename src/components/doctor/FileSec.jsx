@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Card } from '@material-tailwind/react';
 import { docImage } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 
 const FileSec = () => {
     const [profileImage, setProfileImage] = useState(null);
     const [fileUpload, setFileUpload] = useState(null)
 
+    const [uploading, setUploading] = useState('')
 
     const handleFileChange = (e) => {
         console.log('files   --', e.target);
@@ -22,6 +24,7 @@ const FileSec = () => {
         setFileUpload(URL.createObjectURL(document))
     }
 
+    //image uploading state change
     const handleImageChange = (e) => {
         console.log('files   --', e.target.files[0]);
         const file = e.target.files[0];
@@ -35,13 +38,18 @@ const FileSec = () => {
         }
     };
 
+    // uploading image 
     const uploadImage = (e) => {
         e.preventDefault()
-
+        setUploading('uploading')
         const res = async (image) => {
             try {
                 const result = await docImage(image)
-                console.log(result);
+                console.log('iiiii', result);
+                if (result.request.status === 200) {
+                    toast.success('Image Uploaded')
+                    setUploading('uploaded')
+                }
             } catch (error) {
                 console.log(error.message);
             }
@@ -50,14 +58,14 @@ const FileSec = () => {
         if (profileImage) {
             console.log('img name ---', profileImage);
 
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('doctortoken')
             if (token) {
                 const decode = jwtDecode(token)
                 console.log('token ', decode);
                 const id = decode.id
                 const formData = new FormData();
                 formData.append('image', profileImage);
-                formData.append('id',id)
+                formData.append('id', id)
                 res(formData)
             }
 
@@ -104,11 +112,32 @@ const FileSec = () => {
                                     id="image"
                                     name="image"
                                     accept="image/*"
+                                    disabled={uploading}
                                     onChange={handleImageChange}
                                     className="border border-gray-600   rounded-md p-2 w-full"
                                 />
-                                <div className=' mt-2 mb-2'>
-                                    <button className='p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] hover:bg-[#e8df87]' onClick={uploadImage}> Upload image</button>
+                                <div className=" mt-2 mb-2">
+                                    {uploading === 'uploading' ? (
+                                        <div className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] text-white">
+                                            Uploading image...
+                                        </div>
+                                    ) : uploading === 'uploaded' ? (
+                                        <button
+                                            className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] hover:bg-[#e8df87]"
+                                            onClick={uploadImage}
+                                            disabled={!profileImage}
+                                        >
+                                            Uploaded
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] hover:bg-[#e8df87]"
+                                            onClick={uploadImage}
+                                            disabled={!profileImage}
+                                        >
+                                            Upload image
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             <div className="mb-4">

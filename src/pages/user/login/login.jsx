@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 const Login = () => {
 
     useEffect(()=>{
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('usertoken')
         if(token){
             const decode = jwtDecode(token)
             if(decode.role=="user"){
@@ -49,7 +49,7 @@ const Login = () => {
             console.log('response===>',response);
 
             if(response?.status ==200){
-                localStorage.setItem('token',response.data.token)
+                localStorage.setItem('usertoken',response.data.token)
                 navigate('/')
             }else{
                 console.log('invalid ',response);

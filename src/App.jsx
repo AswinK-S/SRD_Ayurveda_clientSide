@@ -11,6 +11,8 @@ import SignUp from "./pages/user/signUp/signUp"
 
 import UserProtectedRoute from './components/UserProtectedRoute'
 import AdmnProtectedRoute from './components/admnPrtctdRoute'
+import DoctorPrtctdRoute from './components/doctorPrtctdRoute'
+
 
 // admin
 import AdminLogin from "./pages/admin/admin"
@@ -56,8 +58,8 @@ function App() {
 
     {/* doctor */}
     <Route path="/doctor" element={<DoctorLogin/>}/>
-    <Route path ='/doctor/overView' element ={<Overview/>} />
-    <Route path ='/doctor/profile' element={<DoctorPro/>}/>
+    <Route path ='/doctor/overView' element ={ <DoctorPrtctdRoute allowedRole='doctor'> <Overview/> </DoctorPrtctdRoute> } />
+    <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/>
     </Routes>
     </BrowserRouter>
 

@@ -16,7 +16,7 @@ const AdmnBody = () => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('admintoken')
         console.log('admn nav tkn :',token);
         
         if (token) {
@@ -40,7 +40,7 @@ const AdmnBody = () => {
             console.log('ressss ----------,');
             if (response?.status == 200) {
                 console.log('login success --admin');
-                localStorage.setItem('token',response.data.token)
+                localStorage.setItem('admintoken',response.data.token)
                 navigate('/admin/dashboard')
             } else {
                 console.log('invalid',response?.data?.message);

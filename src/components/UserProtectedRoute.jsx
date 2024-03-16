@@ -11,7 +11,7 @@ const UserProtectedRoute = ({ children, allowedRole }) => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null); // Update the type accordingly
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('usertoken');
 
   useEffect(() => {
     try {

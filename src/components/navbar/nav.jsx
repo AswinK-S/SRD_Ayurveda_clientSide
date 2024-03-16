@@ -10,7 +10,7 @@ const Nav = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('usertoken')
     console.log('user token :', token);
     if (token) {
       const decode = jwtDecode(token)
@@ -23,7 +23,7 @@ const Nav = () => {
   }, [user])
 
   const logout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('usertoken')
     navigate('/')
   }
 

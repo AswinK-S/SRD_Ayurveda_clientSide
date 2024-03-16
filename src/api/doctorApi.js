@@ -16,6 +16,7 @@ export const docImage = async(image)=>{
         console.log('image ---',image);
         const res = await axiosApi.post(doctorRoute.image,image)
         console.log('object',res);
+        return res
     } catch (error) {
         console.log(error.message);
     }

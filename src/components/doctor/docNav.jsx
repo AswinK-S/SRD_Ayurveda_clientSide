@@ -12,7 +12,7 @@ const DocNav = () => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('doctortoken')
         console.log('dctr nav tkn :', token);
 
         if (token) {
@@ -28,7 +28,7 @@ const DocNav = () => {
     }, [navigate])
 
     const logout = () => {
-        localStorage.removeItem('token')
+        localStorage.removeItem('doctortoken')
         navigate('/doctor')
     }
 

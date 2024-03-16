@@ -13,16 +13,17 @@ const DocBody =()=>{
     const [password,setPassword] = useState('')
 
     useEffect(()=>{
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('doctortoken')
         if(token){
             const decode = jwtDecode(token)
             if(decode.role =='doctor'){
-                navigate('doctor/dashboard')
-            }else{
-                navigate('/doctor')
+                navigate('/doctor/overView')
+                return
             }
+        }else{
+            navigate('/doctor')
         }
-    },[])
+    },[navigate,])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -33,7 +34,7 @@ const DocBody =()=>{
             console.log('ressss ----------,');
             if (response?.data.message==='doctor logged in') {
                 console.log('login success --admin');
-                localStorage.setItem('token',response.data.token)
+                localStorage.setItem('doctortoken',response.data.token)
                 navigate('/doctor/overView')
             } else {
                 console.log('invalid',response?.data?.message);

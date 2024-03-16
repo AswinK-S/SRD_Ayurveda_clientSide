@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
-const AdmnProtectedRoute = ({ children, allowedRole }) => {
+const DoctorPrtctdRoute = ({ children, allowedRole }) => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('admintoken');
+  const token = localStorage.getItem('doctortoken');
+
 
   useEffect(() => {
     try {
@@ -13,19 +14,19 @@ const AdmnProtectedRoute = ({ children, allowedRole }) => {
         const decode = jwtDecode(token);
 
         if (decode.role !== allowedRole) {
-          navigate('/admin');
+          navigate('/doctor');
         }
         // No need for an else block, you can proceed with the rendering logic
       } else {
-        navigate('/admin');
+        navigate('/doctor');
       }
     } catch (error) {
-      navigate('/admin');
+      navigate('/doctor');
     }
-  }, [token,navigate,allowedRole]); // Dependency array is empty to run the effect only once
+  }, [token, navigate, allowedRole]); // Dependency array is empty to run the effect only once
 
   // Render the content based on conditions
   return <>{children}</>;
 };
 
-export default AdmnProtectedRoute;
+export default DoctorPrtctdRoute;
