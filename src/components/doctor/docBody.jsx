@@ -33,7 +33,7 @@ const DocBody =()=>{
             let response = await docLogin(loginData)
             console.log('ressss ----------,');
             if (response?.data.message==='doctor logged in') {
-                console.log('login success --admin');
+                console.log('login success --doctor');
                 localStorage.setItem('doctortoken',response.data.token)
                 navigate('/doctor/overView')
             } else {

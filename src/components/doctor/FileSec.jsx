@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '@material-tailwind/react';
 import { docImage } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
@@ -10,6 +10,14 @@ const FileSec = () => {
     const [fileUpload, setFileUpload] = useState(null)
 
     const [uploading, setUploading] = useState('')
+
+    useEffect(()=>{
+        const token = localStorage.getItem('doctortoken')
+        if(token){
+            const doctor= jwtDecode(token)
+            console.log('doc---',doctor);
+        }
+    },[])
 
     const handleFileChange = (e) => {
         console.log('files   --', e.target);

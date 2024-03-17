@@ -1,29 +1,33 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import './nav.css';
-import { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { logout } from '../../featuers/user/userSlice';
+
 
 const Nav = () => {
 
-  const [user, setUser] = useState(false)
   const navigate = useNavigate()
+  const user = useSelector((state)=>state.user.user)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const token = localStorage.getItem('usertoken')
-    console.log('user token :', token);
-    if (token) {
-      const decode = jwtDecode(token)
+ 
 
-      if (decode.role == 'user') {
-        setUser(true)
-      }
+
+  useEffect(()=>{
+    if(user){
+      console.log('user---- ',user);
+      navigate('/')
+    }else{
+      console.log('user---- ',user);
+
     }
+  },[user,navigate])
 
-  }, [user])
-
-  const logout = () => {
+  const logoutUser = () => {
     localStorage.removeItem('usertoken')
+    dispatch(logout())
     navigate('/')
   }
 
@@ -48,7 +52,7 @@ const Nav = () => {
             {user ?
               <button
                 className="bg-[#E7EE9D] px-4 py-2 rounded-lg shadow-lg hover:border-b-2"
-                onClick={logout}
+                onClick={logoutUser}
               >
                 Logout
               </button> :
