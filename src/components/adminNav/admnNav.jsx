@@ -1,38 +1,50 @@
 
-import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { loginSuccess, logout } from '../../featuers/admin/adminSlice';
+import { jwtDecode } from 'jwt-decode';
+import ReactLoading from 'react-loading'
 
 
 const AdmnNav = () => {
 
   const navigate = useNavigate()
-
-  const [admin, setadmin] = useState(false)
+  const dispatch = useDispatch()
 
   const [showMenu, setShowMenu] = useState(false);
+  const [loading,setLoading] = useState(true)
+  const admin = useSelector((state)=>state.admin.admin)
 
 
-
-  useEffect(() => {
+  useEffect(()=>{
     const token = localStorage.getItem('admintoken')
-    console.log('admn nav tkn :', token);
-
-    if (token) {
+    if(token){
       const decode = jwtDecode(token)
-      console.log('admn token :', decode.role);
-      if (decode.role == 'admin') {
-        setadmin(true)
+      if(decode.role ==='admin'){
+        const adminDetails = localStorage.getItem('adminDetails')
+        dispatch(loginSuccess(adminDetails))
+        console.log('admn--',admin);
+        setTimeout(()=>{
+          setLoading(false)
+
+        },1000)
         return
+      }else{
+        navigate('/admin')
       }
-    } else {
+    }else{
       navigate('/admin')
     }
-  }, [navigate])
+    setLoading(false)
+  },[navigate,admin,dispatch])
 
-  const logout = () => {
+
+
+  const logoutAdmin = () => {
     localStorage.removeItem('admintoken')
-    navigate('/admin')
+    localStorage.removeItem('adminDetails')
+    dispatch(logout())
   }
 
   const toggleMenu = () => {
@@ -42,7 +54,14 @@ const AdmnNav = () => {
 
   return (
     <>
-      <div className=" flex justify-center shadow-md shadow-blue-gray-300 py-1">
+      {
+        loading ?( 
+        <div className="fixed inset-0 flex items-center justify-center bg-yellow-100">
+        <ReactLoading type="balls" color="lime" height={100} width={50} />
+      </div>
+      ):
+        (
+          <div className=" flex justify-center shadow-md shadow-blue-gray-300 py-1">
 
         <div className="container ">
           <div className="flex flex-col sm:flex-row items-center justify-between">
@@ -67,9 +86,6 @@ const AdmnNav = () => {
             >
               {admin ? (
                 <>
-
-
-
                   <Link to="/admin/dashboard" className="inline-flex hover:border-b-2 rounded-lg hover:border-black cursor-pointer py-2 px-4 sm:px-5">
                     Dashboard
                   </Link>
@@ -87,7 +103,7 @@ const AdmnNav = () => {
                   </Link>
                   <button
                     className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-lg hover:border-b-2"
-                    onClick={logout}
+                    onClick={logoutAdmin}
                   >
                     Logout
                   </button>
@@ -98,11 +114,11 @@ const AdmnNav = () => {
           </div>
         </div>
       </div>
+        )
+      }
 
     </>
   );
-
-
 
 }
 

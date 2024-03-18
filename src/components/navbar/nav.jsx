@@ -27,6 +27,7 @@ const Nav = () => {
 
   const logoutUser = () => {
     localStorage.removeItem('usertoken')
+    localStorage.removeItem('userDetails')
     dispatch(logout())
     navigate('/')
   }

@@ -12,6 +12,12 @@ import { useDispatch } from "react-redux";
 
 const Login = () => {
 
+    const navigate =useNavigate()
+    const dispatch = useDispatch()
+
+    const [email,setEmail] = useState('')
+    const [password,setPassword] =useState('')
+
     useEffect(()=>{
         const token = localStorage.getItem('usertoken')
         if(token){
@@ -36,11 +42,7 @@ const Login = () => {
     };
 
 
-    const navigate =useNavigate()
-    const dispatch = useDispatch()
 
-    const [email,setEmail] = useState('')
-    const [password,setPassword] =useState('')
 
     const handleSubmit =async (e)=>{
         e.preventDefault()
@@ -53,7 +55,7 @@ const Login = () => {
             if(response?.status ==200){
                 dispatch(loginSuccess(response.data.user))
                 localStorage.setItem('usertoken',response.data.token)
-
+                localStorage.setItem('userDetails',JSON.stringify(response.data.user))
                 navigate('/')
             }else{
                 console.log('invalid ',response);

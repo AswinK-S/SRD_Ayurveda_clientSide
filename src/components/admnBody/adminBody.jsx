@@ -2,7 +2,8 @@ import {  useEffect, useState } from "react"
 import { login } from "../../api/adminApi"
 import { useNavigate } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"
-// import { jwtDecode } from "jwt-decode"
+import { useDispatch } from "react-redux"
+import { loginSuccess } from "../../featuers/admin/adminSlice"
 
 
 
@@ -13,7 +14,7 @@ const AdmnBody = () => {
 
 
     const navigate = useNavigate()
-
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const token = localStorage.getItem('admintoken')
@@ -22,7 +23,7 @@ const AdmnBody = () => {
         if (token) {
           const decode = jwtDecode(token)
           console.log('admn token :', decode.role);
-          if (decode.role == 'admin') {
+          if (decode.role === 'admin') {
             navigate('/admin/dashboard')
             return
           }
@@ -37,10 +38,12 @@ const AdmnBody = () => {
 
             let loginData = { email, password }
             let response = await login(loginData)
-            console.log('ressss ----------,');
             if (response?.status == 200) {
-                console.log('login success --admin');
+                console.log('login success --admin',response);
                 localStorage.setItem('admintoken',response.data.token)
+                localStorage.setItem('adminDetails',JSON.stringify(response.data))
+                
+                dispatch(loginSuccess(response?.data?.admin))
                 navigate('/admin/dashboard')
             } else {
                 console.log('invalid',response?.data?.message);

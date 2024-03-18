@@ -3,6 +3,7 @@ import { Card } from '@material-tailwind/react';
 import { docImage } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 
 const FileSec = () => {
@@ -11,13 +12,16 @@ const FileSec = () => {
 
     const [uploading, setUploading] = useState('')
 
+    const doctorData = useSelector((state)=>state.doctor.doctor)
+
     useEffect(()=>{
         const token = localStorage.getItem('doctortoken')
         if(token){
             const doctor= jwtDecode(token)
             console.log('doc---',doctor);
+            console.log('doctordata--',doctorData);
         }
-    },[])
+    },[doctorData])
 
     const handleFileChange = (e) => {
         console.log('files   --', e.target);
@@ -191,7 +195,7 @@ const FileSec = () => {
 
                 </div>
 
-                <Card className='mt-5 mb-5 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800 antialiased rounded-md p-3 flex items-center'>
+                <Card className='mt-5 mb-5 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800  rounded-md p-3 flex items-center'>
                     <p className='text-black'>change password</p>
                 </Card>
             </div>

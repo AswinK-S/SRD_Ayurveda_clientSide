@@ -45,8 +45,6 @@ const SideBar = () => {
                                     </li>
                                 </Link>
 
-                                {/* Other list items */}
-
                                 <li>
                                     <a
                                         href="#"
@@ -77,7 +75,7 @@ const SideBar = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                        className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                     >
                                         <span className="inline-flex justify-center items-center ml-4">
                                             <svg
@@ -107,7 +105,7 @@ const SideBar = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                        className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                     >
                                         <span className="inline-flex justify-center items-center ml-4">
                                             <svg
@@ -134,7 +132,7 @@ const SideBar = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                        className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                     >
                                         <span className="inline-flex justify-center items-center ml-4">
                                             <svg
@@ -161,7 +159,7 @@ const SideBar = () => {
                                 <li>
                                     <a
                                         href="#"
-                                        className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                        className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                     >
                                         <span className="inline-flex justify-center items-center ml-4">
                                             <svg
@@ -190,7 +188,7 @@ const SideBar = () => {
 
                                     <a
                                         href="#"
-                                        className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                        className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                     >
                                         <span className="inline-flex justify-center items-center ml-4">
                                             <svg
@@ -222,7 +220,7 @@ const SideBar = () => {
                                     <li>
                                         <a
                                             href="#"
-                                            className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+                                            className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                         >
                                             <span className="inline-flex justify-center items-center ml-4">
                                                 <svg

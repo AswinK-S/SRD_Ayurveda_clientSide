@@ -1,35 +1,55 @@
 import { useNavigate, } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { docloginSuccess, logout } from "../../featuers/doctor/doctorSlice";
 import { jwtDecode } from "jwt-decode";
-
+// import ReactLoading from 'react-loading'
+import 'ldrs/quantum'
 const DocNav = () => {
     const navigate = useNavigate()
-
-    const [doctor, setDoctor] = useState(false)
+    const dispatch = useDispatch()
 
     const [showMenu, setShowMenu] = useState(false);
+    const [loading, setLoading] = useState(true)
 
+    const doctor = useSelector((state) => state.doctor.doctor)
 
 
     useEffect(() => {
         const token = localStorage.getItem('doctortoken')
-        console.log('dctr nav tkn :', token);
+        console.log('llllklklk22');
 
         if (token) {
+            console.log('llllklklk3333');
+
             const decode = jwtDecode(token)
-            console.log('dctr token :', decode.role);
-            if (decode.role == 'doctor') {
-                setDoctor(true)
+            if (decode.role === 'doctor') {
+                console.log('llllklklk4444');
+
+                const doctorDetails = localStorage.getItem('doctorDetails')
+                console.log('llllklklk22 doc details--', doctorDetails);
+
+                dispatch(docloginSuccess(doctorDetails))
+                console.log('doctor--', doctor);
+                setTimeout(() => {
+                    console.log('sfd');
+                    setLoading(false)
+
+                }, 1000)
                 return
+            } else {
+                navigate('/doctor')
             }
         } else {
             navigate('/doctor')
         }
-    }, [navigate])
+        setLoading(false)
+    }, [dispatch, navigate, doctor])
 
-    const logout = () => {
+    const logoutDoc = () => {
         localStorage.removeItem('doctortoken')
-        navigate('/doctor')
+        localStorage.removeItem('doctorDetails')
+        dispatch(logout())
     }
 
     const toggleMenu = () => {
@@ -39,47 +59,62 @@ const DocNav = () => {
 
     return (
         <>
-
-
-            <div className=" flex justify-center shadow-lg shadow-blue-gray-300 py-1">
-                <div className="container">
-                    <div className="flex flex-col sm:flex-row items-center justify-between">
-                        <div className="mb-4 sm:mb-0">
-                            <img className="h-[100px]" src="/logo.png" alt="" />
+            {
+                loading ? (
+                    <div className="h-screen inset-0 flex items-center justify-center  border bg-yellow-100   ">
+                        <div className="p-5 flex-row items-center justify-center   ">
+                        <l-quantum
+                            size="80"
+                            speed="1.25"
+                            color="green"
+                        ></l-quantum>
+                        <p className="text-light-green-800">loading...</p>
                         </div>
 
-                        {/* Menu Button for Mobile View */}
-                        <div className="sm:hidden">
-                            <button
-                                onClick={toggleMenu}
-                                className="text-black focus:outline-none"
-                            >
-                                &#9776; {/* Hamburger Icon */}
-                            </button>
-                        </div>
 
-                        {/* Menu Items for Normal and Mobile View */}
-                        <div
-                            className={`flex text-black items-center space-x-4 font-serif ${showMenu ? 'flex-col sm:flex-row' : 'hidden sm:flex'
-                                }`}
-                        >
-                            {doctor ? (
-                                <>
-                                    <button
-                                        className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-md shadow-gray-700 hover:border-b-2"
-                                        onClick={logout}
+                       
+
+                    </div>) :
+                    (
+                        <div className=" flex justify-center shadow-lg shadow-blue-gray-300 py-1">
+                            <div className="container">
+                                <div className="flex flex-col sm:flex-row items-center justify-between">
+                                    <div className="mb-4 sm:mb-0">
+                                        <img className="h-[100px]" src="/logo.png" alt="" />
+                                    </div>
+
+                                    {/* Menu Button for Mobile View */}
+                                    <div className="sm:hidden">
+                                        <button
+                                            onClick={toggleMenu}
+                                            className="text-black focus:outline-none"
+                                        >
+                                            &#9776; {/* Hamburger Icon */}
+                                        </button>
+                                    </div>
+
+                                    {/* Menu Items for Normal and Mobile View */}
+                                    <div
+                                        className={`flex text-black items-center space-x-4 font-serif ${showMenu ? 'flex-col sm:flex-row' : 'hidden sm:flex'
+                                            }`}
                                     >
-                                        Logout
-                                    </button>
+                                        {doctor ? (
+                                            <>
+                                                <button
+                                                    className="bg-[#d3dd64] px-4 py-2 rounded-lg shadow-md shadow-gray-700 hover:border-b-2"
+                                                    onClick={logoutDoc}
+                                                >
+                                                    Logout
+                                                </button>
 
-                                </>
-                            ) : null}
+                                            </>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-
+                    )
+            }
 
         </>
     );

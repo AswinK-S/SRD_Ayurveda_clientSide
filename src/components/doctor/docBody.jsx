@@ -1,22 +1,26 @@
 import { jwtDecode } from "jwt-decode"
-import { useEffect, useState } from "react"
+import {  useState,useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { docLogin } from "../../api/doctorApi";
-
+import { useDispatch } from "react-redux";
+import { docloginSuccess } from "../../featuers/doctor/doctorSlice";
 
 
 const DocBody =()=>{
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const [email,setEmail]= useState('')
     const [password,setPassword] = useState('')
+    
 
     useEffect(()=>{
         const token = localStorage.getItem('doctortoken')
         if(token){
             const decode = jwtDecode(token)
-            if(decode.role =='doctor'){
+            if(decode.role ==="doctor"){
+                console.log('ionosdjknfksdf---',decode.role);
                 navigate('/doctor/overView')
                 return
             }
@@ -33,9 +37,13 @@ const DocBody =()=>{
             let response = await docLogin(loginData)
             console.log('ressss ----------,');
             if (response?.data.message==='doctor logged in') {
-                console.log('login success --doctor');
+                console.log('login success --doctor',response.data.doctor);
+                 dispatch(docloginSuccess(response.data.doctor))
+                localStorage.setItem('doctorDetails',JSON.stringify(response.data.doctor))
                 localStorage.setItem('doctortoken',response.data.token)
                 navigate('/doctor/overView')
+                console.log(';;;;;;');
+
             } else {
                 console.log('invalid',response?.data?.message);
                 navigate('/doctor')
@@ -56,7 +64,7 @@ const DocBody =()=>{
                       Doctor
                     </h1>
 
-                    <form className=" bg-transparent mt-6" onClick={handleSubmit} >
+                    <form className=" bg-transparent mt-6"  >
                         <div className="mb-2 bg-transparent">
                             <label
                                 htmlFor="email"
@@ -90,7 +98,7 @@ const DocBody =()=>{
                         
 
                         <div className="mt-6 flex justify-center bg-transparent">
-                            <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
+                            <button onClick={handleSubmit} className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
                                 Login
                             </button>
                         </div>
