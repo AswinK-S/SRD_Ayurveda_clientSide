@@ -3,7 +3,9 @@ import { Card } from '@material-tailwind/react';
 import { docImage } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import "react-step-progress-bar/styles.css";
+import { docloginSuccess } from '../../featuers/doctor/doctorSlice';
 
 
 const FileSec = () => {
@@ -11,17 +13,34 @@ const FileSec = () => {
     const [fileUpload, setFileUpload] = useState(null)
 
     const [uploading, setUploading] = useState('')
+    let [doctorDetails,setDoctorDetails] =useState(null)
+    const dispatch= useDispatch()
+    // const doctorData = (useSelector((state) => state.doctor.doctor))
 
-    const doctorData = useSelector((state)=>state.doctor.doctor)
-
-    useEffect(()=>{
+   
+    useEffect(() => {
         const token = localStorage.getItem('doctortoken')
-        if(token){
-            const doctor= jwtDecode(token)
-            console.log('doc---',doctor);
-            console.log('doctordata--',doctorData);
+        console.log('111');
+        if (token) {
+            console.log('222');
+            const doctor = jwtDecode(token)
+            console.log('doc---', doctor);
+            if(doctor.role ==='doctor'){
+                console.log('3333');
+                // console.log('777777777',localStorage.getItem('doctorDetails'));
+                const detail = JSON.parse(localStorage.getItem('doctorDetails')); // Parse the JSON string back to an object
+                console.log('44444', detail);
+                setDoctorDetails(detail)
+                dispatch(docloginSuccess(detail)); // Dispatch the object directly
+
+                console.log('doctordata--55', detail.image);
+
+            }
         }
-    },[doctorData])
+    }, [dispatch,setDoctorDetails,])
+
+
+
 
     const handleFileChange = (e) => {
         console.log('files   --', e.target);
@@ -59,6 +78,19 @@ const FileSec = () => {
                 const result = await docImage(image)
                 console.log('iiiii', result);
                 if (result.request.status === 200) {
+                    console.log('oooooooo--',result.data);
+                    const uploadImg = JSON.stringify(result.data)
+                    console.log('000009999--',uploadImg,typeof uploadImg);
+
+                    setDoctorDetails((prevDetails) => ({
+                        ...prevDetails,
+                        ...uploadImg,
+                    }));
+                    // localStorage.removeItem('doctorDetails')
+                    localStorage.setItem('doctorDetails',uploadImg)
+
+                    dispatch(docloginSuccess(uploadImg))
+
                     toast.success('Image Uploaded')
                     setUploading('uploaded')
                 }
@@ -78,6 +110,8 @@ const FileSec = () => {
                 const formData = new FormData();
                 formData.append('image', profileImage);
                 formData.append('id', id)
+
+                
                 res(formData)
             }
 
@@ -102,9 +136,9 @@ const FileSec = () => {
                 <div className="flex flex-col md:flex-row bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800 antialiased rounded-md p-3">
                     <div className="md:w-auto p-4">
                         <div className="flex justify-center mb-4">
-                            {profileImage ? (
+                            {doctorDetails && doctorDetails?.image ? (
                                 <img
-                                    src={URL.createObjectURL(profileImage)}
+                                    src={doctorDetails?.image}
                                     alt="Profile"
                                     className=" w-32 h-32 rounded-full shadow-md shadow-black "
                                 />
@@ -124,7 +158,7 @@ const FileSec = () => {
                                     id="image"
                                     name="image"
                                     accept="image/*"
-                                    disabled={uploading}
+                                    // disabled={uploading}
                                     onChange={handleImageChange}
                                     className="border border-gray-600   rounded-md p-2 w-full"
                                 />
@@ -133,23 +167,17 @@ const FileSec = () => {
                                         <div className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] text-white">
                                             Uploading image...
                                         </div>
-                                    ) : uploading === 'uploaded' ? (
+                                    )  : (
                                         <button
                                             className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] hover:bg-[#e8df87]"
                                             onClick={uploadImage}
-                                            disabled={!profileImage}
-                                        >
-                                            Uploaded
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] hover:bg-[#e8df87]"
-                                            onClick={uploadImage}
-                                            disabled={!profileImage}
                                         >
                                             Upload image
                                         </button>
                                     )}
+                                   
+
+
                                 </div>
                             </div>
                             <div className="mb-4">

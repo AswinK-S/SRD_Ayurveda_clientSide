@@ -21,3 +21,12 @@ export const docImage = async(image)=>{
         console.log(error.message);
     }
 }
+
+export const postDetails = async (formData)=>{
+    try {
+        const response = await axiosApi.post(doctorRoute.details,formData)
+        return response
+    } catch (error) {
+        console.log(error.message)
+    }
+}

@@ -49,12 +49,11 @@ const AddTreatments = () => {
     }
   };
 
+
   const handleSubmit = (e) => {
    
     e.preventDefault();
 
-   
-  
     if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '')) {
       const newTreatmentData = {
         name: treatmentName,
