@@ -1,52 +1,25 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useState } from "react";
 import { postDetails } from "../../api/doctorApi";
 import { formValidation } from "../../utils/doctor/prfile";
+import { useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
 
-  const [errors,setErrors] = useState('')
+  const [errors, setErrors] = useState('')
+  const [modifiedData, setModifiedData] = useState('')
+  const [noUpdate, setNoUpdate] = useState('')
 
-  const doctor = useSelector((state) => {
-    state.doctor.doctor
-    // console.log('Redux state:', state.doctor.doctor);
-    return state.doctor.doctor;
-  })
+  const doctor = useSelector((state) => state.doctor.doctor)
 
-  useEffect(() => {
-
-  }, [])
-
-  const [formData, setFormData] = useState({
-    name: doctor?.name || '',
-    email: doctor?.email || '',
-    mobile: doctor?.mob || '', 
-    address: doctor?.address || '',
-    experience: doctor?.experience || '',
-    doctorId: doctor?.doctor_id || '',
-    treatment: doctor?.treatment || '',
-    subTreatment: doctor?.subTreatment || '',
-  });
-
-  // console.log('profile---', doctor);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const fieldName = name === 'mob' ? 'mobile' : name; // Handle the case where the property name is different
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [fieldName]: value,
-    }));
-
-    
-    
-    // if(Object.keys(formValidateErrors).length>0){
-    //   setErrors(formValidateErrors)
-    //   console.log(formValidateErrors);
-    // }
-
-    
+    setModifiedData((prevModifiedData) => ({
+      ...prevModifiedData,
+      [name]: value,
+    }))
 
   };
 
@@ -54,18 +27,44 @@ const Profile = () => {
     e.preventDefault();
     try {
       // Handle form submission logic
-      console.log('jjhhh',formData);
-      const formValidateErrors = formValidation(formData)
+      const token = localStorage.getItem('doctortoken')
+      if (token) {
 
-      if (Object.keys(formValidateErrors).length > 0) {
-        console.log('vldtn errs', formValidateErrors);
-        setErrors(formValidateErrors);
-      } else {
-        console.log('formData--', formData);
-        const result = await postDetails(formData);
-        console.log('result doc details--', result);
+        const decode = jwtDecode(token)
+        if (decode.role === 'doctor') {
+
+          const id = decode.id
+          console.log('iiiiiiiiiiiiiiiiii', id);
+          const modifiedFieldsKeys = Object.keys(modifiedData);
+
+          if (modifiedFieldsKeys.length > 0) {
+            const formValidateErrors = formValidation(modifiedData);
+
+            if (Object.keys(formValidateErrors).length > 0) {
+              console.log('vldtn errs', formValidateErrors);
+              setErrors(formValidateErrors);
+            } else {
+              console.log('modifiedFields--', modifiedData);
+              setErrors('');
+              const result = await postDetails(modifiedData, id);
+              console.log('result doc details--', result);
+
+              // Reset modifiedFields after successful update
+              setModifiedData({});
+            }
+          } else {
+            console.log('No fields were modified.');
+            setNoUpdate('No fields were modified.')
+          }
+
+        }
+
+
+
       }
-     
+
+
+
     } catch (error) {
       console.log(error.message)
     }
@@ -112,8 +111,8 @@ const Profile = () => {
           </label>
           <input
             type="tel"
-            id="mobile"
-            name="mobile"
+            id="mob"
+            name="mob"
             value={doctor?.mob}
             onChange={handleInputChange}
             className="border border-gray-400 rounded-md p-2 w-full"
@@ -133,9 +132,9 @@ const Profile = () => {
             className="border border-gray-400 rounded-md p-2 w-full"
           ></textarea>
         </div>
+        {errors && <p className="text-red-500 text-sm mb-2">{errors.address}</p>}
 
       </div>
-      {errors && <p className="text-red-500 text-sm mb-2">{errors.address}</p>}
 
       <div className="md:w-1/2 p-4">
         <h2 className="text-lg font-bold mb-4">Additional Information</h2>
@@ -192,6 +191,7 @@ const Profile = () => {
             className="border border-gray-400 rounded-md p-2 w-full bg-gray-200"
           />
         </div>
+        {noUpdate && <p className="text-blue-800 text-sm mb-2">{noUpdate}</p>}
 
         <div className="flex justify-end">
           <button

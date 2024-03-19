@@ -22,9 +22,9 @@ export const docImage = async(image)=>{
     }
 }
 
-export const postDetails = async (formData)=>{
+export const postDetails = async (formData,id)=>{
     try {
-        const response = await axiosApi.post(doctorRoute.details,formData)
+        const response = await axiosApi.post(doctorRoute.details,{...formData,id})
         return response
     } catch (error) {
         console.log(error.message)

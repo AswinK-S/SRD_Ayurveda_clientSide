@@ -17,22 +17,16 @@ const DocNav = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('doctortoken')
-        console.log('llllklklk22');
 
         if (token) {
-            console.log('llllklklk3333');
 
             const decode = jwtDecode(token)
             if (decode.role === 'doctor') {
-                console.log('llllklklk4444');
 
                 const doctorDetails = localStorage.getItem('doctorDetails')
-                console.log('llllklklk22 doc details--', doctorDetails);
 
                 dispatch(docloginSuccess(doctorDetails))
-                console.log('doctor--', doctor);
                 setTimeout(() => {
-                    console.log('sfd');
                     setLoading(false)
 
                 }, 1000)
@@ -61,8 +55,8 @@ const DocNav = () => {
         <>
             {
                 loading ? (
-                    <div className="h-screen inset-0 flex items-center justify-center  border bg-yellow-100   ">
-                        <div className="p-5 flex-row items-center justify-center   ">
+                    <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
+                        <div className=" p-5 flex-row items-center justify-center   ">
                         <l-quantum
                             size="80"
                             speed="1.25"
