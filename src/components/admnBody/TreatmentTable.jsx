@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { treatments, trtMntStatus } from "../../api/adminApi";
 import { AddTBtn } from "./AddBtn";
 import ConfirmationModals from "../modals/confirmationModals";
+import TrtmntEdtModal from "../modals/TrtmntEdtModal";
 
 const TABLE_HEAD = ["Main Treatment", "Actions", "Status", "Sub Treatments"];
 
@@ -16,6 +17,7 @@ const TreatmentTable = () => {
 
   //state variables for modal and to get id
   const [showModal, setShowModal] = useState(false)
+  const [trtmntModal,setTrtmntModal] = useState(false)
   const [id, setId] = useState('')
 
   // get the treatments when the page is loaded
@@ -32,7 +34,7 @@ const TreatmentTable = () => {
     };
 
     getTreatments();
-  }, [showModal]);
+  }, [showModal,trtmntModal]);
 
   //get the search data
   const handleSearch = (event) => {
@@ -61,6 +63,12 @@ const TreatmentTable = () => {
     console.log('id', editId);
     setId(editId)
     setShowModal(true)
+  }
+
+  const editTrtmntModal = async (trtmntId)=>{
+    console.log('trtmnt id :',trtmntId);
+    setTrtmntModal(true)
+
   }
 
   // handle status 
@@ -93,7 +101,7 @@ const TreatmentTable = () => {
 
   return (
     <>
-      <div className=" mt-5 p-5">
+      <div className=" mt-5 p-5 ">
         <div className="flex items-center justify-center mb-5 ">
           <div className="bg-[#d3dd64] flex flex-col items-center rounded-lg shadow-md p-3 w-1/2 ">
             <h1>TREATMENTS</h1>
@@ -142,10 +150,16 @@ const TreatmentTable = () => {
                       {/* status and edit  */}
 
                       <td className={cellClass}>
-                        <button className="px-2 py-1 bg-blue-500 text-white rounded">
-                          Edit
-                        </button>
+
+                         <button className="px-2 py-1 bg-blue-500 text-white rounded"
+                         onClick={()=>{editTrtmntModal(_id)}}
+                         >
+                           Edit
+                         </button>
+                      
+                       
                       </td>
+
                       <td className={cellClass}>
                         <button
                           onClick={()=>{modalConfirmation(_id)}}
@@ -185,6 +199,7 @@ const TreatmentTable = () => {
       </div>
 
       {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
+      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal}/>}
     </>
   );
 };

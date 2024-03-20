@@ -29,7 +29,7 @@ const DocNav = () => {
                 setTimeout(() => {
                     setLoading(false)
 
-                }, 1000)
+                }, 1000*15)
                 return
             } else {
                 navigate('/doctor')
@@ -64,9 +64,7 @@ const DocNav = () => {
                         ></l-quantum>
                         <p className="text-light-green-800">loading...</p>
                         </div>
-
-
-                       
+     
 
                     </div>) :
                     (

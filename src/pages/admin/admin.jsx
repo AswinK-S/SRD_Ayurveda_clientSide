@@ -2,12 +2,12 @@ import AdmnNav from "../../components/adminNav/admnNav";
 import AdmnBody from "../../components/admnBody/adminBody";
 
 
-const AdminLogin =()=>{
+const AdminLogin = () => {
 
-    return(
+    return (
         <div>
-            <AdmnNav/>
-            <AdmnBody/>
+                <AdmnNav />
+                <AdmnBody />
         </div>
     )
 }
