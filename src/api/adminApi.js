@@ -62,6 +62,13 @@ export const trtMntStatus = async(id)=>{
     }
 }
 
+//remove subTreatment
+export const removeSubTreatment = async(editData)=>{
+    console.log('edit data----',editData);
+    const result = await axiosApi.delete(adminRoutes.removeSub_trtmnt,{data:editData})
+    return result
+}
+
 //add Doctors
 export const addDoctor = async(doctorData)=>{
     try {

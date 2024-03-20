@@ -1,20 +1,46 @@
-import { useEffect } from "react";
-import { treatment } from "../../api/adminApi";
+import { useEffect, useState } from "react";
+import { removeSubTreatment, treatment } from "../../api/adminApi";
+import ConfirmationModals from "./confirmationModals";
 
 /* eslint-disable react/prop-types */
 export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
 
-    useEffect(()=>{
+    const [getTreatment, setTreatment] = useState('')
+    const [showModal, setShowModal] = useState(false)
+    const [id,setId] =useState('')
+    const[subName,setSubName]=useState('')
+
+
+
+
+    useEffect(() => {
         console.log('modal---------');
-        const fetchData =async(editTrtmntId)=>{
+        const fetchData = async (editTrtmntId) => {
             console.log('010101');
             const result = await treatment(editTrtmntId)
-            console.log('trtmnt rslt----',result);
+            console.log('trtmnt rslt----', result.data);
+            setTreatment(result.data)
         }
 
         fetchData(editTrtmntId)
 
-    },[editTrtmntId])
+    }, [editTrtmntId])
+
+    //subTreatment remove confirmation modal
+    const modalConfirmation = async (trtmntId,subTrtmntName) => {
+        console.log('id ->', trtmntId, "  name ->",subTrtmntName);
+        setShowModal(true)
+        setId(trtmntId)
+        setSubName(subTrtmntName)
+    }
+
+    const handelRemove =async() =>{
+        console.log('id 2222 ->', id, "  name 2222 ->",subName);
+        const editData ={id,subName}
+        const result = await removeSubTreatment (editData)
+        console.log('remove----',result);
+    }
+    
     return (
         <>
             <div
@@ -26,7 +52,7 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
                 <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-[#E7EE9D]">
                     {/*content*/}
                     <div className="flex justify-center mb-5 mt-5">
-                        <h2 className="text-2xl font-semibold mb-4">Add Treatment</h2>
+                        <h2 className="text-2xl font-semibold mb-4">Edit Treatment</h2>
                     </div>
 
                     <form onSubmit=''>
@@ -40,30 +66,51 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
                                         type="text"
                                         id="name"
                                         name="name"
-                                        // value=''
+                                        value={getTreatment.name}
                                         onChange=''
                                         className="border rounded-md p-2 w-full"
                                     />
                                 </div>
-
-                                <div className="mb-4" key=''>
-                                    <label htmlFor='' className="block text-gray-600 text-sm font-medium mb-2">
-                                        Add SubTreatments
-                                    </label>
-                                    <div className="flex">
-                                        <input
-                                            type="text"
-                                            id=''
-                                            name=''
-                                            // value=''
-                                            onChange=''
-                                            className="border rounded-md p-2 w-full"
-                                        />
-                                        <button type="button" onClick='' className="ml-2">
-                                            +
-                                        </button>
+                                {getTreatment?.subTreatments?.map((subTreatment, index) => (
+                                    <div className="mb-4" key=''>
+                                        <label htmlFor='' className="block text-gray-600 text-sm font-medium mb-2">
+                                            Sub Treatments
+                                        </label>
+                                        <div className="flex">
+                                            <input
+                                                type="text"
+                                                id={`subTreatment-${index}`}
+                                                name={`subTreatment-${index}`}
+                                                value={subTreatment.name}
+                                                onChange=''
+                                                className="border rounded-md p-2 w-full"
+                                            />
+                                            <button type="button" onClick={()=>{modalConfirmation(getTreatment._id,subTreatment.name)}} className="ml-2 bg-red-500 text-white rounded px-2 py-1">
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
+
+                                {getTreatment?.subTreatments?.length < 5 && (
+                                    <div className="mb-4" key=''>
+
+                                        <div className="flex">
+                                            <input
+                                                type="text"
+                                                id='newSubTreatment'
+                                                name='newSubTreatment'
+                                                value=''
+                                                onChange=''
+                                                className="border rounded-md p-2 w-full"
+                                            />
+                                            <button type="button" onClick='' className="ml-2 bg-green-500 text-white rounded px-2 py-1-2">
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
 
@@ -86,8 +133,9 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
                     </div>
                 </div>
             </div>
-        </>
+            {showModal && <ConfirmationModals setShowModal={setShowModal} handelRemove={handelRemove} />}
 
+        </>
     );
 }
 export default TrtmntEdtModal
