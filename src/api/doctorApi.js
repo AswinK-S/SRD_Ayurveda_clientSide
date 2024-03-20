@@ -30,3 +30,5 @@ export const postDetails = async (formData,id)=>{
         console.log(error.message)
     }
 }
+
+

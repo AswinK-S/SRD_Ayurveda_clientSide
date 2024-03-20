@@ -19,13 +19,14 @@ const TreatmentTable = () => {
   const [showModal, setShowModal] = useState(false)
   const [trtmntModal,setTrtmntModal] = useState(false)
   const [id, setId] = useState('')
+  const [editTrtmntId, setEditTrtmntId] =useState('')
 
   // get the treatments when the page is loaded
   useEffect(() => {
     const getTreatments = async () => {
       try {
         const res = await treatments();
-        console.log('treatment list for table --', res.data);
+        // console.log('treatment list for table --', res.data);
         setTreatmentData(res.data);
         paginationData()
       } catch (error) {
@@ -60,15 +61,15 @@ const TreatmentTable = () => {
 
   // subTreatment edit status modal confirmation 
   const modalConfirmation = async (editId) => {
-    console.log('id', editId);
+    // console.log('id', editId);
     setId(editId)
     setShowModal(true)
   }
 
   const editTrtmntModal = async (trtmntId)=>{
-    console.log('trtmnt id :',trtmntId);
+    // console.log('trtmnt id :',trtmntId);
     setTrtmntModal(true)
-
+    setEditTrtmntId(trtmntId)
   }
 
   // handle status 
@@ -77,6 +78,7 @@ const TreatmentTable = () => {
     console.log(res);
     setShowModal(false)
   }
+
 
   //function to implement pagination
 
@@ -199,7 +201,7 @@ const TreatmentTable = () => {
       </div>
 
       {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
-      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal}/>}
+      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal} editTrtmntId={editTrtmntId}/>}
     </>
   );
 };

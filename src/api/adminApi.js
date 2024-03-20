@@ -27,6 +27,18 @@ export const treatments = async ()=>{
         console.log(error.message);
     }
 }
+
+//get single treatmentdetail
+export const treatment = async(id)=>{
+    try{
+        console.log('02020---',id);
+        const result = await axiosApi.get(`${adminRoutes.treatment}/${id}`)
+        return result
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
 //add Treatments
 export const addTreatments = async(data)=>{
     try {

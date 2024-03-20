@@ -9,6 +9,8 @@ const adminRoutes ={
     doctors:'admin/getDoctors',
     doctorStatus:'admin/doctorStatus',
     addDoctor:'admin/add_Doc',
+    treatment:'admin/treatment'
+
 
 }
 
