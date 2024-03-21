@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { removeSubTreatment, treatment } from "../../api/adminApi";
 import ConfirmationModals from "./confirmationModals";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 /* eslint-disable react/prop-types */
-export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
+export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
     const [getTreatment, setTreatment] = useState('')
     const [showModal, setShowModal] = useState(false)
     const [id,setId] =useState('')
     const[subName,setSubName]=useState('')
 
-
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -39,6 +41,13 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId }) {
         const editData ={id,subName}
         const result = await removeSubTreatment (editData)
         console.log('remove----',result);
+        if(result?.status ===200){
+            navigate('/admin/treatments')
+            setShowModal(false)
+            setTrtmntModal(false)
+            toast.success('Sub treatment removed')
+
+        }
     }
     
     return (
