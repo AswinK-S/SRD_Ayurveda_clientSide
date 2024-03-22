@@ -1,11 +1,11 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { addTreatments } from '../../api/adminApi';
 import { useNavigate } from 'react-router-dom';
 
 const AddTreatments = () => {
   const [treatmentName, setTreatmentName] = useState(null);
   const [subTreatments, setSubTreatments] = useState(['']);
-  const [errorMessage,setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const navigate = useNavigate()
 
@@ -20,38 +20,38 @@ const AddTreatments = () => {
     const isDuplicate = newSubTreatments.some((subTreatment, i) => i !== index && subTreatment === value);
 
     if (isDuplicate) {
-        setErrorMessage('Same data exists');
-        return; // Exit the function if a duplicate is found
-    }else{
+      setErrorMessage('Same data exists');
+      return; // Exit the function if a duplicate is found
+    } else {
       setErrorMessage('')
     }
     console.log('nw subTrtmnts:----', newSubTreatments);
     newSubTreatments[index] = value;
-    if(subTreatments.length<=5)setSubTreatments(newSubTreatments);
-    
+    if (subTreatments.length <= 5) setSubTreatments(newSubTreatments);
+
   };
 
-  //limiting the length of subtreatments and prevent empty fields
+  //limiting the length of subtreatments and prevent add empty fields
   const handleAddSubTreatment = () => {
-    console.log('sub trtmnts---------- :',subTreatments);
-    if(subTreatments.length == 5){
-      console.log('subT lngth----',subTreatments.length);
-        setErrorMessage('SubTreatments limit is only five')
+    console.log('sub trtmnts---------- :', subTreatments);
+    if (subTreatments.length == 5) {
+      console.log('subT lngth----', subTreatments.length);
+      setErrorMessage('SubTreatments limit is only five')
     }
-    
-    // show error message when we enter an empty treatment 
-    const subtrtmnt = subTreatments.some((element)=>element.trim()=='')
-    console.log('ssss---', subtrtmnt);
-    if(subtrtmnt)setErrorMessage('fields should not be empty')  
 
-    if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '') && subTreatments.length<=5) {
+    // show error message when we enter an empty treatment 
+    const subtrtmnt = subTreatments.some((element) => element.trim() == '')
+    console.log('ssss---', subtrtmnt);
+    if (subtrtmnt) setErrorMessage('fields should not be empty')
+
+    if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '') && subTreatments.length <= 5) {
       setSubTreatments([...subTreatments, '']);
     }
   };
 
 
   const handleSubmit = (e) => {
-   
+
     e.preventDefault();
 
     if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '')) {
@@ -59,13 +59,13 @@ const AddTreatments = () => {
         name: treatmentName,
         subTreatments: subTreatments.map(subTreatment => ({ name: subTreatment })),
       }
-  
+
       console.log('New Treatment Data:', newTreatmentData);
-      const sendData = async(newTreatmentData)=>{
+      const sendData = async (newTreatmentData) => {
         try {
           const res = await addTreatments(newTreatmentData)
-          console.log('data added--',res);
-          if(res){
+          console.log('data added--', res);
+          if (res) {
             navigate('/admin/treatments')
           }
         } catch (error) {
@@ -73,7 +73,7 @@ const AddTreatments = () => {
         }
       }
       sendData(newTreatmentData)
-    }else{
+    } else {
       setSubTreatments([''])
       setErrorMessage('')
     }
@@ -107,7 +107,7 @@ const AddTreatments = () => {
                 {errorMessage && <p className='text-red-500 text-sm'> {errorMessage}</p>}
 
                 {subTreatments.map((subTreatment, index) => (
-                  
+
                   <div className="mb-4" key={index}>
                     <label htmlFor={`subTreatment${index}`} className="block text-gray-600 text-sm font-medium mb-2">
                       Add SubTreatments
@@ -126,6 +126,7 @@ const AddTreatments = () => {
                           +
                         </button>
                       )}
+
                     </div>
                   </div>
                 ))}

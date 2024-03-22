@@ -69,6 +69,17 @@ export const removeSubTreatment = async(editData)=>{
     return result
 }
 
+// edit Treatment
+export const updateTreatment =async(data)=>{
+    try {
+        console.log('iid----',data);
+        const result = await axiosApi.patch(adminRoutes.editTrtmnt,data)
+        return result
+    } catch (error) {
+        console.log(error.message);
+    } 
+}
+
 //add Doctors
 export const addDoctor = async(doctorData)=>{
     try {

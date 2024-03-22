@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { removeSubTreatment, treatment } from "../../api/adminApi";
+import { removeSubTreatment, treatment, updateTreatment } from "../../api/adminApi";
 import ConfirmationModals from "./confirmationModals";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,8 +9,11 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
     const [getTreatment, setTreatment] = useState('')
     const [showModal, setShowModal] = useState(false)
-    const [id,setId] =useState('')
-    const[subName,setSubName]=useState('')
+    const [id, setId] = useState('')
+    const [subName, setSubName] = useState('')
+    const [sub_trtmnt, setSub_trtmnt] = useState([''])
+    const [errorMessage, setErrorMessage] = useState('')
+    const [arr1, setArr1] = useState(new Set()); 
 
     const navigate = useNavigate()
 
@@ -25,23 +28,101 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
         }
 
         fetchData(editTrtmntId)
+        
 
     }, [editTrtmntId])
 
+    useEffect(() => {
+        const uniqueNames = new Set(getTreatment.subTreatments?.map(treatment => treatment.name));
+        setArr1(uniqueNames);
+    }, [getTreatment]);
+
+
+   
+
     //subTreatment remove confirmation modal
-    const modalConfirmation = async (trtmntId,subTrtmntName) => {
-        console.log('id ->', trtmntId, "  name ->",subTrtmntName);
+    const modalConfirmation = async (trtmntId, subTrtmntName) => {
+        console.log('id ->', trtmntId, "  name ->", subTrtmntName);
         setShowModal(true)
         setId(trtmntId)
         setSubName(subTrtmntName)
     }
 
-    const handelRemove =async() =>{
-        console.log('id 2222 ->', id, "  name 2222 ->",subName);
-        const editData ={id,subName}
-        const result = await removeSubTreatment (editData)
-        console.log('remove----',result);
-        if(result?.status ===200){
+
+
+   // Handle sub-treatment change
+   const handleSubTrtmntChange = (index, value) => {
+    const updatedSubTreatments = [...sub_trtmnt];
+    updatedSubTreatments[index] = value;
+    setSub_trtmnt(updatedSubTreatments);
+
+
+    
+    // Clear the error message when the input field is cleared
+    if (value === '' && errorMessage !=='Reached sub-treatments limit!') {
+        setErrorMessage('');
+    }
+};
+
+
+
+
+    // Handle add treatment
+    const handleAddSubTrtmnt = () => {
+        const newSubTreatment = sub_trtmnt[sub_trtmnt.length - 1]; // Get the last sub-treatment entered
+
+        if(newSubTreatment.trim()===''){
+            setErrorMessage('treatment cannot be empty')
+            return
+        }
+
+        // Check for duplicates in both arrays
+        if (arr1.has(newSubTreatment)) {
+            
+            setErrorMessage('Sub-treatment already exists!');
+            return;
+        }
+
+        if (sub_trtmnt.length + getTreatment.subTreatments.length >= 5) {
+            setArr1(prevArr1 => new Set([...prevArr1, newSubTreatment]));
+            // setSub_trtmnt([...sub_trtmnt, '']);
+            console.log('arr1 ',arr1,'---sub trt',sub_trtmnt);
+
+            setErrorMessage('Reached sub-treatments limit!');
+            return;
+        }
+
+
+
+        setArr1(prevArr1 => new Set([...prevArr1, newSubTreatment]));
+        setSub_trtmnt([...sub_trtmnt, '']);
+
+       
+        setErrorMessage(''); 
+
+    };
+
+const handleSubmit = async(e) => {
+    e.preventDefault();
+    console.log('trt id',getTreatment._id);
+    const newTreatmentData = {
+        id: getTreatment._id,
+        subTreatments: sub_trtmnt.map(subTreatment => ({ name: subTreatment })),
+      }
+      console.log('ne trt dta',newTreatmentData);
+
+   const result = await updateTreatment(  newTreatmentData )
+    console.log('result ---',result);
+    console.log('Form submitted with unique sub-treatments');
+}
+
+
+    const handelRemove = async () => {
+        console.log('id 2222 ->', id, "  name 2222 ->", subName);
+        const editData = { id, subName }
+        const result = await removeSubTreatment(editData)
+        console.log('remove----', result);
+        if (result?.status === 200) {
             navigate('/admin/treatments')
             setShowModal(false)
             setTrtmntModal(false)
@@ -49,7 +130,7 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
         }
     }
-    
+
     return (
         <>
             <div
@@ -64,7 +145,8 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
                         <h2 className="text-2xl font-semibold mb-4">Edit Treatment</h2>
                     </div>
 
-                    <form onSubmit=''>
+                    <form   onSubmit={handleSubmit}
+>
                         <div className="flex flex-row gap-5 justify-around">
                             <div className="">
                                 <div className="mb-4">
@@ -94,31 +176,43 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
                                                 onChange=''
                                                 className="border rounded-md p-2 w-full"
                                             />
-                                            <button type="button" onClick={()=>{modalConfirmation(getTreatment._id,subTreatment.name)}} className="ml-2 bg-red-500 text-white rounded px-2 py-1">
+                                            <button type="button" onClick={() => { modalConfirmation(getTreatment._id, subTreatment.name) }} className="ml-2 bg-red-500 text-white rounded px-2 py-1">
                                                 Remove
                                             </button>
                                         </div>
                                     </div>
                                 ))}
+                            
+                                {getTreatment?.subTreatments?.length <5 &&
+                                    sub_trtmnt.map((subTreatment, index) => (
 
-                                {getTreatment?.subTreatments?.length < 5 && (
-                                    <div className="mb-4" key=''>
+                                        <div className="mb-4" key={index}>
+                                            {errorMessage && <p className='text-red-500 text-sm'> {errorMessage}</p>}
 
-                                        <div className="flex">
-                                            <input
-                                                type="text"
-                                                id='newSubTreatment'
-                                                name='newSubTreatment'
-                                                value=''
-                                                onChange=''
-                                                className="border rounded-md p-2 w-full"
-                                            />
-                                            <button type="button" onClick='' className="ml-2 bg-green-500 text-white rounded px-2 py-1-2">
-                                                +
-                                            </button>
+                                            <div className="flex">
+                                                <input
+                                                    type="text"
+                                                    id={`subTreatment-${index}`}
+                                                    name={`subTreatment-${index}`}
+                                                    value={subTreatment}
+                                                    onChange={(e) => {
+                                                        handleSubTrtmntChange(index, e.target.value);
+                                                    }}
+                                                    className="border rounded-md p-2 w-full"
+                                                />
+                                                {  sub_trtmnt?.length + getTreatment?.subTreatments?.length <= 5 && errorMessage !== 'Reached sub-treatments limit!' && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleAddSubTrtmnt}
+                                                        className="ml-2 bg-green-500 text-white rounded px-2 py-1-2"
+                                                    >
+                                                        +
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )
+                                    )}
 
                             </div>
                         </div>
