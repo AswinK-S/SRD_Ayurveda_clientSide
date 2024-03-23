@@ -1,6 +1,5 @@
 import userRoutes from "../services/endpoints/userRoutes";
 import { axiosApi } from "../services/api";
-import { toast } from 'react-toastify';
 
 //login route
 export const login = async (loginData)=>{
@@ -13,8 +12,7 @@ export const login = async (loginData)=>{
         return response
     }catch(error){
         console.log("axios error :",error.response.data.message);
-        toast.error(error.response.data.message)
-        return error.message.data.message
+        return error.response.data.message
     }
 }
 
@@ -43,6 +41,8 @@ export const signup = async (resgisterData)=>{
         console.log('signup response',response);
         return response
     }catch(error){
-        console.log('register err  :',error.message);
+        console.log('register err  :',error.message);   
+        return error.message
+
     }
 }

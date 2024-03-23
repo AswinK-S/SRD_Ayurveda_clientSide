@@ -29,7 +29,7 @@ const DocNav = () => {
                 setTimeout(() => {
                     setLoading(false)
 
-                }, 1000*15)
+                }, 1000)
                 return
             } else {
                 navigate('/doctor')

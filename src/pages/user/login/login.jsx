@@ -17,6 +17,7 @@ const Login = () => {
 
     const [email,setEmail] = useState('')
     const [password,setPassword] =useState('')
+    const [error,setError] = useState('')
 
     useEffect(()=>{
         const token = localStorage.getItem('usertoken')
@@ -41,7 +42,17 @@ const Login = () => {
 
     };
 
+    const handleChange =(e)=>{
+        const {name,value}=e.target
+        if(name=='email'){
+            setEmail(value)
+        }
 
+        if(name ==='password'){
+            setPassword(value)
+        }
+        setError('')
+    }
 
 
     const handleSubmit =async (e)=>{
@@ -49,8 +60,14 @@ const Login = () => {
 
         try{
             const formData = {email,password}
+            // const validation = 
             const response = await login(formData)
             console.log('response===>',response);
+
+            if(response ==='invalid email id'){
+                setError('invalid email id or password')
+
+            }
 
             if(response?.status ==200){
                 dispatch(loginSuccess(response.data.user))
@@ -104,7 +121,8 @@ const Login = () => {
                             </label>
                             
                             <input
-                                type="email" name="email" placeholder="enter your email address"  value={email} onChange={(e)=>setEmail(e.target.value)}
+                                type="email" name="email" placeholder="enter your email address"  value={email} 
+                                onChange={handleChange}
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md "
                             />
                         </div>
@@ -117,7 +135,7 @@ const Login = () => {
                                 Password
                             </label>
                             <input
-                                type="password" name="password" placeholder="enter password" value={password} onChange={(e)=>setPassword(e.target.value)}
+                                type="password" name="password" placeholder="enter password" value={password} onChange={handleChange}
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
                             />
                         </div>
@@ -125,7 +143,7 @@ const Login = () => {
                         <a href="#" className="text-sm font-normal  hover:underline">
                             Forget Password?
                         </a>
-
+                        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
                         <div className="mt-6 bg-transparent">
                             <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
                                 Login

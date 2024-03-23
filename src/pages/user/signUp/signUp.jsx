@@ -1,11 +1,10 @@
-import { useState } from "react";
 import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
 import { signup } from "../../../api/userApi";
 import { registerUser } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify'
+import {  useState } from "react";
 
 
 const SignUp = () => {
@@ -17,10 +16,7 @@ const SignUp = () => {
     //useState to show otp field
     const [showOtpInput, setShowOtpInput] = useState(false)
     const [otpValue, setOtpValue] = useState('')
-
-
-
-
+   
     //formData 
     const [formData, setFormData] = useState({
         name: '',
@@ -30,7 +26,17 @@ const SignUp = () => {
         confirmPassword: ''
     })
 
+    //input field errors
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        mob: '',
+        password: '',
+        confirmPassword: '',
+    });
 
+    const [submissionError,setSubmissionError] = useState('')
+   
 
     //background image style 
     const backgroundImage = {
@@ -47,50 +53,73 @@ const SignUp = () => {
         setShowPassword(!showPassword)
     }
 
-    //function to submit the data of form
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        setSubmissionError('')
+        if (name === 'name' && value.length >= 3) {
+            setErrors({ ...errors, name: '' });
+        } else if (name === 'email' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            setErrors({ ...errors, email: '' });
+        } else if (name === 'mob' && value.length === 10 && !isNaN(value)) {
+            setErrors({ ...errors, mob: '' });
+        } else if (name === 'password' && value.length >= 6) {
+            setErrors({ ...errors, password: '' });
+        } else if (name === 'confirmPassword' && value === formData.password) {
+            setErrors({ ...errors, confirmPassword: '' });
+        }
+    };
+
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
+        // Validation
+        let newErrors = {};
+        if (!formData.name || formData.name.length < 3) {
+            newErrors.name = 'Name must be at least 3 characters long';
+        }
+        if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+        if (!formData.mob || formData.mob.length !== 10 || isNaN(formData.mob)) {
+            newErrors.mob = 'Mobile number should have exactly 10 digits';
+        }
+        if (!formData.password || formData.password.length < 6) {
+            newErrors.password = 'Password should be at least 6 characters long';
+        }
+        if (formData.password !== formData.confirmPassword) {
+            console.log('psswrd err');
+            newErrors.confirmPassword = 'Password and Confirm Password do not match';
+        }
 
+        console.log('errors--',Object.keys(newErrors).length);
+        if (Object.keys(newErrors).length > 0) {
+            // Update errors state with new error messages
+            setErrors(newErrors);
+            return; // Exit early if there are errors
+        }
+
+        // If no errors, proceed with form submission
         try {
-
-            const { name, email, mob, password, confirmPassword } = formData;
-
-            if (!name || !email || !mob || !password || !confirmPassword) {
-                console.error('Please fill in all the fields.');
-                toast.error('Please fill in all the fields.')
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                console.error('Please enter a valid email address.');
-                toast.error('Please enter a valid email address.')
-                return;
-            }
-
-            if (mob.length !== 10) {
-                console.error('Mobile number should have exactly 10 digits.');
-                toast.error('Mobile number should have exactly 10 digits.')
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                console.error('Password and Confirm Password do not match.');
-                toast.error('Password and Confirm Password do not match.')
-                return;
-            }
-
             if (showOtpInput) {
                 // Process OTP submission logic here
                 console.log('Submitted OTP:', otpValue);
                 let res = await registerUser(otpValue)
+                console.log('res--->',res);
                 if (res.status === 200) {
                     navigate('/login')
                 }
             } else {
+                console.log('submiting',formData);
                 const registerData = formData
                 const response = await signup(registerData)
+                console.log('res--->',response);
+
+                if(response==='Request failed with status code 400'){
+                    setSubmissionError('already existing email')
+                    return
+                }
+
                 if (response.status == 200) {
                     console.log('user data send to back end');
                     setShowOtpInput(true)
@@ -99,24 +128,15 @@ const SignUp = () => {
         } catch (err) {
             console.log(err.message);
         }
-
-    }
-
-    // take the data from the form 
-    const handleChange = async (e) => {
-        const { name, value } = e.target
-        setFormData({ ...formData, [name]: value })
-        console.log('register data', formData);
-    }
-
-
+    };
+    
 
     return (
 
         <div>
             <div className=" flex justify-center">
                 <Nav />
-                </div>
+            </div>
             <div>
                 <div className="flex lg:h-[200px]  items-center justify-center p-5" style={backgroundImage}>
                     <div className="text-white text-5xl font-bold  bg-transparent">
@@ -144,7 +164,10 @@ const SignUp = () => {
                         <div className="mb-2 bg-transparent">
                             <label htmlFor="name" className=" block text-sm bg-transparent font-semibold  "> Full Name </label>
                             <input type="text" name="name" placeholder="Enter your full name"
+
+
                                 className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md" onChange={handleChange} />
+                    {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
                         </div>
 
 
@@ -153,20 +176,23 @@ const SignUp = () => {
 
 
                             <input type="email" name="email" placeholder="enter your email address"
-                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
 
+
+                                className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
+                    {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
                         </div>
 
 
                         <div className="mb-2 bg-transparent">
+
                             <label htmlFor="" className="block text-sm bg-transparent  font-semibold"> Mob </label>
 
 
                             <input type="number" name="mob" placeholder="enter your valid mobile number"
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
 
-
+                        {errors.mob && <p className="text-red-500 text-sm mb-2">{errors.mob}</p>}
                         </div>
 
                         <div className="mb-2 bg-transparent">
@@ -195,7 +221,7 @@ const SignUp = () => {
                                 </span>
 
                             </div>
-
+                            {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
 
                         </div>
 
@@ -222,6 +248,9 @@ const SignUp = () => {
 
                             </div>
 
+                            {errors.confirmPassword && <p className="text-red-500 text-sm mb-2">{errors.confirmPassword}</p>}
+
+
                         </div>
 
                         {/* Conditional rendering of OTP input */}
@@ -242,6 +271,8 @@ const SignUp = () => {
                         )}
 
                         <div className="mt-6 bg-transparent">
+                        {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
+
                             <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
                             >
                                 {showOtpInput ? "Enter OTP" : "Sign Up"}

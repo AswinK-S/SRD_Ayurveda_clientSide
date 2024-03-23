@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { removeSubTreatment, treatment, updateTreatment } from "../../api/adminApi";
 import ConfirmationModals from "./confirmationModals";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 /* eslint-disable react/prop-types */
@@ -15,7 +15,7 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
     const [errorMessage, setErrorMessage] = useState('')
     const [arr1, setArr1] = useState(new Set()); 
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
 
     useEffect(() => {
