@@ -74,6 +74,7 @@ export const updateTreatment =async(data)=>{
     try {
         console.log('iid----',data);
         const result = await axiosApi.patch(adminRoutes.editTrtmnt,data)
+        console.log('rslt in api--',result);
         return result
     } catch (error) {
         console.log(error.message);

@@ -102,6 +102,7 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
     };
 
+
 const handleSubmit = async(e) => {
     e.preventDefault();
     console.log('trt id',getTreatment._id);
@@ -111,9 +112,29 @@ const handleSubmit = async(e) => {
       }
       console.log('ne trt dta',newTreatmentData);
 
-   const result = await updateTreatment(  newTreatmentData )
-    console.log('result ---',result);
-    console.log('Form submitted with unique sub-treatments');
+   const result = await updateTreatment( newTreatmentData )
+   console.log('reslt-->5555',result);
+   if(result.data.message ==='empty data is not allowed'){
+    setErrorMessage('empty submission not allowded')
+    return
+   }
+   if(result.data.message === 'duplicate treatment name is not allowed'){
+    setErrorMessage('Duplicate subtreatment')
+    return
+   }
+   if(result.data.message ==='cannot add more  than five!'){
+    console.log('more than five----');
+    setErrorMessage('cannot add more  than five!')
+    return
+   }
+   if(result.data.message ==='success'){
+   console.log('ssssss');
+   toast.success('updated')
+   setTrtmntModal(false)
+//    navigate('/admin/treatments')
+   }
+
+
 }
 
 
@@ -123,7 +144,7 @@ const handleSubmit = async(e) => {
         const result = await removeSubTreatment(editData)
         console.log('remove----', result);
         if (result?.status === 200) {
-            navigate('/admin/treatments')
+            // navigate('/admin/treatments')
             setShowModal(false)
             setTrtmntModal(false)
             toast.success('Sub treatment removed')
@@ -187,7 +208,7 @@ const handleSubmit = async(e) => {
                                     sub_trtmnt.map((subTreatment, index) => (
 
                                         <div className="mb-4" key={index}>
-                                            {errorMessage && <p className='text-red-500 text-sm'> {errorMessage}</p>}
+                                            {errorMessage  && <p className='text-red-500 text-sm'> {errorMessage}</p>}
 
                                             <div className="flex">
                                                 <input
