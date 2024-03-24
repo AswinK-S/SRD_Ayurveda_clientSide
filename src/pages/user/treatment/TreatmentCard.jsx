@@ -3,67 +3,85 @@ import { treatments } from '../../../api/userApi';
 import { Link } from 'react-router-dom';
 
 const TreatmentCard = () => {
-    const [treatmentData, setTreatmentData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [treatmentData, setTreatmentData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchTreatmentData = async () => {
-            try {
-                const response = await treatments();
-                setTreatmentData(response.data);
-            } catch (error) {
-                console.error('Error fetching treatment data:', error);
-                setError('Error fetching treatment data');
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchTreatmentData = async () => {
+      try {
+        const response = await treatments();
+        setTreatmentData(response.data);
+      } catch (error) {
+        console.error('Error fetching treatment data:', error);
+        setError('Error fetching treatment data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchTreatmentData();
-    }, []);
+    fetchTreatmentData();
+  }, []);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
-    return (
-        <>
+  return (
+    <>
 
+      <div className='w-full   gap-10  flex flex-wrap   flex-row justify-center my-10'>
+        {treatmentData.map((treatment) => (
+          
+          <div key={treatment.id} className="relative flex flex-col my-6 text-gray-700 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black bg-clip-border rounded-xl sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 duration-1000 ">
+            <div className="relative h-56 mx-4 -mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl ">
+              <img
+                src="/hmImg2.jpg"
+                alt="card-image"
+                className="object-cover w-full h-full"
+              />
+            </div>
 
-<div className='w-full flex flex-col gap-y-10 p-9 justify-center items-center '>
-  {treatmentData.map((treatment) => (
-    <div key={treatment._id} className='w-[80%] h-44 p-2 hover:translate-y-5  relative'>
-      <img src="/footer-bg.jpg" alt="" className='object-cover w-full h-full absolute' />
-      <Link to={`/treatment/${treatment._id}`}>
-          <div className='flex justify-center flex-col items-center w-full h-full absolute top-0 left-0'>
-            <h1 className="py-2 px-4 text-center font-semibold tracking-widest text-xl">{treatment.name}</h1>
-            <div className=" flex w-full justify-center ">
-              {treatment.subTreatments && treatment.subTreatments.length > 0 ? (
-                <div className="list-disc p-4 flex justify-evenly text-sm">
-                  {treatment.subTreatments.map((subTreatment) => (
-                    <li key={subTreatment._id} className="mb-1">{subTreatment.name}</li>
-                  ))}
+            <div className="p-6  ">
+            <div className='border flex justify-center '>
+            <h5 className="block mb-5 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                {treatment.name}
+              </h5>
+              <p className="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                {treatment.description}
+              </p>
+            </div>
+              {treatment.subTreatments && treatment.subTreatments.length > 0 && (
+                
+                <div className="mt-4 border  ">
+                  <h6 className="font-bold">Sub-Treatments:</h6>
+                  <ul className="list-disc ml-4">
+                    {treatment.subTreatments.map((subTreatment) => (
+                      <li key={subTreatment.id}>{subTreatment.name}</li>
+                    ))}
+                  </ul>
                 </div>
-              ) : (
-                <span className="italic text-gray-500">No sub-treatments</span>
+
               )}
             </div>
+
           </div>
-      </Link>
-    </div>
-  ))}
-</div>
+        ))}
+      </div>
 
+    </>
 
-
-        </>
-
-    );
+  );
 };
 
 export default TreatmentCard;
+
+
+
+
+
+
