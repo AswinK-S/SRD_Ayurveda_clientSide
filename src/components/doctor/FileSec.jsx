@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Card } from '@material-tailwind/react';
-import { docImage } from '../../api/doctorApi';
+import { docImage, getdoctor, uploadDocument } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import "react-step-progress-bar/styles.css";
+import { useDispatch, useSelector } from 'react-redux';
 import { docloginSuccess } from '../../featuers/doctor/doctorSlice';
 
 
@@ -15,45 +14,83 @@ const FileSec = () => {
     const [uploading, setUploading] = useState('')
     let [doctorDetails,setDoctorDetails] =useState(null)
     const dispatch= useDispatch()
-    // const doctorData = (useSelector((state) => state.doctor.doctor))
-
+    const doctorData = useSelector((state) => state.doctor.doctor)
    
     useEffect(() => {
         const token = localStorage.getItem('doctortoken')
-        console.log('111');
         if (token) {
-            console.log('222');
             const doctor = jwtDecode(token)
             console.log('doc---', doctor);
             if(doctor.role ==='doctor'){
                 console.log('3333');
-                // console.log('777777777',localStorage.getItem('doctorDetails'));
-                const detail = JSON.parse(localStorage.getItem('doctorDetails')); // Parse the JSON string back to an object
-                console.log('44444', detail);
-                setDoctorDetails(detail)
-                dispatch(docloginSuccess(detail)); // Dispatch the object directly
 
-                console.log('doctordata--55', detail.image);
+                const fetch= async(id)=>{
+                       try {
+                        const result = await getdoctor(id)
+                        console.log('doc data',result);
+                        setDoctorDetails(result.data)
+                        // const docData =JSON.parse(result.data)
+                        // console.log('parsed data--',docData);
+                        dispatch(docloginSuccess(result.data)); // Dispatch the object directly
 
+                       } catch (error) {
+                        console.log(error.message);
+                       }
+                }
+                fetch(doctor.id) 
             }
         }
-    }, [dispatch,setDoctorDetails,])
+    }, [dispatch,setDoctorDetails,setProfileImage,setUploading,setFileUpload])
 
 
 
-
+    //document image change
     const handleFileChange = (e) => {
-        console.log('files   --', e.target);
+        console.log('files   --', e.target.files[0]);
 
         const document = e.target.files[0]
         if (document) {
-            setFileUpload(true)
+            setFileUpload(document)
         }
         else {
             setFileUpload(false)
         }
-        setFileUpload(URL.createObjectURL(document))
     }
+   
+    //document image upload
+    const uploadDoc = (e)=>{
+        console.log('ee',e);
+        e.preventDefault()
+
+       if(fileUpload){
+        const uploadfile =async(document)=>{
+            try {
+                console.log('upld--->',document);
+                const docUpload = await uploadDocument(document)
+                console.log('doc Up-->',docUpload);
+                
+            } catch (error) {
+                console.log('file upload error',error.message);
+            }
+        }
+        const token = localStorage.getItem('doctortoken')
+
+        if (token) {
+            const decode = jwtDecode(token)
+            console.log('token ', decode);
+            const id = decode.id
+            const formData = new FormData();
+            formData.append('image', fileUpload);
+            formData.append('id', id)
+
+            //call the function to make api call
+            uploadfile(formData)
+        } 
+
+       }
+      
+    }
+
 
     //image uploading state change
     const handleImageChange = (e) => {
@@ -73,9 +110,12 @@ const FileSec = () => {
     const uploadImage = (e) => {
         e.preventDefault()
         setUploading('uploading')
+
         const res = async (image) => {
             try {
+                //api call to upload image
                 const result = await docImage(image)
+
                 console.log('iiiii', result);
                 if (result.request.status === 200) {
                     console.log('oooooooo--',result.data);
@@ -86,8 +126,6 @@ const FileSec = () => {
                         ...prevDetails,
                         ...uploadImg,
                     }));
-                    // localStorage.removeItem('doctorDetails')
-                    localStorage.setItem('doctorDetails',uploadImg)
 
                     dispatch(docloginSuccess(uploadImg))
 
@@ -99,6 +137,7 @@ const FileSec = () => {
             }
         }
 
+        
         if (profileImage) {
             console.log('img name ---', profileImage);
 
@@ -111,21 +150,13 @@ const FileSec = () => {
                 formData.append('image', profileImage);
                 formData.append('id', id)
 
-                
+                //call the function to make api call
                 res(formData)
             }
-
-
 
         } else {
             console.error('No image selected or selected file is not an image');
         }
-
-    }
-
-
-    const uploadFile = () => {
-
 
     }
 
@@ -138,7 +169,7 @@ const FileSec = () => {
                         <div className="flex justify-center mb-4">
                             {doctorDetails && doctorDetails?.image ? (
                                 <img
-                                    src={doctorDetails?.image}
+                                    src={doctorData?.image}
                                     alt="Profile"
                                     className=" w-32 h-32 rounded-full shadow-md shadow-black "
                                 />
@@ -162,6 +193,7 @@ const FileSec = () => {
                                     onChange={handleImageChange}
                                     className="border border-gray-600   rounded-md p-2 w-full"
                                 />
+
                                 <div className=" mt-2 mb-2">
                                     {uploading === 'uploading' ? (
                                         <div className="p-2 rounded text-xs shadow-md shadow-gray-700 bg-[#BEC944] text-white">
@@ -180,23 +212,25 @@ const FileSec = () => {
 
                                 </div>
                             </div>
+
                             <div className="mb-4">
                                 <label htmlFor="document" className="block text-gray-900 font-bold mb-2">
-                                    Upload Document
+                                    Upload Document image
                                 </label>
                                 <input
                                     type="file"
                                     id="document"
                                     name="document"
-                                    accept=".pdf,.doc,.docx"
+                                    accept="image/*"
                                     onChange={handleFileChange}
                                     className="border border-gray-600 rounded-md p-2 w-full"
                                 />
 
                                 <div className=' mt-2 mb-2'>
-                                    <button className='p-2 rounded bg-[#BEC944]  hover:bg-[#e8df87] text-xs shadow-md shadow-gray-700' onClick={uploadFile}> Upload file</button>
+                                    <button className='p-2 rounded bg-[#BEC944]  hover:bg-[#e8df87] text-xs shadow-md shadow-gray-700' onClick={uploadDoc}> Upload file</button>
                                 </div>
                             </div>
+
                             <div className="flex justify-center mb-4">
                                 {fileUpload ? (
                                     <div >
@@ -213,9 +247,6 @@ const FileSec = () => {
                                         </div>
                                         <span className="text-xs text-black">No file selected</span>
                                     </div>
-
-
-
                                 )}
                             </div>
                         </div>

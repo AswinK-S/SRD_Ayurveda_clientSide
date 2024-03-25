@@ -74,7 +74,7 @@ export const updateTreatment =async(data)=>{
     try {
         console.log('iid----',data);
         const result = await axiosApi.patch(adminRoutes.editTrtmnt,data)
-        console.log('rslt in api--',result);
+        console.log('rslt in api--',result  );
         return result
     } catch (error) {
         console.log(error.message);
@@ -110,13 +110,24 @@ export const doctors = async () => {
 export const doctorStatus = async (id) => {
     try {
         console.log('doctor id', id);
-        let result = await axiosApi.post(`${adminRoutes.doctorStatus}/${id}`)
+        const result = await axiosApi.post(`${adminRoutes.doctorStatus}/${id}`)
         console.log('doc---------------res', result);
         return result
     } catch (error) {
         console.log(error.message);
         throw (error)
 
+    }
+}
+
+// verify doctor 
+export const verifyDoctor = async(id)=>{
+    try {
+        console.log('id-- in api',id);
+        const result = await axiosApi.post(`${adminRoutes.verifyDoc}/${id}`) 
+        return result
+    } catch (error) {
+        console.log(error.message)
     }
 }
 

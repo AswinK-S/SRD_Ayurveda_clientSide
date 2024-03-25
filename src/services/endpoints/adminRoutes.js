@@ -11,8 +11,8 @@ const adminRoutes ={
     addDoctor:'admin/add_Doc',
     treatment:'admin/treatment',
     removeSub_trtmnt:'admin/removeSubTrtmnt',
-    editTrtmnt:'admin/edit_trtmnt'
-
+    editTrtmnt:'admin/edit_trtmnt',
+    verifyDoc:'admin/verifyDoctor'
 
 }
 

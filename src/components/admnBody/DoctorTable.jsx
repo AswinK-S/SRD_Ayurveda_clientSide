@@ -2,19 +2,24 @@
 import { Card, Typography } from "@material-tailwind/react";
 import styles from '../../tailwind.module.css'
 import { useEffect, useState } from "react";
-import { doctors, doctorStatus } from "../../api/adminApi";
+import { doctors, doctorStatus, verifyDoctor } from "../../api/adminApi";
 import ConfirmationModals from "../modals/confirmationModals";
 import { AddBtn } from "./AddBtn";
+import VerifyDocModal from "./VerifyDocModal";
+import { toast } from "react-toastify";
 
 
-const TABLE_HEAD = ["Name", "Email", "Phone", "Status"];
+const TABLE_HEAD = ["Name", "Email", "Phone", "Status",'isVerified'];
 
 export function DoctorTable() {
 
   const [doctor, setDoctor] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [editId, setEditId] = useState(null)
-
+  const [verifyModal,setVerifyModal] = useState(false)
+  const [vefifyId,setVerifyId] = useState(null)
+  const [showDoc,setShowDoc] = useState(null)
+  
   //state variables for pagination
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(4)
@@ -22,15 +27,15 @@ export function DoctorTable() {
   const [searchTerm,setSearchTerm] = useState('')
 
   //get the users when the page is loaded
+  const getDoctors = async () => {
+    let res = await doctors()
+    console.log('res for table--', res.data);
+    setDoctor(res.data)
+    getPaginationData()
+  }
   useEffect(() => {
-    const getDoctors = async () => {
-      let res = await doctors()
-      console.log('res for table--', res.data);
-      setDoctor(res.data)
-      getPaginationData()
-    }
     getDoctors()
-  }, [showModal])
+  }, [showModal,verifyModal])
 
   const handleStatus = async () => {
     // console.log('usrSts id', id);
@@ -39,10 +44,47 @@ export function DoctorTable() {
     setShowModal(false)
   }
 
+  //block modal
   const modalConfirmation = (id) => {
     console.log(id)
     setShowModal(true)
     setEditId(id)
+  }
+
+  const handleVerify = async()=>{
+    try {
+      const result =await verifyDoctor(vefifyId)
+      console.log('vefify result---',result);
+
+      if(result.data.isVerified){
+        setVerifyModal(false)
+        console.log('vvvvvvvvv');
+        toast.success('Doctor Verification Successful!');
+      }else{
+        toast.success('verification cancelled')
+        console.log('ccccccc1111');
+        setVerifyModal(false)
+
+        console.log('ccccccc');
+      }
+      
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+   
+  }
+
+  //vefify modal
+  const verifyModalConfirmation =(id,document)=>{
+    console.log('verfy modal id',id);
+
+    setVerifyModal(true)
+    setVerifyId(id)
+    console.log('doc-->',document);
+    setShowDoc(document)
+    
+
   }
 
   //take the search value
@@ -135,7 +177,7 @@ export function DoctorTable() {
                 </tr>
               </thead>
               <tbody>
-                {getPaginationData().map(({ _id, name, email, mob, status }, index) => {
+                {getPaginationData().map(({ _id, name, email, mob, status,document ,isVerified}, index) => {
                     const isLast = index === doctor.length - 1;
                     const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
 
@@ -169,6 +211,20 @@ export function DoctorTable() {
                           )}
                         </Typography>
                       </td>
+
+                      <td className={cellClass}>
+                        <Typography as="a" href="#" variant="small" color="blue-gray" className={styles.editLink}>
+                          {document && isVerified ? (
+                            <button className="bg-[#64c351] rounded-md shadow-2xl p-3" onClick={() => verifyModalConfirmation(_id,document)}>
+                              Verified
+                            </button>
+                          ) : (
+                            <button className="bg-[#da3c3c] rounded-md shadow-2xl p-3" onClick={() => verifyModalConfirmation(_id,document)}>
+                              Not verified
+                            </button>
+                          )}
+                        </Typography>
+                      </td>
                     </tr>
                   );
                 })}
@@ -187,6 +243,7 @@ export function DoctorTable() {
 
       </div>
       {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
+      {verifyModal && <VerifyDocModal showDoc={showDoc} handleVerify={handleVerify} setVerifyModal={setVerifyModal}/>}
     </>
   );
 }

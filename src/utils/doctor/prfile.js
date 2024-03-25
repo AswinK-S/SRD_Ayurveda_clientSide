@@ -1,7 +1,8 @@
 /* eslint-disable no-prototype-builtins */
 export const formValidation = (modifiedFields) => {
     const errors = {};
-    const nameRegex = /^[a-zA-Z\s]{3,}$/;
+    const nameRegex =/^[a-zA-Z]{3,}$/
+    ;
     // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const mobRegex = /^\d{10}$/;
 
