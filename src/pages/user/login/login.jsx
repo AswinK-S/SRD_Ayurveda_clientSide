@@ -44,7 +44,7 @@ const Login = () => {
 
     const handleChange =(e)=>{
         const {name,value}=e.target
-        if(name=='email'){
+        if(name==='email'){
             setEmail(value)
         }
 
@@ -62,10 +62,13 @@ const Login = () => {
             const formData = {email,password}
             const response = await login(formData)
             console.log('response===>',response);
+            // invalid credentials
 
-            if(response ==='invalid email id'){
+            if(response ==='Invalid credentials'){
+                console.log('000');
                 setError('invalid email id or password')
-
+                console.log('err--->',error);
+                return
             }
 
             if(response?.status ==200){
@@ -74,13 +77,11 @@ const Login = () => {
                 // localStorage.setItem('userDetails',JSON.stringify(response.data.user))
                 navigate('/')
             }else{
-                console.log('invalid ',response);
+                console.log('invalid-- ',response);
             }
 
         }catch(err){
             console.error("login err",err.message);
-        }finally{
-            console.log('ex');
         }
 
     }
@@ -144,8 +145,9 @@ const Login = () => {
                         <a href="#" className="text-sm font-normal  hover:underline">
                             Forget Password?
                         </a>
-                        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
                         <div className="mt-6 bg-transparent">
+                        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
                             <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
                                 Login
                             </button>

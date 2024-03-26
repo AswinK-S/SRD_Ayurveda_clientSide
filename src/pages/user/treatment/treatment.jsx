@@ -1,3 +1,4 @@
+import Footer from "../../../components/footer/footer"
 import ImgComponent from "../../../components/imgCmpnt/ImgComponent"
 import Nav from "../../../components/navbar/nav"
 import TreatmentCard from "./TreatmentCard"
@@ -14,6 +15,7 @@ const Treatment = () => {
         <div>
           <TreatmentCard />
         </div>
+        <Footer/>
       </div>
 
     </>

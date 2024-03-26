@@ -37,12 +37,12 @@ const TreatmentCard = () => {
 
       <div className='w-full gap-10 flex flex-wrap flex-row justify-center my-10'>
         {treatmentData.map((treatment) => (
-          <div key={treatment.id} className="relative flex flex-col my-6 border border-white bg-gradient-to-r from-lime-200 via-lime-100 to-lime-300 shadow-md shadow-black bg-clip-border rounded-xl sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 duration-1000">
+          <div key={treatment.id} className="relative flex flex-col my-6  bg-gradient-to-r from-lime-200 via-lime-100 to-lime-300 shadow-md shadow-black bg-clip-border rounded-xl sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 duration-1000">
             <div className="relative h-56 mx-4 -mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl">
               <img
                 src="/hmImg2.jpg"
                 alt="card-image"
-                className="object-cover border border-white w-full h-full"
+                className="object-cover  w-full h-full"
               />
             </div>
             <div className="p-6 flex flex-col items-center">

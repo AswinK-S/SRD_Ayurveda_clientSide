@@ -14,7 +14,7 @@ const Home = () => {
                 </div>
                 
                 <div className="">
-                    <img className="w-full object-fill lg:h-96 rounded-xl " src='/hmImg1-transformed.jpeg' alt='' />
+                    <img className="w-full object-fill   " src='/inner-bg.jpg' alt='' />
                 </div>
                 <div className=" flex items-center justify-center ">
                     <Body />
