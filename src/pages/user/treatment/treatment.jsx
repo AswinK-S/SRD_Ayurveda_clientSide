@@ -6,13 +6,16 @@ const Treatment = () => {
 
   return (
     <>
-      <div className=" flex justify-center">
-        <Nav />
-      </div>
-      <ImgComponent text='TREATMENTS'/>
       <div>
-        <TreatmentCard />
+        <div className=" flex justify-center">
+          <Nav />
+        </div>
+        <ImgComponent text='TREATMENTS' />
+        <div>
+          <TreatmentCard />
+        </div>
       </div>
+
     </>
   )
 }

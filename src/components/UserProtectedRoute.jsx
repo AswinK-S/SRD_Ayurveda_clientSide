@@ -23,12 +23,14 @@ const UserProtectedRoute = ({ children, allowedRole }) => {
 
         if (decode.role !== allowedRole) {
           // Navigate to a different page or show an error message
+          console.log('role !== user');
           navigate('/');
         }
       } else {
         // If there's no token, navigate to the login page
         navigate('/login');
       }
+
     } catch (error) {
       console.error('Error decoding token:', error);
       // Handle error if necessary, e.g., redirect to a login page

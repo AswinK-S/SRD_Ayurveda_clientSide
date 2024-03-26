@@ -6,12 +6,13 @@ export const login = async (loginData)=>{
     try{
         console.log('login data :',loginData);
         console.log('------------');
-        let response = await axiosApi.post(userRoutes.login,loginData)
+        const response = await axiosApi.post(userRoutes.login,loginData)
         console.log('------',response);
         console.log('response :',response);
         return response
     }catch(error){
-        console.log("axios error :",error.response.data.message);
+        console.error("axios error :",error.response.data.message);
+        
         return error.response.data.message
     }
 }

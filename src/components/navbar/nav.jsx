@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './nav.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { logout } from '../../featuers/user/userSlice';
 
 
@@ -15,19 +15,17 @@ const Nav = () => {
  
 
 
-  useEffect(()=>{
-    if(user){
-      console.log('user---- ',user);
-      navigate('/')
-    }else{
-      console.log('user---- ',user);
-
-    }
-  },[user,navigate])
+  // useEffect(()=>{
+  //   console.log('iiii');
+  //   if(!user){
+  //     console.log('user---- ',user);
+  //     navigate('/')
+  //   }
+  // },[user,navigate])
 
   const logoutUser = () => {
     localStorage.removeItem('usertoken')
-    localStorage.removeItem('userDetails')
+    // localStorage.removeItem('userDetails')
     dispatch(logout())
     navigate('/')
   }

@@ -23,7 +23,7 @@ const doctorSlice = createSlice({
 
 export const { docloginSuccess, logout } = doctorSlice.actions;
 export default doctorSlice.reducer;
-
+        
 
 
 

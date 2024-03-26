@@ -59,7 +59,7 @@ function App() {
       <Route path ='/' element ={<Home/>} />
       <Route path ='/booking' element ={<UserProtectedRoute allowedRole='user'> <OnlineBooking/> </UserProtectedRoute>} />
       <Route path="/signup" element ={<SignUp/>}/>
-      <Route path = '/treatment' element = {<Treatment/>} />
+      <Route path = '/treatment' element = { <Treatment/> } />
       <Route path = '/treatment/:id' element = { <UserProtectedRoute allowedRole='user'> <TreatmentDetail/> </UserProtectedRoute>  } />
       <Route path ='/login'  element ={<Login/>}/>
 

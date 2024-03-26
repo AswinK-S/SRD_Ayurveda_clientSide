@@ -60,7 +60,6 @@ const Login = () => {
 
         try{
             const formData = {email,password}
-            // const validation = 
             const response = await login(formData)
             console.log('response===>',response);
 
@@ -72,14 +71,16 @@ const Login = () => {
             if(response?.status ==200){
                 dispatch(loginSuccess(response.data.user))
                 localStorage.setItem('usertoken',response.data.token)
-                localStorage.setItem('userDetails',JSON.stringify(response.data.user))
+                // localStorage.setItem('userDetails',JSON.stringify(response.data.user))
                 navigate('/')
             }else{
                 console.log('invalid ',response);
             }
 
         }catch(err){
-            console.log(err.message);
+            console.error("login err",err.message);
+        }finally{
+            console.log('ex');
         }
 
     }
