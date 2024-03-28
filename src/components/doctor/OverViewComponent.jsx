@@ -7,18 +7,12 @@ const OverViewComponent = () => {
       category: "Laptop",
       price: "$2999",
     },
-    // More data...
   ];
 
   return (
     <>
-
-    <div className="flex-grow border">
-      <div className="border  w-full md:w-auto flex-grow ">
-
-
-        <div className="overflow-x-auto"> {/* Add overflow handling for horizontal scrolling */}
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <div className="overflow-x-auto">
+          <table className="w-full md:max-w-5xl sm:max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -63,17 +57,9 @@ const OverViewComponent = () => {
             </tbody>
           </table>
         </div>
-
-      </div>
-
-      </div>
     </>
-
-
-
   );
-
-
+  
 }
 
 export default OverViewComponent

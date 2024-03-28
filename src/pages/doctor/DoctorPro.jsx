@@ -6,10 +6,12 @@ import Profile from "../../components/doctor/profile"
 const DoctorPro = () => {
     return (
         <div>
-            <DocNav/>
+            <DocNav />
             <div className="flex flex-col justify-evenly md:flex-row  px-10 mb-5  gap-10 mt-10">
-                <SideBar />
-                <FileSec/>
+                <div className="h-3/4 md:w-1/4 sm:w-full flex justify-center   mb-5 w-full">
+                    <SideBar />
+                </div>
+                <FileSec />
                 <Profile />
 
             </div>

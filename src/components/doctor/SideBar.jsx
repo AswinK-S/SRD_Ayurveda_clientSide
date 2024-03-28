@@ -7,13 +7,13 @@ const SideBar = () => {
         <>
 
             {/* component */}
-            <div className="w-full md:w-auto ">
-                <div className="flex flex-col flex-auto shadow-md shadow-gray-800 antialiased rounded-md p-2 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 text-gray-900">
-                    <div className="flex flex-col top-0 left-0">
-                        <div className="flex items-center justify-center h-14 border-b">
+            {/* <div className=" md:w-auto  bg-white "> */}
+                {/* <div className=" w-full  flex flex-col flex-auto shadow-md shadow-gray-800 antialiased rounded-md p-2 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 text-gray-900"> */}
+                    <div className="flex flex-col top-0 left-0 w-3/4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black">
+                        <div className="flex items-center justify-center  h-14 border-b">
                             <div>Doctor Interface</div>
                         </div>
-                        <div className="overflow-y-auto overflow-x-hidden flex-grow">
+                        <div className="overflow-y-auto overflow-x-hidden flex-grow  ">
                             <ul className="flex flex-col py-4 space-y-1">
 
                                 <Link to='/doctor/overView'>
@@ -96,9 +96,7 @@ const SideBar = () => {
                                         <span className="ml-2 text-sm tracking-wide truncate">
                                             Notifications
                                         </span>
-                                        <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-500 bg-red-50 rounded-full">
-                                            1.2k
-                                        </span>
+                                       
                                     </a>
                                 </li>
 
@@ -209,9 +207,7 @@ const SideBar = () => {
                                         <span className="ml-2 text-sm tracking-wide truncate">
                                             Patients
                                         </span>
-                                        <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">
-                                            15
-                                        </span>
+                                        
                                     </a>
                                 </li>
 
@@ -248,8 +244,8 @@ const SideBar = () => {
                             </ul>
                         </div>
                     </div>
-                </div>
-            </div>
+                {/* </div> */}
+            {/* </div> */}
 
 
 

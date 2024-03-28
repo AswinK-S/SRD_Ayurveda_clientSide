@@ -9,7 +9,7 @@ const Home = () => {
     return (
         <>
             <div >
-                <div className=" flex justify-center">
+            <div className="sticky top-0  flex justify-center bg-gradient-to-r from-lime-100 via-lime-100 to-lime-50">
                 <Nav />
                 </div>
                 

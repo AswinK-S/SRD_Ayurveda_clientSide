@@ -28,27 +28,12 @@ import DoctorLogin from "./pages/doctor/doctorLogin"
 import TreatmentDetail from './components/User/TreatmentDetail'
 import Overview from './pages/doctor/Overview'
 import DoctorPro from './pages/doctor/DoctorPro'
-// import { useEffect } from 'react'
-// import { jwtDecode } from 'jwt-decode'
-// import { useDispatch } from 'react-redux'
-// import { loginSuccess } from './featuers/user/userSlice'
+import AddSlot from './pages/doctor/AddSlot'
+
 
 
 function App() {
-  // const dispatch = useDispatch()
-
-  // useEffect(()=>{
-  //  const userToken = localStorage.getItem('usertoken')
-
-  //  if(userToken){
-  //   const user = jwtDecode(userToken)
-  //   if(user.role==='user'){
-  //     const userDetails = localStorage.getItem('userDetails')
-  //     dispatch(loginSuccess(userDetails))
-  //   }
-  //  }
-
-  // },[dispatch])
+  
 
   return (
     <>
@@ -78,7 +63,8 @@ function App() {
     {/* doctor */}
     <Route path="/doctor" element={<DoctorLogin/>}/>
     <Route path ='/doctor/overView' element ={ <DoctorPrtctdRoute allowedRole='doctor'> <Overview/> </DoctorPrtctdRoute> } />
-    <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/>
+    <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
+    <Route path='/doctor/AddSlot'  element={<AddSlot/>}/>
     </Routes>
     </BrowserRouter>
 

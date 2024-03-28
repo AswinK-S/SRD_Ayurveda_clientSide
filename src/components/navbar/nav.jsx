@@ -34,7 +34,7 @@ const Nav = () => {
   return (
     <>
 
-      <div className="container py-5 px-4 ">
+      <div className="container py-5 px-4">
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between  gap-10">
           {/* Logo */}

@@ -68,7 +68,7 @@ const DocNav = () => {
 
                     </div>) :
                     (
-                        <div className=" flex justify-center shadow-lg shadow-blue-gray-300 py-1">
+                        <div className=" flex justify-center shadow-sm shadow-black py-1">
                             <div className="container">
                                 <div className="flex flex-col sm:flex-row items-center justify-between">
                                     <div className="mb-4 sm:mb-0">
