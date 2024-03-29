@@ -3,7 +3,8 @@ const doctorRoute ={
     image:'doctor/image',
     details:'doctor/details',
     document:'doctor/document',
-    getDoctorDetails:'doctor/getDetail'
+    getDoctorDetails:'doctor/getDetail',
+    slotCreation:'doctor/createSlot'
 }
 
 export default doctorRoute
