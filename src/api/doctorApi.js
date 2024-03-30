@@ -54,10 +54,21 @@ export const createSlot =async (slotData)=>{
     try{
         console.log('sltDta===',slotData);
         const result = await axiosApi.post(doctorRoute.slotCreation,slotData)
-        result
+        console.log('result--',result);
+        return result
     }catch(error){
         console.log(error.message);
     }
 } 
+
+
+export const getSlots = async(id)=>{
+    try {
+        const result = await axiosApi.get(`${doctorRoute.getSlots}/${id}`,)
+        return result
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 

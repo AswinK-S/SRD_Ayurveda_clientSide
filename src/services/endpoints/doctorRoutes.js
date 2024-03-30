@@ -4,7 +4,8 @@ const doctorRoute ={
     details:'doctor/details',
     document:'doctor/document',
     getDoctorDetails:'doctor/getDetail',
-    slotCreation:'doctor/createSlot'
+    slotCreation:'doctor/createSlot',
+    getSlots:'doctor/getSlots',
 }
 
 export default doctorRoute

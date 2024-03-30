@@ -33,6 +33,7 @@ export function DoctorTable() {
     setDoctor(res.data)
     getPaginationData()
   }
+  
   useEffect(() => {
     getDoctors()
   }, [showModal,verifyModal])

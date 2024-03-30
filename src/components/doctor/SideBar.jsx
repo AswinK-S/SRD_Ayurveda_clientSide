@@ -127,6 +127,7 @@ const SideBar = () => {
                                     </a>
                                 </li>
 
+                                <Link to='/doctor/slot'>
                                 <li>
                                     <a
                                         href="#"
@@ -153,6 +154,7 @@ const SideBar = () => {
                                         </span>
                                     </a>
                                 </li>
+                                </Link>
 
                                 <Link to='/doctor/AddSlot'>
                                 <li>

@@ -24,7 +24,7 @@ const DocAddSlot = () => {
 
 
     //slot submition
-    const handleSubmit = async () => {
+    const handleSubmit = async () =>{
 
         console.log('value-->', value,"slctd-->",selectedShift);
         if (!value) {
@@ -34,6 +34,7 @@ const DocAddSlot = () => {
 
         if(selectedShift === ''){
             setError("Select at least one shift")
+            return
         }
 
         try {
@@ -44,6 +45,7 @@ const DocAddSlot = () => {
                 const id = decode.id
 
                     const slotInfo ={selectedShift,value,id}
+                    console.log('slotInfo',slotInfo);
                     const result = await createSlot(slotInfo)
                     console.log('rslt --',result);
                 }

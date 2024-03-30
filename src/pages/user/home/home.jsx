@@ -8,11 +8,11 @@ const Home = () => {
 
     return (
         <>
-            <div >
-            <div className="sticky top-0  flex justify-center bg-gradient-to-r from-lime-100 via-lime-100 to-lime-50">
-                <Nav />
+            <div className="" >
+                <div className="sticky top-0  flex justify-center ">
+                    <Nav />
                 </div>
-                
+
                 <div className="">
                     <img className="w-full object-fill   " src='/inner-bg.jpg' alt='' />
                 </div>

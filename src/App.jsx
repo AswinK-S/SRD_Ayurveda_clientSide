@@ -29,7 +29,7 @@ import TreatmentDetail from './components/User/TreatmentDetail'
 import Overview from './pages/doctor/Overview'
 import DoctorPro from './pages/doctor/DoctorPro'
 import AddSlot from './pages/doctor/AddSlot'
-
+import Slot from './pages/doctor/Slot'
 
 
 function App() {
@@ -64,7 +64,8 @@ function App() {
     <Route path="/doctor" element={<DoctorLogin/>}/>
     <Route path ='/doctor/overView' element ={ <DoctorPrtctdRoute allowedRole='doctor'> <Overview/> </DoctorPrtctdRoute> } />
     <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
-    <Route path='/doctor/AddSlot'  element={<AddSlot/>}/>
+    <Route path='/doctor/AddSlot'  element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot/> </DoctorPrtctdRoute>}/>
+    <Route path='/doctor/slot' element={<Slot/>} />
     </Routes>
     </BrowserRouter>
 
