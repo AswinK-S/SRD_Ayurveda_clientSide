@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { createSlot } from '../../api/doctorApi';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 
@@ -14,11 +16,15 @@ const DocAddSlot = () => {
     const [dateError, setDateError] = useState('')
     const [error, setError] = useState('')
     const [selectedShift, setSelectedShift] = useState('')
+    const [slotError,setSlotError] = useState('')
+
+    const navigate = useNavigate()
 
     const handleShiftChange = (e) => {
         setSelectedShift(e.target.value)
         if(e.target.value){
             setError('')
+            setSlotError('')
         }
     }
 
@@ -43,11 +49,32 @@ const DocAddSlot = () => {
                 const decode = jwtDecode(token)
                 if (decode.role === 'doctor') {
                 const id = decode.id
+                const selectedDate = `${value.getFullYear()}-${(value.getMonth() + 1).toString().padStart(2, '0')}-${value.getDate().toString().padStart(2, '0')}`;
+                console.log('slctd dte --',selectedDate)
 
-                    const slotInfo ={selectedShift,value,id}
+                    const slotInfo ={selectedShift,selectedDate,id}
                     console.log('slotInfo',slotInfo);
                     const result = await createSlot(slotInfo)
                     console.log('rslt --',result);
+                    if(result.data.message ==="slot created"){
+                        toast.success("slot created")
+                        navigate('/doctor/slot')
+                    }
+                    else if(result.data.message ==='You can not create the past date slot.'){
+                        setSlotError('You can not create slot for the past date.')
+                        return
+                    }
+                    else if(result.data.message==='Create slot before 1 day'){
+                        setSlotError('Create slot before 1 day')
+                        return
+                    }
+                    else if(result.data.message ==="This date already has a slot."){
+                        setSlotError('This date already has a slot')
+                        return
+                    }
+                    else if(result.data.message ==='Exceeded the date limit'){
+                        setSlotError('Exceeded the date limit')
+                    }
                 }
             }
         } catch (error) {
@@ -59,9 +86,7 @@ const DocAddSlot = () => {
 
     return (
         <>
-            <Calendar className='mb-4' onChange={onChange} value={value}
-
-            />
+            <Calendar className='mb-4' onChange={onChange} value={value} />
 
             <div className='  mx-10 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 p-10 shadow-md shadow-black'>
                 <div className='flex justify-center'>
@@ -74,7 +99,8 @@ const DocAddSlot = () => {
                 <div className=' p-5   '>
                     <div className=' flex flex-col items-center'>
                     {error && <span className='text-md text-red-700'>{error}</span>}
-                {dateError && <span className='text-md text-red-700'>{dateError}</span>}
+                    {dateError && <span className='text-md text-red-700'>{dateError}</span>}
+                    {slotError && <span className='text-md text-red-700'>{slotError}</span>}
 
                         <div className='m-2 flex gap-3 '>
                             <label className='font-semibold font-serif text-blue-gray-800'>

@@ -52,7 +52,7 @@ export const postDetails = async (formData,id)=>{
 
 export const createSlot =async (slotData)=>{
     try{
-        console.log('sltDta===',slotData);
+        console.log('slotData===',slotData);
         const result = await axiosApi.post(doctorRoute.slotCreation,slotData)
         console.log('result--',result);
         return result
