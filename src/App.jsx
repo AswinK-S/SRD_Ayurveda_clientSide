@@ -25,11 +25,11 @@ import AddDoctor from "./pages/admin/doctor/AddDoctor"
 import AddTreatment from './pages/admin/treatments/AddTreatment'
 // doctor
 import DoctorLogin from "./pages/doctor/doctorLogin"
-import TreatmentDetail from './components/User/TreatmentDetail'
 import Overview from './pages/doctor/Overview'
 import DoctorPro from './pages/doctor/DoctorPro'
 import AddSlot from './pages/doctor/AddSlot'
 import Slot from './pages/doctor/Slot'
+import BookTreatment from './pages/user/onlineBooking.jsx/BookTreatment'
 
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
       <Route path ='/booking' element ={<UserProtectedRoute allowedRole='user'> <OnlineBooking/> </UserProtectedRoute>} />
       <Route path="/signup" element ={<SignUp/>}/>
       <Route path = '/treatment' element = { <Treatment/> } />
-      <Route path = '/treatment/:id' element = { <UserProtectedRoute allowedRole='user'> <TreatmentDetail/> </UserProtectedRoute>  } />
+      <Route path = '/treatment/:id' element = { <UserProtectedRoute allowedRole='user'> <BookTreatment/> </UserProtectedRoute>  } />
       <Route path ='/login'  element ={<Login/>}/>
 
 
@@ -65,7 +65,7 @@ function App() {
     <Route path ='/doctor/overView' element ={ <DoctorPrtctdRoute allowedRole='doctor'> <Overview/> </DoctorPrtctdRoute> } />
     <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
     <Route path='/doctor/AddSlot'  element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot/> </DoctorPrtctdRoute>}/>
-    <Route path='/doctor/slot' element={<Slot/>} />
+    <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot/> </DoctorPrtctdRoute>} />
     </Routes>
     </BrowserRouter>
 

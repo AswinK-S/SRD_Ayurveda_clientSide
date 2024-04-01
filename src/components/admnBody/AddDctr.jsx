@@ -12,7 +12,7 @@ const AddDctr = () => {
     const [selectedTreatment, setSelectedTreatment] = useState({});
     const [selectedSubTreatment, setSelectedSubTreatment] = useState('');
     const [loading, setLoading] = useState(true);
-    const [errors,setErrors] =useState('')
+    const [errors, setErrors] = useState('')
 
     const navigate = useNavigate()
 
@@ -82,7 +82,7 @@ const AddDctr = () => {
 
     const handleSubTreatmentChange = (event) => {
         const selectedSubTreatment = event.target.value;
-
+        console.log('slctd sbTrtmnt-->',selectedSubTreatment);
         // Update selected sub-treatment
         setSelectedSubTreatment(selectedSubTreatment);
 
@@ -99,7 +99,7 @@ const AddDctr = () => {
 
         // Validate form data
         console.log('form data to send for vldtn----', formData);
-        const validationErrors = await formValidation(formData)
+        const validationErrors = formValidation(formData)
 
         if (Object.keys(validationErrors).length > 0) {
             // If there are errors, set them and do not proceed with form submission
@@ -110,11 +110,11 @@ const AddDctr = () => {
             const sendData = async (formData) => {
                 try {
                     const res = await addDoctor(formData);
-                    console.log('result of adding doc---',res.data);
-                    if (res.data.message=== 'mail send to doctor ,added new doctor') {
+                    console.log('result of adding doc---', res.data);
+                    if (res.data.message === 'mail send to doctor ,added new doctor') {
                         toast.success('Added a doctor');
                         navigate('/admin/doctors');
-                    }else if(res.data ==='doctor exists'){
+                    } else if (res.data === 'doctor exists') {
                         toast.error(res.data)
                     }
                 } catch (err) {
@@ -123,7 +123,7 @@ const AddDctr = () => {
             };
             sendData(formData);
         }
-        
+
 
     };
 
@@ -213,7 +213,7 @@ const AddDctr = () => {
                             </div>
 
                             <div className=" w-1/2">
-                            {errors && <p className="text-red-500 text-sm mb-2">{errors.address}</p>}
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.address}</p>}
 
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
@@ -270,7 +270,7 @@ const AddDctr = () => {
                                         <p>Loading...</p>
                                     ) : (
                                         <>
-                                               {errors && <p className="text-red-500 text-sm mb-2">{errors.treatment}</p>}
+                                            {errors && <p className="text-red-500 text-sm mb-2">{errors.treatment}</p>}
 
                                             <div className="mb-4">
                                                 <label htmlFor="treatments" className="block text-gray-600 text-sm font-medium mb-2">
@@ -310,7 +310,7 @@ const AddDctr = () => {
                                                         selectedTreatment?.subTreatments
                                                             .filter((subTreatment) => subTreatment?.status === true)
                                                             .map((filteredSubTreatment) => (
-                                                                <option key={filteredSubTreatment?.name} value={filteredSubTreatment?.name}>
+                                                                <option key={filteredSubTreatment?._id} value={filteredSubTreatment?._id}>
                                                                     {filteredSubTreatment?.name}
                                                                 </option>
                                                             ))

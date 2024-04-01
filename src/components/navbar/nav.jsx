@@ -47,13 +47,13 @@ const Nav = () => {
             <nav className="hidden lg:flex lg:flex-row lg:gap-10 lg:items-center ml-10">
               <a  className="text-md font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/'> Home </Link></a>
               <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/treatment'> Treatment </Link></a>
-              <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/booking'> Online Booking </Link></a>
+              {/* <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/booking'> Online Booking </Link></a> */}
               {user ? (
-                <button  className="bg-[#E7EE9D] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"
+                <button  className="bg-[#d5df6f] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out rounded-md"
                 onClick={logoutUser}
                 > <Link> Logout </Link></button>
               ) : (
-                <button  className="bg-[#E7EE9D] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/login'> Login </Link></button>
+                <button  className="bg-[#d5df6f] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out rounded-md"> <Link to='/login'> Login </Link></button>
               )}
             </nav>
           </div>
@@ -72,13 +72,13 @@ const Nav = () => {
             <nav className="flex flex-col gap-4 mt-4">
               <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"><Link to='/'> Home </Link></a>
               <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"><Link to='/treatment'> Treatment </Link></a>
-              <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"><Link to='/booking'> Online Booking </Link></a>
+              {/* <a  className="text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"><Link to='/booking'> Online Booking </Link></a> */}
               {user ? (
-                <button  className="bg-[#E7EE9D] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"
+                <button  className="bg-[#d5df6f] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"
                 onClick={logoutUser}
                 > <Link> Logout </Link></button>
               ) : (
-                <button  className="bg-[#E7EE9D] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/login'> Login </Link></button>
+                <button  className="bg-[#d5df6f] px-4 py-2  shadow-lg hover:bg-lime-600 text-lg font-serif text-black hover:text-gray-900 transition duration-300 ease-in-out"> <Link to='/login'> Login </Link></button>
               )}
             </nav>
           </div>

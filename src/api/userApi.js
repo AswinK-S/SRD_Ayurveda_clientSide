@@ -19,7 +19,7 @@ export const login = async (loginData)=>{
 
 export const treatments = async ()=>{
     try {
-        let res = await axiosApi.get(userRoutes.treatments)
+        const res = await axiosApi.get(userRoutes.treatments)
         return res
     } catch (error) {
         console.log(error.message);
@@ -29,7 +29,7 @@ export const treatments = async ()=>{
 //otp submition route
 export const registerUser = async (otp)=>{
     console.log('otp data :',otp);
-    let response = await axiosApi.post(userRoutes.registerUser,{otp:otp})
+    const response = await axiosApi.post(userRoutes.registerUser,{otp:otp})
     console.log('otp submit response :', response);
     return response
 }
@@ -38,12 +38,33 @@ export const registerUser = async (otp)=>{
 export const signup = async (resgisterData)=>{
     try{
         console.log('register details :',resgisterData);
-        let response = await axiosApi.post(userRoutes.signup,resgisterData)
+        const response = await axiosApi.post(userRoutes.signup,resgisterData)
         console.log('signup response',response);
         return response
     }catch(error){
         console.log('register err  :',error.message);   
         return error.message
 
+    }
+}
+
+// get treatments for online booking
+export const getTreatments = async ()=>{
+    try{
+        const res = await axiosApi.get(userRoutes.treatments)
+        return res
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+// get doctors according to the treatment
+export const doctor = async()=>{
+    try {
+        const res = await axiosApi.get(userRoutes.doctor)
+        console.log('object');
+        return res
+    } catch (error) {
+        console.log(error.message);
     }
 }
