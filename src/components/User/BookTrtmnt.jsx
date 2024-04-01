@@ -7,18 +7,11 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { getTreatments } from "../../api/userApi";
-import {doctor} from '../../api/userApi'
+import { doctor } from '../../api/userApi'
 
 const BookTrtmnt = () => {
 
-    const doctors = [
-        { id: 1, name: "Dr. John Doe" },
-        { id: 2, name: "Dr. Jane Smith" },
-        { id: 3, name: "Dr. Michael Brown" },
-        { id: 4, name: "Dr. Sarah Johnson" },
-        { id: 5, name: "Dr. Robert Williams" },
-        // Add more doctors if needed
-    ];
+
 
     // Dummy data for slots
     const slots = [
@@ -34,6 +27,7 @@ const BookTrtmnt = () => {
     const [selectedSubTreatment, setSelectedSubTreatment] = useState('')
     const [loading, setLoading] = useState(true)
 
+    const [doctorsForTrtmnt, setDoctorsForTrtmnt] = useState('')
 
 
 
@@ -44,15 +38,16 @@ const BookTrtmnt = () => {
     }
 
     const handleSubTreatmentChange = (e) => {
-        console.log('selected sbtt--',e.target.value);
-        const sbTrtmntId=e.target.value
+        console.log('selected sbtt--', e.target.value);
+        const sbTrtmntId = e.target.value
         setSelectedSubTreatment(sbTrtmntId)
 
-        const getDoctors = async()=>{
-            const result = await doctor(sbTrtmntId) 
-            console.log(result);
+        const getDoctors = async (sbTrtmntId) => {
+            const result = await doctor(sbTrtmntId)
+            console.log('dctr for trtmnt---', result.data.doctor);
+            setDoctorsForTrtmnt(result?.data?.doctor)
         }
-        getDoctors()
+        getDoctors(sbTrtmntId)
     }
 
 
@@ -127,20 +122,24 @@ const BookTrtmnt = () => {
                 <div className="flex justify-center"><p className="font-serif">Available Doctors</p></div>
                 <div className="mb-4 p-2  max-h-60 flex flex-col items-center overflow-hidden">
                     <div className="w-full max-w-md overflow-y-scroll p-4 bg-[#f4fbdb] rounded-md">
-                        {doctors.map((doctor) => (
-                            <Card key={doctor.id} className="mb-2 h-28  bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 rounded-md shadow-md shadow-black">
-                                <CardBody className=" h-8 ">
-                                    <Typography variant="h6" color="blue-gray" className="">
-                                        {doctor.name}
+                        { doctorsForTrtmnt?
+                          (  
+                            doctorsForTrtmnt.map((doctor) => (
+                                <Card key={doctor.id} className="mb-2 h-28  bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 rounded-md shadow-md shadow-black">
+                                    <CardBody className=" h-8 ">
+                                        <Typography variant="h6" color="blue-gray" className="">
+                                            {doctor.name}
 
-                                    </Typography>
-                                    {/* Other doctor details */}
-                                </CardBody>
-                                <CardFooter className="">
-                                    <button className="h-7 px-3  text-sm text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">Select Doctor</button>
-                                </CardFooter>
-                            </Card>
-                        ))}
+                                        </Typography>
+                                        {/* Other doctor details */}
+                                    </CardBody>
+                                    <CardFooter className="">
+                                        <button className="h-7 px-3  text-sm text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">Select Doctor</button>
+                                    </CardFooter>
+                                </Card>
+                            ))
+                         ):(<p>No Doctors Available </p>)
+                        }
                     </div>
                 </div>
                 {/* Calendar */}

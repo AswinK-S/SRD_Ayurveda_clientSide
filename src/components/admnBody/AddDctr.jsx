@@ -36,7 +36,8 @@ const AddDctr = () => {
                 console.log('rrrrr');
                 const response = await treatments();
                 console.log('trtmnt for add doc--', response.data);
-                setTreatmentData(response.data);
+                const trtmnt = response?.data?.filter((item)=>item?.status)
+                setTreatmentData(trtmnt);
             } catch (error) {
                 console.error('Error fetching treatment data:', error);
             } finally {
