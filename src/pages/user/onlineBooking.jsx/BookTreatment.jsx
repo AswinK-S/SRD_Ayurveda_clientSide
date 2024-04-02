@@ -7,10 +7,10 @@ const BookTreatment = () => {
     return (
         <>
             <div>
-                <div className=" flex justify-center">
+                <div className=" flex justify-center ">
                     <Nav />
                 </div>
-                <ImgComponent text='Online Booking' />
+                <ImgComponent text='Online Booking'  />
                 <div className="mx-auto max-w-screen-lg">
                     <BookTrtmnt />
                 </div>

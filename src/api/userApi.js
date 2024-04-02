@@ -59,11 +59,11 @@ export const getTreatments = async ()=>{
 }
 
 // get doctors according to the treatment
-export const doctor = async(id)=>{
+export const doctor = async(slotData)=>{
     try {
-        console.log('id to bcknd------',id);
-        const res = await axiosApi.get(`${userRoutes.doctor}/${id}`)
-        console.log('object');
+        console.log('id to bcknd------',slotData);
+        const res = await axiosApi.get(`${userRoutes.doctor}/${slotData?.sbTrtmntId}/${slotData?.date}`)
+        console.log('object',res);
         return res
     } catch (error) {
         console.log(error.message);

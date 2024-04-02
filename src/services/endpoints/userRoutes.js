@@ -5,7 +5,7 @@ const userRoutes = {
     registerUser:'/user/create_user',
     treatments:'user/userTreatments',
     trtmntsForBkng:'user/trtmnts',
-    doctor:'user/doctor'
+    doctor:'/user/doctor'
 }
 
 
