@@ -14,6 +14,7 @@ const FileSec = () => {
     const [uploading, setUploading] = useState('')
     let [doctorDetails,setDoctorDetails] =useState(null)
     const dispatch= useDispatch()
+    
     const doctorData = useSelector((state) => state.doctor.doctor)
    
     useEffect(() => {

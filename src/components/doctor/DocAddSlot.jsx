@@ -56,6 +56,7 @@ const DocAddSlot = () => {
                     console.log('slotInfo',slotInfo);
                     const result = await createSlot(slotInfo)
                     console.log('rslt --',result);
+
                     if(result.data.message ==="slot created"){
                         toast.success("slot created")
                         navigate('/doctor/slot')
@@ -74,6 +75,8 @@ const DocAddSlot = () => {
                     }
                     else if(result.data.message ==='Exceeded the date limit'){
                         setSlotError('Exceeded the date limit')
+                    }else if(result.data.message ==='Cannot create slot with out completing verification'){
+                        setSlotError('Cannot create slot with out completing verification')
                     }
                 }
             }
@@ -83,7 +86,7 @@ const DocAddSlot = () => {
 
     }
 
-
+    
     return (
         <>
             <Calendar className='mb-4' onChange={onChange} value={value} />

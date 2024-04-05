@@ -3,6 +3,7 @@ export const formValidation = (formData) => {
     const nameRegex = /^[a-zA-Z\s]{3,}$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const mobRegex = /^\d{10}$/;
+    const amountRegex = /^\d{3}$/
 
     console.log(formData.treatment ," trtmnt ",);
     console.log(formData.doctor_id ," id ",);
@@ -31,6 +32,14 @@ export const formValidation = (formData) => {
         errors.mob = 'Mobile number cannot contain only spaces.';
     } else if (!mobRegex.test(formData.mob)) {
         errors.mob = 'Please enter a valid mobile number.';
+    }
+
+    if (!formData.amount) {
+        errors.amount = 'Amount  cannot be empty.';
+    } else if (formData.amount.trim() === '') {
+        errors.amount = 'Mobile number cannot contain only spaces.';
+    } else if (!amountRegex.test(formData.amount)) {
+        errors.amount = 'Please enter a valid amount.';
     }
 
 

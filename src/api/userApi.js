@@ -69,3 +69,21 @@ export const doctor = async(slotData)=>{
         console.log(error.message);
     }
 }
+
+//get user booking detail
+
+export const bookingDetail = async(docId,treatmentId,subTreatmentId)=>{
+    try {
+        const booking ={
+            docId:docId,
+            treatmentId:treatmentId,
+            sbTrtmntId:subTreatmentId
+        }
+        const params = new URLSearchParams(booking).toString()
+        const result = await axiosApi.get(`${userRoutes.getBkngDtails}?${params}`)
+        console.log('bkng rslt--',result);
+        return result.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}

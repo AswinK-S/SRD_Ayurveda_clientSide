@@ -26,7 +26,8 @@ const AddDctr = () => {
         experience: '',
         doctor_id: '',
         treatment: '',
-        subTreatment: ''
+        subTreatment: '',
+        amount:''
     });
 
     // fetching the data to fill select fields 
@@ -184,6 +185,20 @@ const AddDctr = () => {
                                         type="number"
                                         id="mob"
                                         name="mob"
+                                        onChange={handleChange}
+                                        className="border  rounded-md p-2 w-full"
+                                    />
+                                </div>
+                                {errors && <p className="text-red-500 text-sm mb-2">{errors.amount}</p>}
+
+                                <div className="mb-4">
+                                    <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
+                                        Amount
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="amount"
+                                        name="amount"
                                         onChange={handleChange}
                                         className="border  rounded-md p-2 w-full"
                                     />
