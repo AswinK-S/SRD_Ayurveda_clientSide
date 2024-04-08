@@ -1,19 +1,37 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react";
-import { bookingDetail } from "../../api/userApi";
+import { bookingDetail, payment } from "../../api/userApi";
+import { useDispatch } from "react-redux";
+import {bookingDatas} from "../../featuers/booking/booking"
+import {loadStripe}  from '@stripe/stripe-js'
+import {useSelector} from 'react-redux'
 
-const BookSlotModal = ({ setShowModal,bookingData }) => {
-    const [bkngDetail,setbkngDetail] = useState({})
-    useEffect(()=>{
-        const fetchData = async()=>{
+const BookSlotModal = ({ setShowModal, bookingData }) => {
+    const dispatch = useDispatch()
+    const [bkngDetail, setbkngDetail] = useState({})
+    const user = useSelector((state)=>state.user.user)
 
-            const result = await bookingDetail(bookingData?.doctorId,bookingData?.treatmentId,bookingData?.subTreatmentId)
-            console.log('result----bb',result);
+    useEffect(() => {
+        const fetchData = async () => {
+
+            const result = await bookingDetail(bookingData?.doctorId, bookingData?.treatmentId, bookingData?.subTreatmentId)
+            console.log('result----bb', result);
+            result.email = user.email
             setbkngDetail(result)
+            dispatch(bookingDatas(result))
         }
         fetchData()
-    },[])
+    }, [])
+
+    console.log('rrr', bkngDetail);
+
+    const handleBooking = async()=>{
+            const stripe = await loadStripe('pk_test_51P2UV2SEGRYT9lZHg0EcsOSis0gLsLpaKIv9jGemUZuGWoVeBogRpDoBgG8k9udr3TcOZ60jG4mEIIdMYKdRux3Q00KT7sEVMV')
+            const result = await payment(bkngDetail)
+            const data= result.data
+            window.location=data
+    }
 
     return (
         <>
@@ -28,27 +46,45 @@ const BookSlotModal = ({ setShowModal,bookingData }) => {
                             <p className="text-sm text-gray-900 px-8">
                             </p>
                             {/* Input fields */}
-                            <input type="text" placeholder="Patient Name" value={bookingData.patientName}className="w-full mt-4 p-2 border rounded-md" disabled/>
-                            <input type="text" placeholder="Doctor Name"  value={bkngDetail?.doctorName} className="w-full mt-4 p-2 border rounded-md" />
-                            <input type="text" placeholder="Treatment Name"  value={bkngDetail?.treatmentName} className="w-full mt-4 p-2 border rounded-md" />
-                            <input type="text" placeholder="Subtreatment Name"  value={bkngDetail?.subTreatmentName} className="w-full mt-4 p-2 border rounded-md" />
+                            <div className="flex  flex-col  items-start mb-3">
+                                <label className="text-sm text-gray-600">Patient Name</label>
+                                <input type="text" placeholder="Patient Name" value={bookingData.patientName} className="w-full mt-4 p-2 border rounded-md" disabled />
+                            </div>
+                            <div className="flex  flex-col  items-start mb-3">
+                                <label className="text-sm text-gray-600" >Doctor Name</label>
+                                <input type="text" placeholder="Doctor Name" value={bkngDetail?.doctorName} className="w-full mt-4 p-2 border rounded-md" disabled />
+                            </div>
+                            <div className="flex  flex-col  items-start mb-3">
+                                <label className="text-sm text-gray-600" >Treatment Name</label>
+                                <input type="text" placeholder="Treatment Name" value={bkngDetail?.treatmentName} className="w-full mt-4 p-2 border rounded-md" disabled />
+                            </div>
+                            <div className="flex  flex-col  items-start mb-3">
+                                <label className="text-sm text-gray-600"> Sub Treatment </label>
+                                <input type="text" placeholder="Subtreatment Name" value={bkngDetail?.subTreatmentName} className="w-full mt-4 p-2 border rounded-md" disabled />
+
+                            </div>
+                            <div className="flex  flex-col  items-start">
+                                <label className="text-sm text-gray-600"> consultation fee. </label>
+                                <input type="text" placeholder="" value={bkngDetail?.amount} className="w-full mt-4 p-2 border rounded-md" disabled />
+
+                            </div>
                         </div>
                         {/*footer*/}
                         <div className="p-3 mt-2 text-center space-x-4 md:block">
-                           
 
-                           
+
+
                         </div>
                     </div>
 
                     <div className="text-center p-5 flex-auto justify-center">
-                       
+
                         <div className="p-3 mt-2 text-center space-x-4 md:block">
 
                             <button onClick={() => { setShowModal(false) }} className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
                                 Cancel
                             </button>
-                            <button onClick='' className="mb-2 md:mb-0 bg-[#d8e088] border px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider text-black rounded-full hover:shadow-lg hover:bg-[#c9d172]">
+                            <button onClick={handleBooking} className="mb-2 md:mb-0 bg-[#d8e088] border px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider text-black rounded-full hover:shadow-lg hover:bg-[#c9d172]">
                                 Book Now
                             </button>
                         </div>

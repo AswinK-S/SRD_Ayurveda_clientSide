@@ -6,7 +6,8 @@ const userRoutes = {
     treatments:'user/userTreatments',
     trtmntsForBkng:'user/trtmnts',
     doctor:'/user/doctor',
-    getBkngDtails:'/user/bookingDetails'
+    getBkngDtails:'/user/bookingDetails',
+    payment:'/user/payment'
 }
 
 

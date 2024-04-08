@@ -87,3 +87,16 @@ export const bookingDetail = async(docId,treatmentId,subTreatmentId)=>{
         console.log(error.message);
     }
 }
+
+//stripe payment
+export const payment =async(bookingDetail)=>{
+    try {
+        console.log('bkng details--',bookingDetail);
+        const result = await axiosApi.post(userRoutes.payment,bookingDetail)
+        console.log('result--',result);
+        return  result;
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}

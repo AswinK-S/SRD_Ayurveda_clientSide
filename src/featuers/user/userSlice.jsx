@@ -16,7 +16,7 @@ const userSlice = createSlice({
             state.user=null
             localStorage.removeItem("user")
         }
-    }
+    }   
 })
 
 export const {loginSuccess,logout} = userSlice.actions
