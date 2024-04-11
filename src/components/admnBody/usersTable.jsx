@@ -4,41 +4,113 @@ import styles from '../../tailwind.module.css'
 import { useEffect, useState } from "react";
 import { userStatus, users } from "../../api/adminApi";
 import ConfirmationModals from "../modals/confirmationModals";
+import { AddUBtn } from "./AddBtn";
 
 
 const TABLE_HEAD = ["Name", "Email", "Phone", "Status"];
 
 
-
 export function UserTable() {
 
   const [user, setUser] = useState([])
-  const [showModal,setShowModal] = useState(false)
-  const [editId,setEditId]=useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [editId, setEditId] = useState(null)
+
+  //state variables for pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(3)
+  const [searchTerm, setSearchTerm] = useState('')
+
+
+
+  const getUsers = async () => {
+    let res = await users()
+    console.log('res for table--', res.data);
+    setUser(res.data)
+    getPaginationData()
+  }
 
   //get the users when the page is loaded
   useEffect(() => {
-    const getUsers = async () => {
-      let res = await users()
-      console.log('res for table--', res.data);
-      setUser(res.data)
-    }
     getUsers()
   }, [showModal])
 
   const handleStatus = async () => {
     // console.log('usrSts id', id);
-    let result = await userStatus(editId)
+    const result = await userStatus(editId)
     console.log('rrrr', result);
     setShowModal(false)
   }
 
-  const modalConfirmation =(id)=>{
+  const modalConfirmation = (id) => {
     console.log(id)
     setShowModal(true)
     setEditId(id)
   }
 
+
+
+  //take the search value
+  const handleSearchUser = (event) => {
+    setSearchTerm(event.target.value)
+    
+  }
+
+  // filter the data according to search 
+  const filteredusers = user.filter((usr) => {
+    const name = `${usr.name}`.toLowerCase()
+    const mob = `${usr.mob}`.toLowerCase()
+    const searchTermL = searchTerm.toLowerCase()
+
+    return (
+      name.includes(searchTermL) || mob.includes(searchTermL)
+    )
+  })
+
+   // getting the data per page 
+  const getPaginationData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredusers.slice(startIndex, endIndex)
+  }
+
+  const totalPages = Math.ceil(user.length / itemsPerPage)
+
+
+  // function that defines pagination logic 
+  const PaginationControls = () => {
+    const handlePrevClick = () => {
+      setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
+    };
+
+    const handleNextClick = () => {
+      setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : totalPages));
+    };
+
+    return (
+      <div className="flex justify-center mt-4 mb-4  ">
+        <button
+          className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black"
+          onClick={handlePrevClick}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <p className="px-4 py-2 mr-2  font-sans">{currentPage}</p>
+
+        <button
+          className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black"
+          onClick={handleNextClick}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+    );
+  };
+
+
+ 
 
   return (
     <>
@@ -50,6 +122,8 @@ export function UserTable() {
             <h1>USERS</h1>
           </div>
         </div>
+
+        <AddUBtn handleSearchUser={handleSearchUser} searchTerm={searchTerm} />
 
         <div className="mt-5 p-5 ">
           <Card className="h-full w-full overflow-scroll shadow-lg ">
@@ -66,7 +140,7 @@ export function UserTable() {
                 </tr>
               </thead>
               <tbody>
-                {user.map(({ _id, name, email, mob, status }, index) => {
+                {getPaginationData().map(({ _id, name, email, mob, status }, index) => {
                   const isLast = index === user.length - 1;
                   const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
 
@@ -104,10 +178,16 @@ export function UserTable() {
           </Card>
         </div>
 
+        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+
+
 
 
       </div>
-      {showModal && <ConfirmationModals  handleStatus={handleStatus} setShowModal={setShowModal}/>}
+      {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
     </>
   );
 }
+
+
+

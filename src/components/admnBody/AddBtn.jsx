@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa'
@@ -68,6 +69,30 @@ export const AddTBtn = ({ handleSearch, searchTerm }) => {
 }
 
 
+export const AddUBtn = ({ handleSearchUser, searchTerm }) => {
+  return (
+    <>
+      <div className="flex items-center justify-between mb-4  px-20 ">
+
+        <div className='shadow-lg flex items-center border border-lime-200 rounded' >
+          <span className="px-3 text-gray-500">
+            <FaSearch />
+          </span>
+          <input
+            type="text"
+            placeholder="Search "
+            value={searchTerm}
+            onChange={handleSearchUser}
+            className="px-4 py-3 shadow-lg rounded"
+          />
+        </div>
+
+
+      </div>
+    </>
+  )
+}
+
 AddBtn.propTypes = {
   handleSearchChange: PropTypes.func.isRequired,
   searchTerm: PropTypes.string.isRequired,
@@ -75,5 +100,10 @@ AddBtn.propTypes = {
 
 AddTBtn.propTypes = {
   handleSearch: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired
+}
+
+AddUBtn.propTypes ={
+  handleSearchUser:PropTypes.func.isRequired,
   searchTerm: PropTypes.string.isRequired
 }

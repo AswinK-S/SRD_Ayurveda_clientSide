@@ -7,7 +7,8 @@ const userRoutes = {
     trtmntsForBkng:'user/trtmnts',
     doctor:'/user/doctor',
     getBkngDtails:'/user/bookingDetails',
-    payment:'/user/payment'
+    payment:'/user/payment',
+    resendOtp:'/user/resendOtp'
 }
 
 

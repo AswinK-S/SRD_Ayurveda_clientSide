@@ -3,6 +3,7 @@ import Footer from "../../../components/footer/footer"
 import ImgComponent from "../../../components/imgCmpnt/ImgComponent"
 import Nav from "../../../components/navbar/nav"
 
+
 const BookTreatment = () => {
     return (
         <>
@@ -14,8 +15,9 @@ const BookTreatment = () => {
                 <div className="mx-auto max-w-screen-lg">
                     <BookTrtmnt />
                 </div>
-                <Footer />
             </div>
+            <Footer />
+
         </>
     )
 }

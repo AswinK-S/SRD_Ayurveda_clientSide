@@ -135,7 +135,7 @@ export const verifyDoctor = async(id)=>{
 export const users = async () => {
     try {
         console.log('get users req');
-        let response = await axiosApi.get(adminRoutes.users)
+        let response = await axiosApi.get(adminRoutes.users);
         console.log('res frm user', response);
         return response
     } catch (err) {

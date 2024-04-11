@@ -17,9 +17,9 @@ const TreatmentTable = () => {
 
   //state variables for modal and to get id
   const [showModal, setShowModal] = useState(false)
-  const [trtmntModal,setTrtmntModal] = useState(false)
+  const [trtmntModal, setTrtmntModal] = useState(false)
   const [id, setId] = useState('')
-  const [editTrtmntId, setEditTrtmntId] =useState('')
+  const [editTrtmntId, setEditTrtmntId] = useState('')
 
   // get the treatments when the page is loaded
   useEffect(() => {
@@ -35,7 +35,7 @@ const TreatmentTable = () => {
     };
 
     getTreatments();
-  }, [showModal,trtmntModal]);
+  }, [showModal, trtmntModal]);
 
   //get the search data
   const handleSearch = (event) => {
@@ -66,7 +66,7 @@ const TreatmentTable = () => {
     setShowModal(true)
   }
 
-  const editTrtmntModal = async (trtmntId)=>{
+  const editTrtmntModal = async (trtmntId) => {
     // console.log('trtmnt id :',trtmntId);
     setTrtmntModal(true)
     setEditTrtmntId(trtmntId)
@@ -81,7 +81,6 @@ const TreatmentTable = () => {
 
 
   //function to implement pagination
-
   const PaginationControls = () => {
 
     const handlePrev = () => {
@@ -95,6 +94,7 @@ const TreatmentTable = () => {
     return (
       <div className="flex justify-center  mt-4 mb-4">
         <button className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black" onClick={handlePrev} disabled={currentPage === 1}>prev</button>
+        <p className="px-4 py-2 mr-2  font-sans">{currentPage}</p>
         <button className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black  " onClick={handleNext} disabled={currentPage === totalPages}>next</button>
       </div>
     )
@@ -132,7 +132,7 @@ const TreatmentTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginationData().map(({ _id, name, status,subTreatments }, index) => {
+                {paginationData().map(({ _id, name, status, subTreatments }, index) => {
                   const isLast = index === treatmentData.length - 1;
                   const cellClass = isLast
                     ? styles.tableCellLast
@@ -153,18 +153,18 @@ const TreatmentTable = () => {
 
                       <td className={cellClass}>
 
-                         <button className="px-2 py-1 bg-blue-500 text-white rounded"
-                         onClick={()=>{editTrtmntModal(_id)}}
-                         >
-                           Edit
-                         </button>
-                      
-                       
+                        <button className="px-2 py-1 bg-blue-500 text-white rounded"
+                          onClick={() => { editTrtmntModal(_id) }}
+                        >
+                          Edit
+                        </button>
+
+
                       </td>
 
                       <td className={cellClass}>
                         <button
-                          onClick={()=>{modalConfirmation(_id)}}
+                          onClick={() => { modalConfirmation(_id) }}
                           className={`px-2 py-1 rounded ${status ? "bg-green-500 text-white" : "bg-red-500 text-white"
                             }`}
                         >
@@ -201,7 +201,7 @@ const TreatmentTable = () => {
       </div>
 
       {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
-      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal} editTrtmntId={editTrtmntId}/>}
+      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal} editTrtmntId={editTrtmntId} />}
     </>
   );
 };

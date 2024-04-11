@@ -48,6 +48,18 @@ export const signup = async (resgisterData)=>{
     }
 }
 
+//resend otp
+export const resendOtp = async(signupData)=>{
+    try{
+        const result = await axiosApi.post(userRoutes.resendOtp,signupData)
+        console.log('----result',result);
+        return result.data
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+
 // get treatments for online booking
 export const getTreatments = async ()=>{
     try{

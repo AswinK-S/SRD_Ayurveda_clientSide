@@ -12,26 +12,26 @@ import { useDispatch } from "react-redux";
 
 const Login = () => {
 
-    const navigate =useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [email,setEmail] = useState('')
-    const [password,setPassword] =useState('')
-    const [error,setError] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
-    useEffect(()=>{
+    useEffect(() => {
         const token = localStorage.getItem('usertoken')
-        if(token){
+        if (token) {
             const decode = jwtDecode(token)
-            if(decode.role=="user"){
+            if (decode.role == "user") {
                 navigate('/')
-            }else{
+            } else {
                 navigate('/login')
             }
-        }else{
+        } else {
             navigate('/login')
         }
-    },[navigate])
+    }, [navigate])
 
     const backgroundImage = {
         backgroundImage: 'url("ayurveda.jpeg")',
@@ -42,55 +42,55 @@ const Login = () => {
 
     };
 
-    const handleChange =(e)=>{
-        const {name,value}=e.target
-        if(name==='email'){
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        if (name === 'email') {
             setEmail(value)
         }
 
-        if(name ==='password'){
+        if (name === 'password') {
             setPassword(value)
         }
         setError('')
     }
 
 
-    const handleSubmit =async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        try{
-            const formData = {email,password}
+        try {
+            const formData = { email, password }
             const response = await login(formData)
-            console.log('response===>',response);
+            console.log('response===>', response);
             // invalid credentials
 
-            if(response ==='Invalid credentials'){
+            if (response === 'Invalid credentials') {
                 console.log('000');
                 setError('invalid email id or password')
-                console.log('err--->',error);
+                console.log('err--->', error);
                 return
             }
 
-            if(response?.status ==200){
+            if (response?.status == 200) {
                 dispatch(loginSuccess(response.data.user))
-                localStorage.setItem('usertoken',response.data.token)
+                localStorage.setItem('usertoken', response.data.token)
                 // localStorage.setItem('userDetails',JSON.stringify(response.data.user))
                 navigate('/')
-            }else{
-                console.log('invalid-- ',response);
+            } else {
+                console.log('invalid-- ', response);
             }
 
-        }catch(err){
-            console.error("login err",err.message);
+        } catch (err) {
+            console.error("login err", err.message);
         }
 
     }
 
     return (
         <div>
-             <div className=" flex justify-center">
+            <div className=" flex justify-center">
                 <Nav />
-                </div>
+            </div>
 
             <div>
                 <div className="flex lg:h-[200px]  items-center justify-center p-5" style={backgroundImage}>
@@ -121,9 +121,9 @@ const Login = () => {
                             >
                                 Email
                             </label>
-                            
+
                             <input
-                                type="email" name="email" placeholder="enter your email address"  value={email} 
+                                type="email" name="email" placeholder="enter your email address" value={email}
                                 onChange={handleChange}
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md "
                             />
@@ -146,7 +146,7 @@ const Login = () => {
                             Forget Password?
                         </a>
                         <div className="mt-6 bg-transparent">
-                        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+                            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
                             <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
                                 Login
@@ -155,24 +155,24 @@ const Login = () => {
 
                     </form>
 
-                   
+
 
                     <div className="flex  mt-4 gap-x-2">
-                       
+
 
                     </div>
 
                     <p className="mt-8 text-sm bg-transparent font-normal text-center text-gray-700">
                         {" "}
                         Don't have an account?{" "}
-                        
-                           <Link to='/signup'> Sign up  </Link> 
+
+                        <Link className="text-light-blue-900" to='/signup'> Sign up  </Link>
                     </p>
                 </div>
             </div>
 
 
-            <Footer />
+            <Footer/>
         </div>
     )
 }

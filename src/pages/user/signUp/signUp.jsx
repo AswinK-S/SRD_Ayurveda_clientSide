@@ -1,10 +1,10 @@
 import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
-import { signup } from "../../../api/userApi";
+import { resendOtp, signup } from "../../../api/userApi";
 import { registerUser } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const SignUp = () => {
@@ -16,7 +16,31 @@ const SignUp = () => {
     //useState to show otp field
     const [showOtpInput, setShowOtpInput] = useState(false)
     const [otpValue, setOtpValue] = useState('')
-   
+    const [otpError, setOtpError] = useState('')
+    const [resendOtpTimer,setResendOtpTimer] = useState(false)
+
+    const [timer, setTimer] = useState(60); // Timer value in seconds
+    const [timerId] = useState(null);
+
+    useEffect(() => {
+        let id;
+        if (showOtpInput && timer > 0 || resendOtpTimer) {
+            // Start the timer only when OTP input is shown and timer > 0
+            id = setInterval(() => {
+                setTimer(prevTimer => prevTimer - 1);
+            }, 1000);
+        }
+
+        if (timer === 0) {
+            clearInterval(timerId); // Stop the timer when it reaches 0
+            setResendOtpTimer(false)
+        }
+
+        return () => {
+            clearInterval(id); // Clear the timer when the component unmounts or OTP input is hidden
+        };
+    }, [showOtpInput, timer, timerId,resendOtpTimer]);
+
     //formData 
     const [formData, setFormData] = useState({
         name: '',
@@ -35,8 +59,8 @@ const SignUp = () => {
         confirmPassword: '',
     });
 
-    const [submissionError,setSubmissionError] = useState('')
-   
+    const [submissionError, setSubmissionError] = useState('')
+
 
     //background image style 
     const backgroundImage = {
@@ -54,6 +78,7 @@ const SignUp = () => {
     }
 
     const handleChange = (e) => {
+
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         setSubmissionError('')
@@ -71,8 +96,8 @@ const SignUp = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
 
+        e.preventDefault();
         // Validation
         let newErrors = {};
         if (!formData.name || formData.name.length < 3) {
@@ -92,7 +117,7 @@ const SignUp = () => {
             newErrors.confirmPassword = 'Password and Confirm Password do not match';
         }
 
-        console.log('errors--',Object.keys(newErrors).length);
+        console.log('errors--', Object.keys(newErrors).length);
         if (Object.keys(newErrors).length > 0) {
             // Update errors state with new error messages
             setErrors(newErrors);
@@ -102,34 +127,63 @@ const SignUp = () => {
         // If no errors, proceed with form submission
         try {
             if (showOtpInput) {
+
                 // Process OTP submission logic here
                 console.log('Submitted OTP:', otpValue);
-                let res = await registerUser(otpValue)
-                console.log('res--->',res);
-                if (res.status === 200) {
-                    navigate('/login')
+
+                if (!otpValue) {
+                    console.log('no otp--', otpValue);
+                    setOtpError('enter otp')
+                    return
                 }
+
+                setOtpError('')
+                if (otpValue) {
+                    const res = await registerUser(otpValue)
+                    console.log('res--->', res);
+                    if (res.status === 200) {
+                        navigate('/login')
+                    }
+                }
+
             } else {
-                console.log('submiting',formData);
+                console.log('submiting', formData);
                 const registerData = formData
                 const response = await signup(registerData)
-                console.log('res--->',response);
+                console.log('res--->', response);
 
-                if(response==='Request failed with status code 400'){
+                if (response === 'Request failed with status code 400') {
                     setSubmissionError('already existing email')
                     return
                 }
 
-                if (response.status == 200) {
+                if (response.status === 200) {
                     console.log('user data send to back end');
-                    setShowOtpInput(true)
+                    setShowOtpInput(true);
+                    setTimer(60);
                 }
             }
         } catch (err) {
             console.log(err.message);
         }
     };
-    
+
+    //resend otp
+    const handleResendOtp =async()=>{
+        try {
+            console.log('rsnd otp clkd');
+            const result = await resendOtp(formData)
+            console.log('result --in sgnUp',result);
+            if(result){
+                setResendOtpTimer(true)
+                setTimer(60);
+
+            }
+        } catch (error) {
+          console.log(error.message);  
+        }
+    }
+
 
     return (
 
@@ -167,7 +221,7 @@ const SignUp = () => {
 
 
                                 className="block w-full bg-[white]  px-4 py-2 mt-2 border rounded-md" onChange={handleChange} />
-                    {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
+                            {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
                         </div>
 
 
@@ -179,7 +233,7 @@ const SignUp = () => {
 
 
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
-                    {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+                            {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
                         </div>
 
@@ -192,7 +246,7 @@ const SignUp = () => {
                             <input type="number" name="mob" placeholder="enter your valid mobile number"
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md " onChange={handleChange} />
 
-                        {errors.mob && <p className="text-red-500 text-sm mb-2">{errors.mob}</p>}
+                            {errors.mob && <p className="text-red-500 text-sm mb-2">{errors.mob}</p>}
                         </div>
 
                         <div className="mb-2 bg-transparent">
@@ -254,6 +308,8 @@ const SignUp = () => {
                         </div>
 
                         {/* Conditional rendering of OTP input */}
+                        {otpError && <p className="text-red-500 text-sm mb-2">{otpError}</p>}
+
                         {showOtpInput && (
                             <div className="mb-2 bg-transparent">
                                 <label htmlFor="otp" className="block text-sm bg-transparent font-semibold">
@@ -267,47 +323,32 @@ const SignUp = () => {
                                     value={otpValue}
                                     onChange={(e) => setOtpValue(e.target.value)}
                                 />
+                                <Link className="text-sm text-light-blue-900 mt-2" onClick={handleResendOtp}>Resend Otp</Link>
+                                {timer ? (<p className="mt-2 p-2 flex items-center justify-center text-sm text-light-blue-500 border">{timer} seconds left</p>) : null}{/* Show the timer */}
+
                             </div>
                         )}
 
                         <div className="mt-6 bg-transparent">
-                        {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
+                            {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
 
                             <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
                             >
                                 {showOtpInput ? "Enter OTP" : "Sign Up"}
                             </button>
-
-
                         </div>
-
                     </form>
-
                     <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-                        {/* <div className="absolute bg-transparent px-5 ">Or</div> */}
                     </div>
 
                     <div className="flex  mt-4 gap-x-2">
-                        {/* <button
-
-                            className="flex bg-[#CEB047] items-center justify-center w-full p-2 border border-gray-600 rounded-md "
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 32 32"
-                                className="w-5 h-5 bg-transparent fill-current"
-                            >
-                                <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
-                            </svg>
-                        </button> */}
 
                     </div>
-
                     <p className="mt-8 text-sm bg-transparent font-normal text-center text-gray-700">
                         {" "}
                         have an account?{" "}
 
-                        <Link to='/login'> Login  </Link>
+                        <Link className='text-blue-900' to='/login'> Login  </Link>
                     </p>
                 </div>
             </div>
