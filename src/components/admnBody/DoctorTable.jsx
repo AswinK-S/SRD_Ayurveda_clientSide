@@ -181,7 +181,7 @@ export function DoctorTable() {
               </thead>
               
               <tbody>
-                {getPaginationData().map(({ _id, name, email, mob, status, document, isVerified }, index) => {
+                {getPaginationData().length>0 ?( getPaginationData().map(({ _id, name, email, mob, status, document, isVerified }, index) => {
                   const isLast = index === doctor.length - 1;
                   const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
 
@@ -231,7 +231,7 @@ export function DoctorTable() {
                       </td>
                     </tr>
                   );
-                })}
+                })):(<div className="text-black flex justify-center p-5"> No Doctors were added </div>)}
               </tbody>
             </table>
           </Card>

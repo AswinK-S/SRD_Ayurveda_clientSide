@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Card } from '@material-tailwind/react';
+// import { Card } from '@material-tailwind/react';
 import { docImage, getdoctor, uploadDocument } from '../../api/doctorApi';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { docloginSuccess } from '../../featuers/doctor/doctorSlice';
+import DocChngePswrdMdl from '../modals/DocChngePswrdMdl';
+// import { Link } from 'react-router-dom';
 
 
 const FileSec = () => {
@@ -14,6 +16,8 @@ const FileSec = () => {
     const [uploading, setUploading] = useState('')
     let [doctorDetails,setDoctorDetails] =useState(null)
     const dispatch= useDispatch()
+
+    const [pswrdModal,setPswrdModal] = useState(false)
     
     const doctorData = useSelector((state) => state.doctor.doctor)
    
@@ -161,6 +165,13 @@ const FileSec = () => {
 
     }
 
+
+
+    const passwordModal =()=>{
+        console.log('doc detail-------',doctorDetails._id);
+        setPswrdModal(true)
+    }
+
     return (
         <>
             <div className=''>
@@ -255,11 +266,11 @@ const FileSec = () => {
 
                 </div>
 
-                <Card className='mt-5 mb-5 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800  rounded-md p-3 flex items-center'>
-                    <p className='text-black'>change password</p>
-                </Card>
-            </div>
+                <button className='m-5 p-3 bg-[#c6d14d]  rounded shadow-md shadow-gray-700 hover:scale-105 duration-1000' onClick={passwordModal}> <p className='text-blue-800 text-sm' > Change Password</p></button>                 
 
+               
+            </div>
+            {pswrdModal && <DocChngePswrdMdl setPswrdModal={setPswrdModal} doctorDetails={doctorDetails} />}
 
         </>
     );

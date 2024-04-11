@@ -72,3 +72,15 @@ export const getSlots = async(id)=>{
 }
 
 
+export const changePsswrdOtp = async(email,name)=>{
+    try {
+        console.log('email--',email);
+        const result = await axiosApi.post(doctorRoute.changePassword,{email,name})
+        console.log('rslt----',result);
+        return result?.data?.message
+
+    } catch (error) {
+       console.log(error.message); 
+    }
+}
+

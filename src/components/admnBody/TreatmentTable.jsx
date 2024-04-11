@@ -132,7 +132,7 @@ const TreatmentTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginationData().map(({ _id, name, status, subTreatments }, index) => {
+                {paginationData().length>0 ?( paginationData().map(({ _id, name, status, subTreatments }, index) => {
                   const isLast = index === treatmentData.length - 1;
                   const cellClass = isLast
                     ? styles.tableCellLast
@@ -191,7 +191,7 @@ const TreatmentTable = () => {
 
                     </tr>
                   );
-                })}
+                })):(<div className="text-black flex justify-center p-5"> No treatments were added </div>)}
               </tbody>
             </table>
           </Card>
