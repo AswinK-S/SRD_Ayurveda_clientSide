@@ -6,8 +6,14 @@ export const docLogin =async(loginData)=>{
         const response =await axiosApi.post(doctorRoute.login,loginData)
         console.log('doc login res--',response);
         return response
+        
     } catch (error) {
-        console.log(error.message);
+
+        console.log('doc log err',error.message);
+        if(error?.response){
+            console.log('err response--->',error?.response?.data?.message);
+            return error?.response?.data?.message
+        }
     }
 }
 
@@ -94,3 +100,13 @@ export const verifyOtp = async(otp,email)=>{
     }
 }
 
+export const updatePassword = async(password,id)=>{
+    try {
+        const result = await axiosApi.patch(doctorRoute.updatePassword,{password,id})
+        console.log('resul---',result);
+        return result.data
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}

@@ -1,3 +1,4 @@
+
 const doctorRoute ={
     login:'doctor/login',
     image:'doctor/image',
@@ -7,7 +8,8 @@ const doctorRoute ={
     slotCreation:'doctor/createSlot',
     getSlots:'doctor/getSlots',
     changePassword:'doctor/changePassword',
-    verifyOtp:'doctor/verifyOtp'
+    verifyOtp:'doctor/verifyOtp',
+    updatePassword:'doctor/updatePassword'
 }
 
 export default doctorRoute

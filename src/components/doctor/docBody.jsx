@@ -13,6 +13,7 @@ const DocBody =()=>{
 
     const [email,setEmail]= useState('')
     const [password,setPassword] = useState('')
+    const [error,setError] = useState('')
     
 
     useEffect(()=>{
@@ -29,6 +30,8 @@ const DocBody =()=>{
         }
     },[navigate,])
 
+  
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -36,13 +39,21 @@ const DocBody =()=>{
             let loginData = { email, password }
             let response = await docLogin(loginData)
             console.log('ressss ----------,');
+
+            if(response ==='invalid password'){
+                setError("Invalid Password!")
+                return
+            }else if(response ==='doctor is not listed'){
+                setError("Doctor is not listed ")
+                return
+            }
+
             if (response?.data.message==='doctor logged in') {
                 console.log('login success --doctor',response.data.doctor);
                  dispatch(docloginSuccess(response.data.doctor))
                 localStorage.setItem('doctorDetails',JSON.stringify(response.data.doctor))
                 localStorage.setItem('doctortoken',response.data.token)
                 navigate('/doctor/overView')
-                console.log(';;;;;;');
 
             } else {
                 console.log('invalid',response?.data?.message);
@@ -61,7 +72,7 @@ const DocBody =()=>{
 
                 <div className="w-full p-20 m-auto  rounded-3xl shadow-xl lg:max-w-xl  bg-[#E7EE9D] ">
                     <h1 className="bg-transparent  text-3xl font-semibold text-center  uppercase">
-                      Doctor
+                      Doctor Login
                     </h1>
 
                     <form className=" bg-transparent mt-6"  >
@@ -77,7 +88,10 @@ const DocBody =()=>{
                                 type="email" name="email" placeholder="enter your email address"
                                 className="block bg-[white] w-full px-4 py-2 mt-2   border rounded-md "
                                 value={email}
-                                onChange={(e)=>{setEmail(e.target.value)}}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    setError(''); 
+                                }}
                             />
                         </div>
 
@@ -91,8 +105,12 @@ const DocBody =()=>{
                             <input
                                 type="password" name="password" placeholder="enter password" 
                                 className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
-                                value={password} onChange={(e)=>{setPassword(e.target.value)}}
+                                value={password} onChange={(e)=>{
+                                    setPassword(e.target.value);
+                                    setError(''); 
+                                }}
                             />
+                            {error && <p className=" text-sm text-red-700">{error}</p>}
                         </div>
 
                         
@@ -106,7 +124,6 @@ const DocBody =()=>{
                     </form>
 
     
-                   
                 </div>
 
             </div>

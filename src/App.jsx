@@ -71,7 +71,7 @@ function App() {
     <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
     <Route path='/doctor/AddSlot'  element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot/> </DoctorPrtctdRoute>}/>
     <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot/> </DoctorPrtctdRoute>} />
-    <Route path='/doctor/changePassword' element={<ChangePassword/>} />
+    <Route path='/doctor/changePassword' element={ <DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword/> </DoctorPrtctdRoute>  } />
     </Routes>
     </BrowserRouter>
 
