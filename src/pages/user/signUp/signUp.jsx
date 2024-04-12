@@ -77,7 +77,7 @@ const SignUp = () => {
         setShowPassword(!showPassword)
     }
 
-    const handleChange = (e) => {
+    const   handleChange = (e) => {
 
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });

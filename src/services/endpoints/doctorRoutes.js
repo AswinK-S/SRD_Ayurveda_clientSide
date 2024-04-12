@@ -6,7 +6,8 @@ const doctorRoute ={
     getDoctorDetails:'doctor/getDetail',
     slotCreation:'doctor/createSlot',
     getSlots:'doctor/getSlots',
-    changePassword:'doctor/changePassword'
+    changePassword:'doctor/changePassword',
+    verifyOtp:'doctor/verifyOtp'
 }
 
 export default doctorRoute

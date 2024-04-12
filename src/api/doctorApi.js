@@ -84,3 +84,13 @@ export const changePsswrdOtp = async(email,name)=>{
     }
 }
 
+export const verifyOtp = async(otp,email)=>{
+    try{
+        console.log('sndin dta------');
+        const result = await axiosApi.post(doctorRoute.verifyOtp,{otp,email})
+        return result.data
+    }catch(error){
+        console.log(error.message);
+    }
+}
+

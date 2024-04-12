@@ -1,27 +1,90 @@
 import propTypes from 'prop-types'
-import { useState } from 'react'
-import { changePsswrdOtp } from '../../api/doctorApi'
+import { useEffect, useState } from 'react'
+import { changePsswrdOtp, verifyOtp } from '../../api/doctorApi'
+import {useNavigate} from 'react-router-dom'
 
 const DocChngePswrdMdl = ({ setPswrdModal, doctorDetails }) => {
 
     const [showOtpField, setShowOtpField] = useState(false)
+    const [timer, setTimer] = useState(60)
+    const [timerId] = useState(null)
+    const [otp,setOtp] = useState('')
+    const [otpError,setOtpError] =  useState('')
 
-    const getOtp = async ()=>{
+    const navigate = useNavigate()
+
+    // timer 
+    useEffect(() => {
+        let id;
+        if (timer > 0 && showOtpField) {
+            id = setInterval(() => {
+                setTimer(prevTime => prevTime - 1)
+            }, 1000)
+        }
+
+        if (timer === 0) {
+            clearInterval(timerId)
+        }
+
+        return () => {
+            clearTimeout(id);
+        }
+
+
+    }, [showOtpField, timer, timerId])
+
+    const getOtp = async () => {
         try {
             const email = doctorDetails.email
-            const name =doctorDetails.name
-            const result = await changePsswrdOtp(email,name) 
-            if(result==='Otp send successfully'){
+            const name = doctorDetails.name
+            const result = await changePsswrdOtp(email, name)
+            if (result === 'Otp send successfully') {
                 setShowOtpField(true)
+                setTimer(60)
             }
         } catch (error) {
             console.log(error.message);
         }
     }
 
-    const handleResendOtp = async () => {
-
+    // get otp 
+    const handleChange =(e)=>{
+        console.log('trg--',e.target.value);
+        setOtp(e.target.value)
+        setOtpError('')
     }
+
+    //submit otp
+    const handleSubmit = async(e)=>{
+        e.preventDefault()
+        try {
+            if(timer> 0 && otp){
+
+                const email = doctorDetails.email
+                console.log('sending data to bcknd',{otp , email});
+                const result = await verifyOtp(otp,email)
+                console.log('mdl-->',result);
+                if(result.message ==='otp not matched'){
+                    setOtpError('wrong otp')
+                    return
+                }
+                if(result.message ==='otp matched'){
+
+                    navigate('/doctor/changePassword')
+                    setPswrdModal(false)
+                    return
+                }
+            }
+            if(otp==='' || !otp ){
+                setOtpError("Please enter OTP")
+                return
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
 
     return (
         <div className="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover" id="modal-id">
@@ -40,23 +103,32 @@ const DocChngePswrdMdl = ({ setPswrdModal, doctorDetails }) => {
                             <input type="text" placeholder="Enter email" name='email' id='email' value={doctorDetails.email} className="w-full mt-4 p-2 border rounded-md" />
                         </div>
 
-                        {showOtpField ? (
+                        {showOtpField && (
                             <>
                                 <div className="flex  flex-col  items-start mb-3">
+
                                     <label className="text-sm text-gray-600">Enter otp</label>
-                                    <input type="text" placeholder="Enter otp" name='otp' id='otp' value='' className="w-full mt-4 p-2 border rounded-md" />
+                                    {otpError && <p className='text-sm text-red-600'>{otpError}</p>}
+
+                                    <input type="text" placeholder="Enter otp" name='otp' id='otp'  onChange={handleChange} className="w-full mt-4 p-2 border rounded-md" />
                                 </div>
 
-                                <span className="text-sm text-light-blue-900 mt-2" onClick={handleResendOtp}>Resend Otp</span>
+                                {timer ? (<p className="mt-2 p-2 flex items-center justify-center text-sm text-light-blue-700 border">{timer} seconds left</p>) : null}{/* Show the timer */}
+
                             </>
-                        ) : (null)}
+
+                        )}
 
                         <div className="p-3 mt-2 text-center space-x-4 md:block">
 
                             <button onClick={getOtp} className="mb-2 md:mb-0 bg-[#d8e088]  px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider  text-gray-600  hover:shadow-lg ">
                                 Get Otp
                             </button>
-                           
+
+                            <button onClick={handleSubmit} className="mb-2 md:mb-0 bg-[#d8e088]  px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider  text-gray-600  hover:shadow-lg ">
+                                Verify Otp
+                            </button>
+
                         </div>
 
                     </div>
@@ -75,9 +147,7 @@ const DocChngePswrdMdl = ({ setPswrdModal, doctorDetails }) => {
                         <button onClick={() => setPswrdModal(false)} className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
                             Cancel
                         </button>
-                        <button onClick='' className="mb-2 md:mb-0 bg-[#d8e088] border px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider text-black rounded-full hover:shadow-lg hover:bg-[#c9d172]">
-                            Book Now
-                        </button>
+                        
                     </div>
                 </div>
             </div>

@@ -32,6 +32,7 @@ import Slot from './pages/doctor/Slot'
 import BookTreatment from './pages/user/onlineBooking.jsx/BookTreatment'
 import BookingSuccess from './pages/user/onlineBooking.jsx/BookingSuccess'
 import BookingCancel from './pages/user/onlineBooking.jsx/BookingCancel'
+import ChangePassword from './pages/doctor/ChangePassword'
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
     <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
     <Route path='/doctor/AddSlot'  element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot/> </DoctorPrtctdRoute>}/>
     <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot/> </DoctorPrtctdRoute>} />
+    <Route path='/doctor/changePassword' element={<ChangePassword/>} />
     </Routes>
     </BrowserRouter>
 
