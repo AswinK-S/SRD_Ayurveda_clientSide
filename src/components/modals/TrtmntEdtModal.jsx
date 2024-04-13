@@ -95,7 +95,7 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
 
         setArr1(prevArr1 => new Set([...prevArr1, newSubTreatment]));
-        setSub_trtmnt([...sub_trtmnt, '']);
+        setSub_trtmnt([...sub_trtmnt,'']);
 
        
         setErrorMessage(''); 

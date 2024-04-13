@@ -5,10 +5,12 @@ import { treatments, trtMntStatus } from "../../api/adminApi";
 import { AddTBtn } from "./AddBtn";
 import ConfirmationModals from "../modals/confirmationModals";
 import TrtmntEdtModal from "../modals/TrtmntEdtModal";
+import TreatmentModal from "../modals/TreatmentModal";
 
-const TABLE_HEAD = ["Main Treatment", "Actions", "Status", "Sub Treatments"];
+const TABLE_HEAD = ["Main Treatment", "Action", "Status", "Sub Treatments", "Action"];
 
 const TreatmentTable = () => {
+
   //state variable to show on table
   const [treatmentData, setTreatmentData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('')   //state variable to get the serch value
@@ -17,9 +19,15 @@ const TreatmentTable = () => {
 
   //state variables for modal and to get id
   const [showModal, setShowModal] = useState(false)
+
+  //subtreatment modal
   const [trtmntModal, setTrtmntModal] = useState(false)
   const [id, setId] = useState('')
   const [editTrtmntId, setEditTrtmntId] = useState('')
+
+  //treatment modal
+  const [treatmentModal, setTreatmentModal] = useState(false)
+
 
   // get the treatments when the page is loaded
   useEffect(() => {
@@ -35,7 +43,7 @@ const TreatmentTable = () => {
     };
 
     getTreatments();
-  }, [showModal, trtmntModal]);
+  }, [showModal, trtmntModal,treatmentModal]);
 
   //get the search data
   const handleSearch = (event) => {
@@ -66,6 +74,13 @@ const TreatmentTable = () => {
     setShowModal(true)
   }
 
+  //treatment edit modal
+  const editTrtmntModalConfirmation = async (id) => {
+    setEditTrtmntId(id)
+    setTreatmentModal(true)
+  }
+
+  //subTreatment edit modal
   const editTrtmntModal = async (trtmntId) => {
     // console.log('trtmnt id :',trtmntId);
     setTrtmntModal(true)
@@ -132,7 +147,7 @@ const TreatmentTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginationData().length>0 ?( paginationData().map(({ _id, name, status, subTreatments }, index) => {
+                {paginationData().length > 0 ? (paginationData().map(({ _id, name, status, subTreatments }, index) => {
                   const isLast = index === treatmentData.length - 1;
                   const cellClass = isLast
                     ? styles.tableCellLast
@@ -154,7 +169,7 @@ const TreatmentTable = () => {
                       <td className={cellClass}>
 
                         <button className="px-2 py-1 bg-blue-500 text-white rounded"
-                          onClick={() => { editTrtmntModal(_id) }}
+                          onClick={() => { editTrtmntModalConfirmation(_id) }}
                         >
                           Edit
                         </button>
@@ -189,9 +204,22 @@ const TreatmentTable = () => {
                         </Typography>
                       </td>
 
+
+                      {/*   edit  */}
+
+                      <td className={cellClass}>
+
+                        <button className="px-2 py-1 bg-blue-500 text-white rounded"
+                          onClick={() => { editTrtmntModal(_id) }}
+                        >
+                          Edit Sub
+                        </button>
+
+                      </td>
+
                     </tr>
                   );
-                })):(<div className="text-black flex justify-center p-5"> No treatments were added </div>)}
+                })) : (<div className="text-black flex justify-center p-5"> No treatments were added </div>)}
               </tbody>
             </table>
           </Card>
@@ -200,8 +228,9 @@ const TreatmentTable = () => {
         <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       </div>
 
-      {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
-      {trtmntModal && <TrtmntEdtModal setTrtmntModal={setTrtmntModal} editTrtmntId={editTrtmntId} />}
+      {showModal  && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}
+      {trtmntModal  && <TrtmntEdtModal  setTrtmntModal={setTrtmntModal} editTrtmntId={editTrtmntId} />}
+      {treatmentModal && <TreatmentModal setTreatmentModal={setTreatmentModal} editTrtmntId={editTrtmntId} />}
     </>
   );
 };

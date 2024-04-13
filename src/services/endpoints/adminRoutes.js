@@ -4,6 +4,7 @@ const adminRoutes ={
     treatments:'admin/treatments',
     addTreat:'admin/addTreatment',
     treatmentStatus:'admin/trtMntStatus',
+    editTreatmentName:'admin/editTrt_Name',
     users:'admin/users',
     userStatus:'admin/block_User',
     doctors:'admin/getDoctors',
@@ -12,7 +13,8 @@ const adminRoutes ={
     treatment:'admin/treatment',
     removeSub_trtmnt:'admin/removeSubTrtmnt',
     editTrtmnt:'admin/edit_trtmnt',
-    verifyDoc:'admin/verifyDoctor'
+    verifyDoc:'admin/verifyDoctor',
+
 
 }
 

@@ -113,7 +113,6 @@ const SignUp = () => {
             newErrors.password = 'Password should be at least 6 characters long';
         }
         if (formData.password !== formData.confirmPassword) {
-            console.log('psswrd err');
             newErrors.confirmPassword = 'Password and Confirm Password do not match';
         }
 
@@ -139,8 +138,13 @@ const SignUp = () => {
 
                 setOtpError('')
                 if (otpValue) {
-                    const res = await registerUser(otpValue)
+                    const res = await registerUser(otpValue,formData.email)
                     console.log('res--->', res);
+
+                    if(res ==='Wrong verification code'){
+                        setOtpError('Wrong verification code') 
+                        return
+                    }
                     if (res.status === 200) {
                         navigate('/login')
                     }
@@ -321,7 +325,11 @@ const SignUp = () => {
                                     placeholder="enter OTP"
                                     className="block w-full bg-[white] px-4 py-2 mt-2 border rounded-md "
                                     value={otpValue}
-                                    onChange={(e) => setOtpValue(e.target.value)}
+                                    onChange={(e) => {
+                                        setOtpValue(e.target.value);
+                                        setOtpError('');
+                                    }
+                                    }
                                 />
                                 <Link className="text-sm text-light-blue-900 mt-2" onClick={handleResendOtp}>Resend Otp</Link>
                                 {timer ? (<p className="mt-2 p-2 flex items-center justify-center text-sm text-light-blue-500 border">{timer} seconds left</p>) : null}{/* Show the timer */}

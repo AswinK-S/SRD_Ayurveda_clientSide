@@ -51,6 +51,8 @@ export const addTreatments = async(data)=>{
     }
 }
 
+
+
 //change treatment Status
 export const trtMntStatus = async(id)=>{
     try {
@@ -67,6 +69,16 @@ export const removeSubTreatment = async(editData)=>{
     console.log('edit data----',editData);
     const result = await axiosApi.delete(adminRoutes.removeSub_trtmnt,{data:editData})
     return result
+}
+
+//edit Treatment Name
+export const editTrtmntName = async(trtmnt,editTrtmntId)=>{
+    try {
+        const result =await axiosApi.patch(adminRoutes.editTreatmentName,{name:trtmnt,id:editTrtmntId}) 
+        return result
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 // edit Treatment
