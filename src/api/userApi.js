@@ -63,6 +63,43 @@ export const resendOtp = async (signupData) => {
     }
 }
 
+//verify email for forget password
+export const verifyEmail = async(email)=>{
+    try {
+        const result = await axiosApi.post(userRoutes.verifyMail,{email})
+        console.log('result-----00',result);
+        return result.data.message
+    } catch (error) {
+        if(error.response){
+            console.log(error?.response);
+
+        }
+    }
+}
+
+//verify otp for forget Password
+export const submitOtp = async(email,otp)=>{
+    try {
+        console.log('sbt---');
+        const result = await axiosApi.post(userRoutes.submitOtp,{email,otp})
+        console.log('res---',result);
+        return result.data
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//update password for forgot password functionality
+export const updatePassword = async(newPassword,email)=>{
+    try{
+        const result = await axiosApi.patch(userRoutes.updatePassword,{newPassword,email})
+        console.log('rrsslt---',result);
+
+    }catch(error){
+        console.log(error.message);
+    }
+}
 
 // get treatments for online booking
 export const getTreatments = async () => {

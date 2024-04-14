@@ -1,7 +1,7 @@
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 
-        
+
 //user
 import Home from "./pages/user/home/home"
 import Treatment from "./pages/user/treatment/treatment"
@@ -33,47 +33,56 @@ import BookTreatment from './pages/user/onlineBooking.jsx/BookTreatment'
 import BookingSuccess from './pages/user/onlineBooking.jsx/BookingSuccess'
 import BookingCancel from './pages/user/onlineBooking.jsx/BookingCancel'
 import ChangePassword from './pages/doctor/ChangePassword'
+import ForgotPassword from './pages/user/login/ForgotPassword'
+import NwPsswrd from './pages/user/login/NwPsswrd'
+
+
 
 
 function App() {
-  
 
   return (
     <>
 
-    <BrowserRouter>
-    <Routes>
-      {/* users */}
-      <Route path ='/' element ={<Home/>} />
-      <Route path ='/booking' element ={<UserProtectedRoute allowedRole='user'> <OnlineBooking/> </UserProtectedRoute>} />
-      <Route path="/signup" element ={<SignUp/>}/>
-      <Route path = '/treatment' element = { <Treatment/> } />
-      <Route path = '/treatment/:id' element = { <UserProtectedRoute allowedRole='user'> <BookTreatment/> </UserProtectedRoute>  } />
-      <Route path ='/login'  element ={<Login/>}/>
-      <Route path='/success' element={<BookingSuccess/>}/>
-      <Route path='/cancel' element={<BookingCancel/>}/>
+      <BrowserRouter>
+        <Routes>
+          {/* users */}
+          <Route path='/' element={<Home />} />
+          <Route path='/booking' element={<UserProtectedRoute allowedRole='user'> <OnlineBooking /> </UserProtectedRoute>} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path='/treatment' element={<Treatment />} />
+          <Route path='/treatment/:id' element={<UserProtectedRoute allowedRole='user'> <BookTreatment /> </UserProtectedRoute>} />
+          <Route path='/login' element={<Login />} />
 
 
-      {/* admin */}
-      <Route path="/admin" element={<AdminLogin/>}/>
-      <Route  path="/admin/dashboard"  element={<AdmnProtectedRoute allowedRole='admin'> <AdminDash/> </AdmnProtectedRoute>}/>
-      <Route path='/admin/users'  element={<AdmnProtectedRoute allowedRole='admin'> <Users/> </AdmnProtectedRoute>}/>
-      <Route path="/admin/patients"  element={<AdmnProtectedRoute allowedRole='admin'> <Patients/> </AdmnProtectedRoute>}/>
-      <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments/>  </AdmnProtectedRoute>}/>
-      <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors/> </AdmnProtectedRoute>} />
-      <Route path="/admin/addDoc" element={<AdmnProtectedRoute allowedRole='admin'> <AddDoctor/> </AdmnProtectedRoute>} />
-      <Route path="/admin/addTreat" element={<AdmnProtectedRoute allowedRole='admin'> <AddTreatment/> </AdmnProtectedRoute>} />
+            <Route path='/forgotPassword' element={<ForgotPassword />} />
+            <Route path='/newPassword' element={<NwPsswrd />} />
 
 
-    {/* doctor */}
-    <Route path="/doctor" element={<DoctorLogin/>}/>
-    <Route path ='/doctor/overView' element ={ <DoctorPrtctdRoute allowedRole='doctor'> <Overview/> </DoctorPrtctdRoute> } />
-    <Route path ='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro/> </DoctorPrtctdRoute>}/> 
-    <Route path='/doctor/AddSlot'  element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot/> </DoctorPrtctdRoute>}/>
-    <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot/> </DoctorPrtctdRoute>} />
-    <Route path='/doctor/changePassword' element={ <DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword/> </DoctorPrtctdRoute>  } />
-    </Routes>
-    </BrowserRouter>
+          <Route path='/success' element={<BookingSuccess />} />
+          <Route path='/cancel' element={<BookingCancel />} />
+
+
+          {/* admin */}
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdmnProtectedRoute allowedRole='admin'> <AdminDash /> </AdmnProtectedRoute>} />
+          <Route path='/admin/users' element={<AdmnProtectedRoute allowedRole='admin'> <Users /> </AdmnProtectedRoute>} />
+          <Route path="/admin/patients" element={<AdmnProtectedRoute allowedRole='admin'> <Patients /> </AdmnProtectedRoute>} />
+          <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments />  </AdmnProtectedRoute>} />
+          <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors /> </AdmnProtectedRoute>} />
+          <Route path="/admin/addDoc" element={<AdmnProtectedRoute allowedRole='admin'> <AddDoctor /> </AdmnProtectedRoute>} />
+          <Route path="/admin/addTreat" element={<AdmnProtectedRoute allowedRole='admin'> <AddTreatment /> </AdmnProtectedRoute>} />
+
+
+          {/* doctor */}
+          <Route path="/doctor" element={<DoctorLogin />} />
+          <Route path='/doctor/overView' element={<DoctorPrtctdRoute allowedRole='doctor'> <Overview /> </DoctorPrtctdRoute>} />
+          <Route path='/doctor/profile' element={<DoctorPrtctdRoute allowedRole='doctor'> <DoctorPro /> </DoctorPrtctdRoute>} />
+          <Route path='/doctor/AddSlot' element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot /> </DoctorPrtctdRoute>} />
+          <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot /> </DoctorPrtctdRoute>} />
+          <Route path='/doctor/changePassword' element={<DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword /> </DoctorPrtctdRoute>} />
+        </Routes>
+      </BrowserRouter>
 
     </>
   )

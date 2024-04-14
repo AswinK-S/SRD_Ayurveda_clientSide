@@ -168,6 +168,13 @@ const Login = () => {
 
                         <Link className="text-light-blue-900" to='/signup'> Sign up  </Link>
                     </p>
+
+                    <p className=" text-sm bg-transparent font-normal text-center text-gray-700">
+                        {/* {" "}
+                        Forgot Password?{" "} */}
+
+                        <Link className="text-light-blue-900" to='/forgotPassword'> Forgot Password?  </Link>
+                    </p>
                 </div>
             </div>
 

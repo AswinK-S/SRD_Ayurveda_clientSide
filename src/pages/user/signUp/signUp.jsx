@@ -34,6 +34,7 @@ const SignUp = () => {
         if (timer === 0) {
             clearInterval(timerId); // Stop the timer when it reaches 0
             setResendOtpTimer(false)
+            setOtpValue('')
         }
 
         return () => {

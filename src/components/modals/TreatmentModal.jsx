@@ -1,14 +1,12 @@
 import propTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { editTrtmntName, treatment } from '../../api/adminApi'
-import { useNavigate } from 'react-router-dom'
 
 const TreatmentModal = ({setTreatmentModal ,editTrtmntId}) => {
 
     const [trtmnt,setTreatment] = useState('')
     const [error,setError] = useState('')
 
-    const navigate = useNavigate()
 
     const fetch=async(id)=>{
         const result = await treatment(id)
@@ -38,7 +36,6 @@ const TreatmentModal = ({setTreatmentModal ,editTrtmntId}) => {
             if(result?.status ===201){
                 console.log('updated');
                 setTreatmentModal(false)
-                // navigate('/admin/treatments')
             }
         } catch (error) {
             console.log(error.message);

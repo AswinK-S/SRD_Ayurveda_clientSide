@@ -8,7 +8,10 @@ const userRoutes = {
     doctor:'/user/doctor',
     getBkngDtails:'/user/bookingDetails',
     payment:'/user/payment',
-    resendOtp:'/user/resendOtp'
+    resendOtp:'/user/resendOtp',
+    verifyMail:'/user/verifyEmail',
+    submitOtp:'/user/submitOtp',
+    updatePassword:'/user/update-password'
 }
 
 
