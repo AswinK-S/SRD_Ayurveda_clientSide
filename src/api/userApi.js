@@ -95,6 +95,7 @@ export const updatePassword = async(newPassword,email)=>{
     try{
         const result = await axiosApi.patch(userRoutes.updatePassword,{newPassword,email})
         console.log('rrsslt---',result);
+        return result?.data?.message
 
     }catch(error){
         console.log(error.message);

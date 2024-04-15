@@ -2,6 +2,7 @@
 import {  useState } from 'react';
 import { updatePassword } from '../../api/userApi';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const NewPassword = () => {
 
@@ -10,6 +11,7 @@ const NewPassword = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const email = useSelector((state)=>state.email.email)
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,8 +28,15 @@ const NewPassword = () => {
             }
             setErrorMessage('');
             console.log('iiiiiiii----->',email);
-            const result = updatePassword(newPassword,email)
+            const result = await updatePassword(newPassword,email)
             console.log('result', result);
+            if(result ==='updated'){
+                navigate('/login')
+            }
+            else if(result ==='try using another password'){
+                setErrorMessage('try using another password')
+                return
+            }
 
         } catch (error) {
             console.log(error.message);
