@@ -22,13 +22,14 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
             dispatch(bookingDatas(result))
         }
         fetchData()
-    }, [])
+    }, [bookingData,setbkngDetail,dispatch,user])
 
     console.log('rrr', bkngDetail);
 
     const handleBooking = async()=>{
-            const stripe = await loadStripe('pk_test_51P2UV2SEGRYT9lZHg0EcsOSis0gLsLpaKIv9jGemUZuGWoVeBogRpDoBgG8k9udr3TcOZ60jG4mEIIdMYKdRux3Q00KT7sEVMV')
+            await loadStripe('pk_test_51P2yGBSGV6hrQc7cK3KHLXeHHyd9h645uNtMyMIfJoP8QH7Lz6PR1GD5BxLoZarWVNYlKXDiwXp3QqihCB0QOjdW00Kjf8FBNx')
             const result = await payment(bkngDetail)
+            console.log('bkng rslt-->',result);
             const data= result.data
             window.location=data
     }

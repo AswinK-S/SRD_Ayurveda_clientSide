@@ -147,7 +147,7 @@ export const payment = async (bookingDetail) => {
     try {
         console.log('bkng details--', bookingDetail);
         const result = await axiosApi.post(userRoutes.payment, bookingDetail)
-        console.log('result--', result);
+        console.log('result-----2', result);
         return result;
 
     } catch (error) {

@@ -5,18 +5,19 @@ const Footer = () => {
 
 
 
-    const backgroundImage = {
-        backgroundImage: 'url("footer-bg.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        width: '100%',
-        position: 'relative',
+    // const backgroundImage = {
+    //     backgroundImage: 'url("footer-bg.jpg")',
+    //     backgroundSize: 'cover',
+    //     backgroundPosition: 'center',
+    //     width: '100%',
+    //     position: 'relative',
 
-    };
+    // };
+    // style={backgroundImage}
 
     return (
         <div>
-            <div className="flex lg:h-[200px]  items-center p-5" style={backgroundImage}>
+            <div className="flex lg:h-[200px]  items-center p-5 bg-[#78350f]" >
                 <div className="address bg-transparent text-white rounded-md p-2  shadow-lg">
                     <ul className=' text-wrap  bg-transparent font-bold p-2  rounded-lg  '>
                         <li className='bg-transparent'>PULAMANTHOLE</li>

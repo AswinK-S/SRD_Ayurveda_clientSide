@@ -43,6 +43,8 @@ const DocNav = () => {
     const logoutDoc = () => {
         localStorage.removeItem('doctortoken')
         localStorage.removeItem('doctorDetails')
+        localStorage.removeItem('doctor_data')
+        localStorage.removeItem('docImg')
         dispatch(logout())
     }
 

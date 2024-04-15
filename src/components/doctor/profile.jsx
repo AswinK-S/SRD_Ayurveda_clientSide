@@ -3,6 +3,7 @@ import { postDetails } from "../../api/doctorApi";
 import { formValidation } from "../../utils/doctor/prfile";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
 
@@ -11,7 +12,7 @@ const Profile = () => {
   const [noUpdate, setNoUpdate] = useState('')
 
   const doctor = useSelector((state) => state.doctor.doctor)
-
+  const navigate = useNavigate()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,10 +58,14 @@ const Profile = () => {
             setNoUpdate('No fields were modified.')
           }
 
+        } else {
+          console.log('no token');
+
+          navigate('/doctor')
         }
-
-
-
+      } else {
+        console.log('no token');
+        navigate('/doctor')
       }
 
 
@@ -197,7 +202,7 @@ const Profile = () => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-[#BEC944] hover:bg-[#e8df87] text-black font-bold py-2 px-4 rounded shadow-md shadow-gray-800 antialiased "
+            className="bg-[#BEC944] hover:bg-[#d5e887] text-black font-bold py-2 px-4 rounded shadow-md shadow-gray-800 antialiased "
           >
             Submit
           </button>

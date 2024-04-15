@@ -1,8 +1,9 @@
 
 import {  useState } from 'react';
 import { updatePassword } from '../../api/userApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { removeEmail } from '../../featuers/user/emailSlice';
 
 const NewPassword = () => {
 
@@ -12,6 +13,7 @@ const NewPassword = () => {
 
     const email = useSelector((state)=>state.email.email)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,6 +33,7 @@ const NewPassword = () => {
             const result = await updatePassword(newPassword,email)
             console.log('result', result);
             if(result ==='updated'){
+                dispatch(removeEmail())
                 navigate('/login')
             }
             else if(result ==='try using another password'){

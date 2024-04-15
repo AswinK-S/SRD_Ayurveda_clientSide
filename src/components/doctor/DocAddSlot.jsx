@@ -147,9 +147,9 @@ const DocAddSlot = () => {
                     </div>
 
 
-                    <div className='m-2  flex flex-col items-center'>
+                    <div className='m-2  flex flex-col items-center border rounded-md  border-light-blue-700 p-3'>
                         <h4 className='text-md font-serif font-semibold' >Selected slot </h4>
-                        {value && <p className='font-semibold font-serif  text-blue-800'> Selected date is - {value.toLocaleDateString()}</p>}
+                        {value && <p className='font-semibold font-serif  text-blue-800 '> Selected date is - {value.toLocaleDateString()}</p>}
                         {selectedShift  ? (
                                 
                                  <span className='font-semibold font-serif  text-green-800'>You have selected slot for {selectedShift} </span>
@@ -157,7 +157,7 @@ const DocAddSlot = () => {
                             <span className='text-md font-serif text-deep-orange-700'>No Slot Selected</span>
                         )}
 
-                        <button className='bg-[#9ca535] px-4 py-2 rounded-lg shadow-md shadow-gray-700 hover:bg-[#e0ea6e] m-2'
+                        <button className='bg-[#9ca535] px-4 py-2 rounded-lg shadow-md text-sm text-white shadow-gray-700  m-2'
                             onClick={handleSubmit}
                         >Create slot</button>
 
