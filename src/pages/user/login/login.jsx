@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react";
 import Footer from "../../../components/footer/footer"
 import Nav from "../../../components/navbar/nav"
-import { login } from "../../../api/userApi";
+import {  login } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { loginSuccess } from "../../../featuers/user/userSlice";
 import { useDispatch } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
 
 
 const Login = () => {
@@ -54,6 +55,7 @@ const Login = () => {
         setError('')
     }
 
+  
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -145,12 +147,24 @@ const Login = () => {
                         <a href="#" className="text-sm font-normal  hover:underline">
                             Forget Password?
                         </a>
-                        <div className="mt-6 bg-transparent">
-                            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+                        <div className="mt-6 bg-transparent flex  justify-center gap-5">
 
-                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md ">
+                            <button className=" bg-white  px-5 py-2 tracking-wide font-semibold     text-black border border-gray-400 rounded-md  ">
                                 Login
                             </button>
+                            <GoogleLogin  
+                                onSuccess={credentialResponse => {
+                                    const decode = jwtDecode(credentialResponse?.credential);
+                                    console.log(decode,'---oath');
+                                }}
+                                onError={() => {
+                                    console.log('Login Failed');
+                                }}
+                            />
+                        </div>
+                        <div  className="flex justify-center p-2">
+                            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
                         </div>
 
                     </form>
@@ -179,7 +193,7 @@ const Login = () => {
             </div>
 
 
-            <Footer/>
+            <Footer />
         </div>
     )
 }

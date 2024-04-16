@@ -24,6 +24,7 @@ const Nav = () => {
   //   }
   // },[user,navigate])
 
+  console.log('ussr--nav>',user);
   const logoutUser = () => {
     localStorage.removeItem('usertoken')
     

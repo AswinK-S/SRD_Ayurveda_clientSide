@@ -1,14 +1,17 @@
 import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav"
 import { Link } from "react-router-dom";
-import { resendOtp, signup } from "../../../api/userApi";
+import { googleAuth, resendOtp, signup } from "../../../api/userApi";
 import { registerUser } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../../featuers/user/userSlice";
 
 
 const SignUp = () => {
-
 
     const [showPassword, setShowPassword] = useState(false)
     const navigate = useNavigate()
@@ -19,8 +22,12 @@ const SignUp = () => {
     const [otpError, setOtpError] = useState('')
     const [resendOtpTimer,setResendOtpTimer] = useState(false)
 
+    const [gSignUpError,setGsignUpError] = useState('')
+
     const [timer, setTimer] = useState(60); // Timer value in seconds
     const [timerId] = useState(null);
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         let id;
@@ -41,6 +48,8 @@ const SignUp = () => {
             clearInterval(id); // Clear the timer when the component unmounts or OTP input is hidden
         };
     }, [showOtpInput, timer, timerId,resendOtpTimer]);
+
+
 
     //formData 
     const [formData, setFormData] = useState({
@@ -81,6 +90,8 @@ const SignUp = () => {
     const   handleChange = (e) => {
 
         const { name, value } = e.target;
+        setGsignUpError('')
+
         setFormData({ ...formData, [name]: value });
         setSubmissionError('')
         if (name === 'name' && value.length >= 3) {
@@ -189,6 +200,45 @@ const SignUp = () => {
         }
     }
 
+    //google auth
+
+    const sendDataToBackend = async(decode)=>{
+        try {
+
+            const userDetail ={
+                email:decode?.email,
+                name:decode?.name,
+                mob:1234567892,
+
+            }
+            const result = await googleAuth(userDetail)
+            console.log('rslt-->',result);
+            if(result.message ==='user already exist in this email'){
+                setGsignUpError('user already exist in this email')
+                return 
+            }
+            if(result.message ==='user registered'){
+                if(result?.token){
+                    console.log('token',result.token);
+                    const tokn =  result.token;
+                    localStorage.setItem('usertoken',tokn)
+                    const decode = jwtDecode(tokn)
+                    if(decode?.role==='user'){
+                        dispatch(loginSuccess(result.userId))
+
+                        console.log('role',decode.role);
+                        navigate('/')
+
+                    }
+
+                }
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
 
     return (
 
@@ -217,6 +267,8 @@ const SignUp = () => {
                         {/* /signup/ */}
                         {showOtpInput ? "Submit OTP" : "Sign Up"}
                     </h1>
+
+                   
 
                     <form className=" bg-transparent mt-6" onSubmit={handleSubmit} >
 
@@ -338,13 +390,30 @@ const SignUp = () => {
                             </div>
                         )}
 
-                        <div className="mt-6 bg-transparent">
-                            {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
+                        <div className="mt-6 bg-transparent flex justify-center gap-5">
+                           
 
-                            <button className="w-full bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
+                            <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
                             >
                                 {showOtpInput ? "Enter OTP" : "Sign Up"}
                             </button>
+                            <GoogleLogin  
+                                onSuccess={credentialResponse => {
+                                    const decode = jwtDecode(credentialResponse?.credential);
+                                    console.log(decode,'---oath');
+                                    sendDataToBackend(decode)
+                                   
+                                }}
+                                onError={() => {
+                                    console.log('Login Failed');
+                                }}
+                                 onClick={()=>{setGsignUpError('')}}
+                            />
+
+                        </div>
+                        <div className="flex justify-center p-2">
+                        {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
+                        {gSignUpError && <p className="text-sm text-red-600">{gSignUpError}</p>}
                         </div>
                     </form>
                     <div className="relative flex items-center justify-center w-full mt-6 border border-t">

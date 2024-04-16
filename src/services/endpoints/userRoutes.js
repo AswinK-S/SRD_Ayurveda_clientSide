@@ -11,7 +11,9 @@ const userRoutes = {
     resendOtp:'/user/resendOtp',
     verifyMail:'/user/verifyEmail',
     submitOtp:'/user/submitOtp',
-    updatePassword:'/user/update-password'
+    updatePassword:'/user/update-password',
+    googleAuth:'/user/googleSignUp',
+    googleLogin:'/user/googleLogin'
 }
 
 

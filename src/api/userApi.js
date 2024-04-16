@@ -38,6 +38,18 @@ export const registerUser = async (otp, email) => {
     }
 }
 
+//google signUp
+export const googleAuth = async(userDetail)=>{
+    try {
+        const result = await axiosApi.post(userRoutes.googleAuth,userDetail)
+        console.log('g sgn Up -->',result);
+        return result.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 //signup route
 export const signup = async (resgisterData) => {
     try {

@@ -3,7 +3,7 @@ import Nav from "../../../components/navbar/nav";
 
 const BookingSuccess = () => {
 
-
+    
     return (
         <>
             <Nav />

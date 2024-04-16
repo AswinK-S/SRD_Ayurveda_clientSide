@@ -18,6 +18,8 @@ const BookTrtmnt = () => {
     const [selectedSubTreatment, setSelectedSubTreatment] = useState('')
     const [loading, setLoading] = useState(true)
 
+    const [slotError,setSlotError] =useState('')
+
     const [doctorsForTrtmnt, setDoctorsForTrtmnt] = useState('')
     const [slotsForTreatment, setSlotsForTretment] = useState([])
     const [date, setDate] = useState('')
@@ -33,7 +35,7 @@ const BookTrtmnt = () => {
         treatmentId:'',
         subTreatmentId:''
     })
-
+   
     const selectedDoctorSlot = (id) => {
         console.log('doc id----->', id);
 
@@ -130,8 +132,13 @@ const BookTrtmnt = () => {
 
     console.log('selected trtmnt', selectedTreatment);
 
-    const modalConfirmation = () => {
-        console.log('user---',userId);
+    const modalConfirmation = (count) => {
+        console.log('user---',userId,'count--->',count);
+
+        if(count<1){
+            setSlotError('no slots available')
+             return
+        }
         setBookingData(PrevData =>({
             ...PrevData,
         patientName:userId?.name
@@ -246,9 +253,9 @@ const BookTrtmnt = () => {
                                                         Doctor
                                                     </Typography>
                                                     <Typography>
-                                                        Slot Available
+                                                       <p className="text-black">Slot Details</p> 
                                                         <p>Date: {item.date.toString().split("T")[0]}</p>
-                                                        <p>Count:{item.count}</p>
+                                                        <p>Count:{item?.count}</p>
                                                         {item.shift === 'Morning Shift' ? (
                                                             <p>Time: 9 a.m - 12 p.m</p>
                                                         ) : null}
@@ -258,10 +265,12 @@ const BookTrtmnt = () => {
                                                         {item.shift === 'FullDay Shift' ? (
                                                             <p>Time:9 a.m - 5 p.m</p>
                                                         ) : null}
+
+                                                        {slotError&&<p className="text-sm text-red-700">{slotError}</p>}
                                                     </Typography>
                                                 </CardBody>
                                                 <CardFooter className="pt-0">
-                                                    <Button onClick={modalConfirmation}>Book Now</Button>
+                                                    <Button onClick={()=>modalConfirmation(item?.count)}>Book Now</Button>
                                                 </CardFooter>
                                             </Card>
 
