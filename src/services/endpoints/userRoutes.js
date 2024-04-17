@@ -13,7 +13,8 @@ const userRoutes = {
     submitOtp:'/user/submitOtp',
     updatePassword:'/user/update-password',
     googleAuth:'/user/googleSignUp',
-    googleLogin:'/user/googleLogin'
+    googleLogin:'/user/googleLogin',
+    bookings:'/user/bookings'
 }
 
 

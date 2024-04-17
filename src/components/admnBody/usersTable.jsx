@@ -12,31 +12,58 @@ const TABLE_HEAD = ["Name", "Email", "Phone", "Status"];
 
 export function UserTable() {
 
-  const [user, setUser] = useState([])
+  const [usersData, setUsersData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+
+
   const [showModal, setShowModal] = useState(false)
   const [editId, setEditId] = useState(null)
 
-  //state variables for pagination
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(3)
+
   const [searchTerm, setSearchTerm] = useState('')
 
-
+  const pageSize = 8;
 
   const getUsers = async () => {
-    let res = await users()
-    console.log('res for table--', res.data);
-    setUser(res.data)
-    getPaginationData()
+    setLoading(true);
+    try {
+      const res = await users(currentPage)
+      console.log('res for table--', res);
+      setUsersData(res?.users);
+      setTotalUsers(res?.totalUsers);
+      setTotalPages(Math.ceil(res?.totalUsers / pageSize))
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
+
   }
 
   //get the users when the page is loaded
   useEffect(() => {
     getUsers()
-  }, [showModal])
+  }, [showModal, currentPage])
+
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const handleStatus = async () => {
-    // console.log('usrSts id', id);
     const result = await userStatus(editId)
     console.log('rrrr', result);
     setShowModal(false)
@@ -53,11 +80,11 @@ export function UserTable() {
   //take the search value
   const handleSearchUser = (event) => {
     setSearchTerm(event.target.value)
-    
+
   }
 
   // filter the data according to search 
-  const filteredusers = user.filter((usr) => {
+  const filteredusers = usersData.filter((usr) => {
     const name = `${usr.name}`.toLowerCase()
     const mob = `${usr.mob}`.toLowerCase()
     const searchTermL = searchTerm.toLowerCase()
@@ -67,50 +94,7 @@ export function UserTable() {
     )
   })
 
-   // getting the data per page 
-  const getPaginationData = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = startIndex + itemsPerPage
-    return filteredusers.slice(startIndex, endIndex)
-  }
 
-  const totalPages = Math.ceil(user.length / itemsPerPage)
-
-
-  // function that defines pagination logic 
-  const PaginationControls = () => {
-    const handlePrevClick = () => {
-      setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
-    };
-
-    const handleNextClick = () => {
-      setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : totalPages));
-    };
-
-    return (
-      <div className="flex justify-center mt-4 mb-4  ">
-        <button
-          className="px-4 py-2 mr-2 bg-gray-200 rounded shadow-sm shadow-black"
-          onClick={handlePrevClick}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
-        <p className="px-4 py-2 mr-2  font-sans">{currentPage}</p>
-
-        <button
-          className="px-4 py-2 bg-gray-200 rounded shadow-sm shadow-black"
-          onClick={handleNextClick}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
-    );
-  };
-
-
- 
 
   return (
     <>
@@ -122,6 +106,9 @@ export function UserTable() {
             <h1>USERS</h1>
           </div>
         </div>
+
+        {loading && <p>Loading...</p>}
+
 
         <AddUBtn handleSearchUser={handleSearchUser} searchTerm={searchTerm} />
 
@@ -140,8 +127,8 @@ export function UserTable() {
                 </tr>
               </thead>
               <tbody>
-                {getPaginationData().map(({ _id, name, email, mob, status }, index) => {
-                  const isLast = index === user.length - 1;
+                {filteredusers.map(({ _id, name, email, mob, status }, index) => {
+                  const isLast = index === usersData.length - 1;
                   const cellClass = isLast ? styles.tableCellLast : styles.tableCell;
 
                   return (
@@ -178,10 +165,14 @@ export function UserTable() {
           </Card>
         </div>
 
-        <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-
-
-
+        <div className="flex gap-3 justify-center">
+          <button className="text-xs px-4 py-2 border border-blue-gray-200 bg-blue-gray-100 rounded-md" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
+          <div className=" flex flex-col items-center">
+            <span className="text-xs" >Page {currentPage} of {totalPages}</span>
+            <p className="text-xs">Total Users: {totalUsers}</p>
+          </div>
+          <button className="text-xs px-4 py-2  border border-blue-gray-200 bg-blue-gray-100 rounded-md" onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+        </div>
 
       </div>
       {showModal && <ConfirmationModals handleStatus={handleStatus} setShowModal={setShowModal} />}

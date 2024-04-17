@@ -144,12 +144,12 @@ export const verifyDoctor = async(id)=>{
 }
 
 // get users 
-export const users = async () => {
+export const users = async (currentPage) => {
     try {
-        console.log('get users req');
-        let response = await axiosApi.get(adminRoutes.users);
+        console.log('get users req-->',currentPage);
+        const response = await axiosApi.get(`${adminRoutes.users}?page=${currentPage}`);
         console.log('res frm user', response);
-        return response
+        return response.data
     } catch (err) {
         console.log(err.message)
         throw (err)

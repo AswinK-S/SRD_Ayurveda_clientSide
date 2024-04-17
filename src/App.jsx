@@ -8,6 +8,7 @@ import Treatment from "./pages/user/treatment/treatment"
 import OnlineBooking from "./pages/user/onlineBooking.jsx/onlineBooking"
 import Login from "./pages/user/login/login"
 import SignUp from "./pages/user/signUp/signUp"
+import UserProfile from './pages/user/profile/Profile'
 
 import UserProtectedRoute from './components/UserProtectedRoute'
 import AdmnProtectedRoute from './components/admnPrtctdRoute'
@@ -61,6 +62,7 @@ function App() {
 
           <Route path='/success' element={<BookingSuccess />} />
           <Route path='/cancel' element={<BookingCancel />} />
+          <Route path='/userProfile' element={<UserProfile/>}/>
 
 
           {/* admin */}

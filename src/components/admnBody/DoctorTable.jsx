@@ -59,14 +59,10 @@ export function DoctorTable() {
 
       if (result.data.isVerified) {
         setVerifyModal(false)
-        console.log('vvvvvvvvv');
         toast.success('Doctor Verification Successful!');
       } else {
         toast.success('verification cancelled')
-        console.log('ccccccc1111');
         setVerifyModal(false)
-
-        console.log('ccccccc');
       }
 
 

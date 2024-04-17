@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import Footer from "../../../components/footer/footer"
 import Nav from "../../../components/navbar/nav"
-import {  login } from "../../../api/userApi";
+import { login } from "../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { loginSuccess } from "../../../featuers/user/userSlice";
 import { useDispatch } from "react-redux";
-import { GoogleLogin } from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
 
 
 const Login = () => {
@@ -55,7 +55,7 @@ const Login = () => {
         setError('')
     }
 
-  
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -147,12 +147,12 @@ const Login = () => {
                         <a href="#" className="text-sm font-normal  hover:underline">
                             Forget Password?
                         </a>
-                        <div className="mt-6 bg-transparent flex  justify-center gap-5">
+                        <div className="mt-6 bg-transparent flex  justify-center ">
 
                             <button className=" bg-white  px-5 py-2 tracking-wide font-semibold     text-black border border-gray-400 rounded-md  ">
                                 Login
                             </button>
-                            <GoogleLogin  
+                            {/* <GoogleLogin  
                                 onSuccess={credentialResponse => {
                                     const decode = jwtDecode(credentialResponse?.credential);
                                     console.log(decode,'---oath');
@@ -160,23 +160,16 @@ const Login = () => {
                                 onError={() => {
                                     console.log('Login Failed');
                                 }}
-                            />
+                            /> */}
                         </div>
-                        <div  className="flex justify-center p-2">
+                        <div className="flex justify-center p-2">
                             {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
                         </div>
 
                     </form>
 
-
-
-                    <div className="flex  mt-4 gap-x-2">
-
-
-                    </div>
-
-                    <p className="mt-8 text-sm bg-transparent font-normal text-center text-gray-700">
+                    <p className=" text-sm bg-transparent font-normal text-center text-gray-700">
                         {" "}
                         Don't have an account?{" "}
 

@@ -111,6 +111,9 @@ const SignUp = () => {
 
         e.preventDefault();
         // Validation
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
         let newErrors = {};
         if (!formData.name || formData.name.length < 3) {
             newErrors.name = 'Name must be at least 3 characters long';
@@ -121,8 +124,8 @@ const SignUp = () => {
         if (!formData.mob || formData.mob.length !== 10 || isNaN(formData.mob)) {
             newErrors.mob = 'Mobile number should have exactly 10 digits';
         }
-        if (!formData.password || formData.password.length < 6) {
-            newErrors.password = 'Password should be at least 6 characters long';
+        if (!passwordRegex.test(formData.password)) {
+            newErrors.password = 'Password must be at least 6 characters long, include at least one uppercase letter, one lowercase letter, and one number.';
         }
         if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Password and Confirm Password do not match';

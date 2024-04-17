@@ -3,7 +3,7 @@ import {
     CardBody,
     CardFooter,
     Typography,
-    Button,
+    // Button,
 } from "@material-tailwind/react";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
@@ -42,35 +42,35 @@ const Slots = () => {
         <>
             <div className='w-full gap-10 flex flex-wrap flex-row justify-center my-10'>
 
-            {slot.length > 0 ? (
+                {slot.length > 0 ? (
 
-                slot.map((singleSlot, index) => (
-                    <Card key={`slot-${index}`} className="mt-6 w-auto bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black">
-                        <CardBody>
-                            <Typography variant="h5" color="blue-gray" className="mb-2">
-                                Selected Slot
-                            </Typography>
-                            <Typography>
-                                <p className="flex ">Date : <p>{new Date(singleSlot.date).toLocaleDateString()}</p></p> 
-                                <p className="flex">Shift : <p>{singleSlot.shift}</p></p> 
-                                {/* <p className="flex">Id of Doc : <p>{}</p></p>  */}
-                                <p className="flex">Available token : <p>{singleSlot.count}</p></p>
-                                
+                    slot.map((singleSlot, index) => (
+                        <Card key={`slot-${index}`} className="mt-6 w-auto bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black">
+                            <CardBody>
+                                <Typography variant="h5" color="blue-gray" className="mb-2">
+                                    Created Slots
                                 </Typography>
-                        </CardBody>
-                        <CardFooter className="pt-0">
-                            <Button>cancel</Button>
-                        </CardFooter>
-                    </Card>
-                ))  
-            ) : (
-                <>
-                    <span>
-                        <h1>No Slots created</h1>
-                    </span>
-                </>
-            )}
-        </div>
+                                <Typography>
+                                    <p className="flex ">Date : <p>{new Date(singleSlot.date).toLocaleDateString()}</p></p>
+                                    <p className="flex">Shift : <p>{singleSlot.shift}</p></p>
+                                    {/* <p className="flex">Id of Doc : <p>{}</p></p>  */}
+                                    <p className="flex">Available token : <p>{singleSlot.count}</p></p>
+
+                                </Typography>
+                            </CardBody>
+                            <CardFooter className="pt-0">
+                                {/* <Button>cancel</Button> */}
+                            </CardFooter>
+                        </Card>
+                    ))
+                ) : (
+                    <>
+                        <span>
+                            <h1>No Slots created</h1>
+                        </span>
+                    </>
+                )}
+            </div>
         </>
 
     );
