@@ -36,6 +36,7 @@ import BookingCancel from './pages/user/onlineBooking.jsx/BookingCancel'
 import ChangePassword from './pages/doctor/ChangePassword'
 import ForgotPassword from './pages/user/login/ForgotPassword'
 import NwPsswrd from './pages/user/login/NwPsswrd'
+import Message from './pages/user/message/Message'
 
 
 
@@ -59,7 +60,7 @@ function App() {
             <Route path='/forgotPassword' element={<ForgotPassword />} />
             <Route path='/newPassword' element={<NwPsswrd />} />
 
-
+          <Route path='/message' element={<Message/>}/>
           <Route path='/success' element={<BookingSuccess />} />
           <Route path='/cancel' element={<BookingCancel />} />
           <Route path='/userProfile' element={<UserProfile/>}/>
