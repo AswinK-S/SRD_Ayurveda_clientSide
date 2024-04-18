@@ -15,6 +15,44 @@
 
 .chatBox{
     flex: 5.5;
+    background-color: rgb(237, 237, 165);
+
+
+}
+
+.chatBoxWrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.chatBoxTop{
+    height: 100%;
+    overflow-y : scroll;
+    padding-right: 10px;
+    scrollbar-width: none;
+
+}
+
+.chatBoxBottom{
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatMessageInput{
+    width: 80%;
+    height: 60px;
+    padding: 10px;
+}
+
+.chatSubmitButton{
+    width: 70px;
+    height: 40px;
+    border:none;
+    border-radius: 5px;
+    background-color: rgb(119, 142, 57);
+    color: white;
 }
 
 .chatOnline{
