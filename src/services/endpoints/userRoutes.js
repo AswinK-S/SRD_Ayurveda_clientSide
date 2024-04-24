@@ -1,4 +1,4 @@
-
+    
 const userRoutes = {
     login:"/user/login",
     signup: "/user/signup",

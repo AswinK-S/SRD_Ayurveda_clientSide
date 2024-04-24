@@ -14,7 +14,7 @@ const Nav = () => {
 
   const [showMenu, setShowMenu] = useState(false)
 
-  console.log('ussr--nav>', user);
+  // console.log('ussr--nav>', user);
   const logoutUser = () => {
     localStorage.removeItem('usertoken')
 

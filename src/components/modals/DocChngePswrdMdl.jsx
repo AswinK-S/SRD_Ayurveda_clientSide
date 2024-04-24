@@ -1,4 +1,4 @@
-import propTypes from 'prop-types'
+    import propTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { changePsswrdOtp, verifyOtp } from '../../api/doctorApi'
 import {useNavigate} from 'react-router-dom'

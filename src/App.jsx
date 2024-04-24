@@ -60,7 +60,7 @@ function App() {
             <Route path='/forgotPassword' element={<ForgotPassword />} />
             <Route path='/newPassword' element={<NwPsswrd />} />
 
-          <Route path='/message' element={<Message/>}/>
+          <Route path='/message' element={ <UserProtectedRoute allowedRole='user'>  <Message/> </UserProtectedRoute> }/>
           <Route path='/success' element={<BookingSuccess />} />
           <Route path='/cancel' element={<BookingCancel />} />
           <Route path='/userProfile' element={<UserProfile/>}/>

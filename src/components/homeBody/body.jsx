@@ -5,17 +5,11 @@ import './body.css'
 const Body = () => {
     return (
         <>
-
-
-
             <div className="container py-20 px-20 ">
-
                 <div className='flex flex-col lg:flex-row gap-10  mb-5 items-center'>
-
                     <div className="flex justify-center lg:justify-start items-center p-2">
                         <img className='img-fluid h-auto lg:h-[300px] w-full lg:w-[450px] hover:scale-105 duration-1000 cursor-pointer shadow-md shadow-black ' src="/product-bg.jpg" alt="" />
                     </div>
-
                     <div className='p-5 lg:p-10 bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-lg shadow-black w-full lg:w-3/6'>
                         <p className='text-md font-serif'>
                             SRD AYURVEDA
