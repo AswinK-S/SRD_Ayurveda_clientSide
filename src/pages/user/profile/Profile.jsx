@@ -46,7 +46,7 @@ const UserProfile = () => {
                                 <h2 className="text-2xl font-bold text-teal-500">{userData.name}</h2>
                                 <p className="text-gray-600">{userData.email}</p>
                             </div>
-                            <div className='flex gap-2'>
+                            <div className='flex gap-2 justify-center'>
                                 <button
                                     className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-teal-700"
                                     onClick={handleEdit}

@@ -1,5 +1,6 @@
 import { axiosApi } from "../services/api";
 import conversationRoute from '../services/endpoints/conversationRoutes'
+import messagesRoute from "../services/endpoints/messageRoute";
 
 
 //get conversation details
@@ -15,9 +16,11 @@ export const getConversation = async(userId)=>{
 }
 
 //get messages 
-export const getMessages = async ()=>{
+export const getMessages = async (converSationId)=>{
     try {
-        const result = await axiosApi.get()
+        const result = await axiosApi.get(`${messagesRoute.getMessages}/${converSationId}`)
+        console.log('rs in msg rt-->',result);
+        return result?.data
     } catch (error) {
         console.log(error.message);
     }

@@ -1,16 +1,17 @@
 import './messages.css'
 import propTypes from 'prop-types'
+import {format} from 'timeago.js'
 
-const Messages = ({own}) => {
+const Messages = ({message,own}) => {
     return (
         <>
             <div className={own ? 'message own': 'message'}>
                 <div className="messageTop">
                     <img className='messageImg' src="/3.jpg" alt="" />
-                    <p className='messageText'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p className='messageText'>{message.text}</p>
                 </div>
                 <div className="messageBottom">
-                    1 hour ago
+                    {format(message.createdAt)}
                 </div>
             </div>
         </>
@@ -19,5 +20,6 @@ const Messages = ({own}) => {
 
 export default Messages
 Messages.propTypes ={
-    own:propTypes.func.isRequired
+    own:propTypes.func.isRequired,
+    message:propTypes.func.isRequired
 }

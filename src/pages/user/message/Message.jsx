@@ -6,7 +6,7 @@ import Messages from '../../../components/message/Messages'
 import Nav from '../../../components/navbar/nav'
 import './Message.css'
 import { useEffect, useState } from 'react'
-import { getConversation } from '../../../api/conversationApi'
+import { getConversation, getMessages } from '../../../api/conversationApi'
 
 
 const Message = () => {
@@ -17,12 +17,13 @@ const Message = () => {
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
 
+
     useEffect(() => {
         const fetch = async () => {
 
             try {
                 if (currentUser) {
-                    const result = await getConversation(currentUser._id)
+                    const result = await getConversation(currentUser?._id)
                     console.log('cnvrstn--->', result);
                     setConverstion(result)
                 } else {
@@ -36,8 +37,13 @@ const Message = () => {
     }, [currentUser])
 
     useEffect(()=>{
-
-    },[])
+            const Messages = async()=>{
+                const res = await getMessages(currentChat?._id)
+                setMessages(res)
+                console.log('messages--',res);
+            }
+            Messages()
+    },[currentChat?._id])
 
     return (
         <>
@@ -47,8 +53,11 @@ const Message = () => {
                 <div className="chatMenu ">
                     <div className="chatMenuWrapper">
                         <input placeholder='search' className='chatMenuInput' />
-                        {conversation.map((c) => (
-                            <Conversation key={c._id} conversation={c} currentUser={currentUser} />
+                        {conversation?.map((c) => (
+                            <div key={c?._id} onClick={()=>{setCurrentChat(c)}}>
+                                <Conversation  conversation={c} currentUser={currentUser} />
+                            </div>
+    
                         ))}
 
                     </div>
@@ -59,13 +68,10 @@ const Message = () => {
                     <div className="chatBoxWrapper">
                         { currentChat?  (<>
                             <div className="chatBoxTop">
-                                <Messages />
-                                <Messages own={true} />
-                                <Messages />
-                                <Messages own={true} />
-                                <Messages />
-                                <Messages own={true} />
-                                <Messages />
+                               {messages.map((m)=>(
+                                     <Messages key={m?._id} message={m} own={m.sender ===currentUser._id}/>
+
+                               ))}
                             </div>
                             <div className="chatBoxBottom">
                                 <textarea className='chatMessageInput rounded-md' placeholder='write something..'></textarea>
