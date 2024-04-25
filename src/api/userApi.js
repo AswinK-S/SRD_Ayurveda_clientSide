@@ -1,6 +1,5 @@
 import userRoutes from "../services/endpoints/userRoutes";
 import { axiosApi } from "../services/api";
-import conversationRoute from "../services/endpoints/conversationRoutes";
 
 //login route
 export const login = async (loginData) => {
@@ -179,15 +178,3 @@ export const payment = async (bookingDetail) => {
     }
 }
 
-
-//get conversation details
-export const getConversation = async(userId)=>{
-    try {
-        console.log('sending data to bknd',userId);
-        const result = await axiosApi.get(`${conversationRoute.getConversation}/${userId}`)
-        console.log('rslt -->',result);
-        return result?.data
-    } catch (error) {
-        console.log(error.message);
-    }
-}

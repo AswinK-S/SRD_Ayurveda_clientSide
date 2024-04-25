@@ -1,5 +1,5 @@
 const conversationRoute ={
-    getConversation:'conversation/getConversation'
+        getConversation:'conversation/getConversation'
 }
 
 export default conversationRoute
