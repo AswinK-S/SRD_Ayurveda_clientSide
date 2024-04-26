@@ -1,19 +1,18 @@
 import { useSelector } from 'react-redux'
-import ChatOnline from '../../../components/chatOnline/ChatOnline'
-import Conversation from '../../../components/conversations/Conversation'
-import Footer from '../../../components/footer/footer'
-import Messages from '../../../components/message/Messages'
-import Nav from '../../../components/navbar/nav'
-import './Message.css'
+import ChatOnline from '../../components/chatOnline/ChatOnline'
+import Conversation from '../../components/conversations/Conversation'
+import Messages from '../../components/message/Messages'
+import Nav from '../../components/doctor/docNav'
+import '../user/message/Message.css'
 import { useEffect, useRef, useState } from 'react'
-import { getConversation, getMessages, send } from '../../../api/conversationApi'
+import { getConversation, getMessages, send } from '../../api/conversationApi'
 
 
-const Message = () => {
+const DocMessage = () => {
 
-    
 
-    const currentUser = useSelector((state) => state.user.user)
+
+    const currentUser = useSelector((state) => state.doctor.doctor)
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
@@ -54,9 +53,9 @@ const Message = () => {
 
 
     //automatic scroll when there is new message
-    useEffect(()=>{
-        scrollRef.current?.scrollIntoView({behavior:'smooth'})
-    },[messages]) 
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
 
     //send message
     const sendMessage = async (e) => {
@@ -121,10 +120,9 @@ const Message = () => {
                 </div>
 
             </div>
-            <Footer />
         </>
 
     )
 }
 
-export default Message
+export default DocMessage

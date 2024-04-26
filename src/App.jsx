@@ -9,6 +9,8 @@ import OnlineBooking from "./pages/user/onlineBooking.jsx/onlineBooking"
 import Login from "./pages/user/login/login"
 import SignUp from "./pages/user/signUp/signUp"
 import UserProfile from './pages/user/profile/Profile'
+import Message from './pages/user/message/Message'
+
 
 import UserProtectedRoute from './components/UserProtectedRoute'
 import AdmnProtectedRoute from './components/admnPrtctdRoute'
@@ -36,7 +38,7 @@ import BookingCancel from './pages/user/onlineBooking.jsx/BookingCancel'
 import ChangePassword from './pages/doctor/ChangePassword'
 import ForgotPassword from './pages/user/login/ForgotPassword'
 import NwPsswrd from './pages/user/login/NwPsswrd'
-import Message from './pages/user/message/Message'
+import DocMessage from './pages/doctor/DocMessage'
 
 
 
@@ -84,6 +86,7 @@ function App() {
           <Route path='/doctor/AddSlot' element={<DoctorPrtctdRoute allowedRole='doctor'> <AddSlot /> </DoctorPrtctdRoute>} />
           <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot /> </DoctorPrtctdRoute>} />
           <Route path='/doctor/changePassword' element={<DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword /> </DoctorPrtctdRoute>} />
+          <Route path='/doctor/docMessage' element={<DoctorPrtctdRoute allowedRole='doctor'> <DocMessage/> </DoctorPrtctdRoute> }/>
         </Routes>
       </BrowserRouter>
 
