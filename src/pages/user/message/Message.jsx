@@ -6,7 +6,7 @@ import Messages from '../../../components/message/Messages'
 import Nav from '../../../components/navbar/nav'
 import './Message.css'
 import { useEffect, useState } from 'react'
-import { getConversation, getMessages } from '../../../api/conversationApi'
+import { getConversation, getMessages, send } from '../../../api/conversationApi'
 
 
 const Message = () => {
@@ -16,6 +16,7 @@ const Message = () => {
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
+    const [text,setText] = useState('')
 
 
     useEffect(() => {
@@ -44,6 +45,24 @@ const Message = () => {
             }
             Messages()
     },[currentChat?._id])
+
+    const messageHandler = (e)=>{
+        setText(e.target.value)
+    }
+
+    const sendMessage = async(e)=>{
+        e.preventDefault()
+        try {
+            const conversationId = conversation.find(item => item._id)?._id;
+            console.log('cnvrstn id=',conversationId, 'sndr-',currentUser._id,'text--',text);
+            const result = await send(conversationId,currentUser._id,text)
+            console.log('result ---',result);
+            setMessages(prevMessages => [...prevMessages,result])
+            setText('')
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     return (
         <>
@@ -74,8 +93,9 @@ const Message = () => {
                                ))}
                             </div>
                             <div className="chatBoxBottom">
-                                <textarea className='chatMessageInput rounded-md' placeholder='write something..'></textarea>
-                                <button className='chatSubmitButton'>Send</button>
+                                <textarea className='chatMessageInput rounded-md' placeholder='write something..' onChange={messageHandler} ></textarea>
+                                {text ?
+                                   ( <button className='chatSubmitButton' onClick={sendMessage} >Send</button>):(null)}
 
                             </div>
                         </>):(<span className='noConversation'>Open a conversation to start a chat </span>)

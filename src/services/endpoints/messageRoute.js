@@ -1,6 +1,7 @@
 
 const messagesRoute={
-    getMessages:'message/getMessages'
+    getMessages:'message/getMessages',
+    sendMessage:'message/'
 }
 
 export default messagesRoute
