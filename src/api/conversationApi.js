@@ -3,6 +3,18 @@ import conversationRoute from '../services/endpoints/conversationRoutes'
 import messagesRoute from "../services/endpoints/messageRoute";
 
 
+//get userDetails
+export const getUserData = async(userId)=>{
+    try {
+        console.log('usrId',userId);
+        const result = await axiosApi.get(`${conversationRoute.getUser}/${userId}`)
+        console.log('user ifo0000-----',result);
+        return result.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //get conversation details
 export const getConversation = async(userId)=>{
     try {

@@ -1,4 +1,4 @@
-import './messages.css'
+import './DocMessage.css'
 import propTypes from 'prop-types'
 import {format} from 'timeago.js'
 

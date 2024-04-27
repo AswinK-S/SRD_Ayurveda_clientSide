@@ -1,22 +1,41 @@
 import { useSelector } from 'react-redux'
 import ChatOnline from '../../components/chatOnline/ChatOnline'
-import Conversation from '../../components/conversations/Conversation'
-import Messages from '../../components/message/Messages'
+import Conversation from '../../components/doctor/DocConversation'
+import Messages from '../../components/doctor/DocMessage'
 import Nav from '../../components/doctor/docNav'
 import '../user/message/Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send } from '../../api/conversationApi'
+import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 
 
 const DocMessage = () => {
 
+    const navigate = useNavigate()
 
-
-    const currentUser = useSelector((state) => state.doctor.doctor)
+    const docData = useSelector((state) => state.doctor.doctor)
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
     const [text, setText] = useState('')
+
+    const token=localStorage.getItem('doctortoken')
+    const currentUser =JSON.parse(docData)
+
+
+    useEffect(()=>{
+        if(token){       
+            const decode = jwtDecode(token)
+            if(!decode.role==='doctor'){
+                console.log('no doc');
+                navigate('/doctor')
+            }
+        }else{
+            console.log('no doctoken');
+            navigate('/doctor')
+        }
+    },[navigate,token])
 
     const scrollRef = useRef()
     useEffect(() => {
@@ -24,6 +43,7 @@ const DocMessage = () => {
 
             try {
                 if (currentUser) {
+                    console.log('current user id', currentUser?._id);
                     const result = await getConversation(currentUser?._id)
                     console.log('cnvrstn--->', result);
                     setConverstion(result)
@@ -35,7 +55,7 @@ const DocMessage = () => {
             }
         }
         fetch()
-    }, [currentUser])
+    }, [])
 
     //get messages
     useEffect(() => {
@@ -62,8 +82,8 @@ const DocMessage = () => {
         e.preventDefault()
         try {
             const conversationId = conversation.find(item => item._id)?._id;
-            console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
-            const result = await send(conversationId, currentUser._id, text)
+            console.log('cnvrstn id=', conversationId, 'sndr-', currentUser?._id, 'text--', text);
+            const result = await send(conversationId, docData?._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
             setText('')
