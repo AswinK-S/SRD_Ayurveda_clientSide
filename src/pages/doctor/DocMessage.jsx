@@ -23,6 +23,7 @@ const DocMessage = () => {
     const token=localStorage.getItem('doctortoken')
     const currentUser =JSON.parse(docData)
 
+    console.log('currnt user---000000>',currentUser);
 
     useEffect(()=>{
         if(token){       
@@ -83,7 +84,7 @@ const DocMessage = () => {
         try {
             const conversationId = conversation.find(item => item._id)?._id;
             console.log('cnvrstn id=', conversationId, 'sndr-', currentUser?._id, 'text--', text);
-            const result = await send(conversationId, docData?._id, text)
+            const result = await send(conversationId, currentUser?._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
             setText('')
@@ -91,7 +92,7 @@ const DocMessage = () => {
             console.log(error.message);
         }
     }
-
+    console.log('messages---->',messages);
     return (
         <>
             <Nav />

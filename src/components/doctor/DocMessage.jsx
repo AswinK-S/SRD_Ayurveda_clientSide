@@ -2,7 +2,7 @@ import './DocMessage.css'
 import propTypes from 'prop-types'
 import {format} from 'timeago.js'
 
-const Messages = ({message,own}) => {
+const DocMessage = ({message,own}) => {
     return (
         <>
             <div className={own ? 'message own': 'message'}>
@@ -18,8 +18,8 @@ const Messages = ({message,own}) => {
     )
 }
 
-export default Messages
-Messages.propTypes ={
+export default DocMessage
+DocMessage.propTypes ={
     own:propTypes.func.isRequired,
     message:propTypes.func.isRequired
 }

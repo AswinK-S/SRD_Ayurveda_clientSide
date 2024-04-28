@@ -41,6 +41,7 @@ export const getMessages = async (converSationId)=>{
 // send message 
 export const send = async(conversationId,sender,text)=>{
     try {
+        console.log('cnvrstn id----',conversationId,'sender id---->',sender,'text--->',text);
         const result= await axiosApi.post(messagesRoute.sendMessage,{conversationId,sender,text})
         console.log('snd msg rslt--',result);
         return result.data
