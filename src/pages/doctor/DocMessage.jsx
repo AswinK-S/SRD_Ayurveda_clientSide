@@ -9,36 +9,71 @@ import { getConversation, getMessages, send } from '../../api/conversationApi'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 
+import { io } from "socket.io-client"
+
 
 const DocMessage = () => {
 
     const navigate = useNavigate()
+    const socket = useRef()
 
     const docData = useSelector((state) => state.doctor.doctor)
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
     const [text, setText] = useState('')
+    const [arrivalMessage, setArrivalMessage] = useState(null)
 
-    const token=localStorage.getItem('doctortoken')
-    const currentUser =JSON.parse(docData)
+    const token = localStorage.getItem('doctortoken')
+    const currentUser = JSON.parse(docData)
 
-    console.log('currnt user---000000>',currentUser);
+    console.log('currnt user---000000>', currentUser);
 
-    useEffect(()=>{
-        if(token){       
+    //conecting socket
+    useEffect(() => {
+        socket.current = io('ws://localhost:3001')
+
+        socket.current.on('getMessage', data => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now()
+            })
+        })
+    }, [])
+
+
+
+    useEffect(() => {
+        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+            setMessages((prev) => [...prev, arrivalMessage])
+    }, [arrivalMessage, currentChat])
+
+
+    useEffect(() => {
+        socket.current.emit('addUser', currentUser?._id)
+        socket.current.on("getUsers", users => {
+            console.log('online users in doc side', users);
+        })
+    }, [currentUser])
+
+
+
+    useEffect(() => {
+        if (token) {
             const decode = jwtDecode(token)
-            if(!decode.role==='doctor'){
+            if (!decode.role === 'doctor') {
                 console.log('no doc');
                 navigate('/doctor')
             }
-        }else{
+        } else {
             console.log('no doctoken');
             navigate('/doctor')
         }
-    },[navigate,token])
+    }, [navigate, token])
 
     const scrollRef = useRef()
+
     useEffect(() => {
         const fetch = async () => {
 
@@ -57,6 +92,7 @@ const DocMessage = () => {
         }
         fetch()
     }, [])
+
 
     //get messages
     useEffect(() => {
@@ -81,9 +117,19 @@ const DocMessage = () => {
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
+
+        const receiverId = currentChat?.members.find((member) => member !== currentUser._id)
+        socket.current.emit("sendMessage", {
+            senderId: currentUser._id,
+            receiverId,
+            text
+        })
         try {
             const conversationId = conversation.find(item => item._id)?._id;
             console.log('cnvrstn id=', conversationId, 'sndr-', currentUser?._id, 'text--', text);
+
+
+
             const result = await send(conversationId, currentUser?._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
@@ -92,7 +138,7 @@ const DocMessage = () => {
             console.log(error.message);
         }
     }
-    console.log('messages---->',messages);
+    console.log('messages---->', messages);
     return (
         <>
             <Nav />

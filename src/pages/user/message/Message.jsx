@@ -8,16 +8,51 @@ import './Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send } from '../../../api/conversationApi'
 
+import { io } from 'socket.io-client'
 
 const Message = () => {
 
-    
+
 
     const currentUser = useSelector((state) => state.user.user)
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
     const [text, setText] = useState('')
+    const [arrivalMessage, setArrivalMessage] = useState(null)
+
+    const socket = useRef()
+
+    //connect to socket server
+    useEffect(() => {
+        socket.current = io('ws://localhost:3001')
+
+        socket?.current.on("getMessage", data => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now()
+            })
+        })
+
+    }, [])
+
+
+
+    useEffect(() => {
+        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+            setMessages((prev) => [...prev, arrivalMessage])
+    }, [arrivalMessage, currentChat])
+
+
+    useEffect(() => {
+        socket.current.emit('addUser', currentUser._id)
+        socket.current.on("getUsers", users => {
+            console.log('online users', users);
+        })
+    }, [currentUser])
+
+
 
     const scrollRef = useRef()
     useEffect(() => {
@@ -54,16 +89,29 @@ const Message = () => {
 
 
     //automatic scroll when there is new message
-    useEffect(()=>{
-        scrollRef.current?.scrollIntoView({behavior:'smooth'})
-    },[messages]) 
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
 
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
+
+        console.log('currnt chat----', currentChat);
+        const receiverId = currentChat.members.find((item) => item !== currentUser._id)//--------------------- >-id
+        console.log('recvr id----', receiverId);
+        console.log('text-- sending0000', text);
+        socket.current.emit("sendMessage", {
+            senderId: currentUser._id,
+            receiverId,
+            text
+        })
         try {
             const conversationId = conversation.find(item => item._id)?._id;
-            console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
+            // console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
+
+
             const result = await send(conversationId, currentUser._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
@@ -98,7 +146,7 @@ const Message = () => {
                             <div className="chatBoxTop">
                                 {messages.map((m) => (
                                     <div key={m?._id} ref={scrollRef}>
-                                        <Messages message={m} own={m.sender === currentUser._id} />
+                                        <Messages message={m} own={m.sender === currentUser?._id} />
                                     </div>
                                 ))}
                             </div>
