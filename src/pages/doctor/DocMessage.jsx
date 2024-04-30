@@ -10,6 +10,9 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 
 import { io } from "socket.io-client"
+// import {data} from  '@emoji-mart/data'
+// import { Picker } from 'emoji-mart/react'
+import { MdOutlineEmojiEmotions } from "react-icons/md";
 
 
 const DocMessage = () => {
@@ -23,6 +26,9 @@ const DocMessage = () => {
     const [messages, setMessages] = useState([])
     const [text, setText] = useState('')
     const [arrivalMessage, setArrivalMessage] = useState(null)
+
+    const [emoji,setEmoji] = useState(null)
+    const [showEmoji,setShowEmoji] = useState(false)
 
     const token = localStorage.getItem('doctortoken')
     const currentUser = JSON.parse(docData)
@@ -108,6 +114,10 @@ const DocMessage = () => {
         setText(e.target.value)
     }
 
+    const toggleEmojiPicker = () => {
+        setShowEmoji(!showEmoji)
+    }
+
 
     //automatic scroll when there is new message
     useEffect(() => {
@@ -169,8 +179,9 @@ const DocMessage = () => {
                                 ))}
                             </div>
                             <div className="chatBoxBottom">
-                                <textarea className='chatMessageInput rounded-md' placeholder='write something..' value={text} onChange={messageHandler} ></textarea>
-                                {text ?
+                                <textarea type='text' className='chatMessageInput rounded-md' placeholder='write something..' value={text} onChange={messageHandler} ></textarea>
+                                <span onClick={toggleEmojiPicker} style={{fontSize:'30px', cursor:'pointer'}}><MdOutlineEmojiEmotions/></span>
+                                {text | emoji ?
                                     (<button className='chatSubmitButton' onClick={sendMessage} >Send</button>) : (null)}
 
                             </div>

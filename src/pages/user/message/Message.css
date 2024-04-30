@@ -22,6 +22,21 @@
 
 }
 
+.emojiPickerContainer {
+    position: absolute;
+    bottom: 20%; /* Position above the text area */
+    right: 0;
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 350px; 
+    overflow-y: auto;
+}
+
+
+
 .chatBoxWrapper{
     display: flex;
     flex-direction: column;
@@ -78,6 +93,8 @@
     text-align: center;
     cursor:default;
 }
+
+
 
 
 
