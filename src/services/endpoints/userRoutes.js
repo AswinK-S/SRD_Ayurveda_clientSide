@@ -14,7 +14,8 @@ const userRoutes = {
     updatePassword:'/user/update-password',
     googleAuth:'/user/googleSignUp',
     googleLogin:'/user/googleLogin',
-    bookings:'/user/bookings'
+    bookings:'/user/bookings',
+    bookedDoctors:'/user/doctors'
 }
 
 

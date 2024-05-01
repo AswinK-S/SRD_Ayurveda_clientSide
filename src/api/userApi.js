@@ -178,3 +178,14 @@ export const payment = async (bookingDetail) => {
     }
 }
 
+//get doctors list for chat 
+export const getDoctors = async(email)=>{
+    try {
+        console.log('sending email to get doctors--',email);
+        const result = await axiosApi.get(`${userRoutes.bookedDoctors}?email= ${email}`);
+        console.log('result --',result);
+        return result.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}
