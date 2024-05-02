@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import ChatOnline from '../../components/chatOnline/ChatOnline'
+import DocChatOnline from '../../components/chatOnline/DocChatOnline'
 import Conversation from '../../components/doctor/DocConversation'
 import Messages from '../../components/doctor/DocMessage'
 import Nav from '../../components/doctor/docNav'
@@ -14,6 +14,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
+import { getUsers } from '../../api/userApi'
 
 
 const DocMessage = () => {
@@ -27,9 +28,11 @@ const DocMessage = () => {
     const [messages, setMessages] = useState([])
     const [text, setText] = useState('')
     const [arrivalMessage, setArrivalMessage] = useState(null)
+    const [onlineUsers, setOnlineUsers] = useState([])
 
     const [showSendButton, setShowSendButton] = useState(false)
 
+    const [usersForChat,setUsersForChat] = useState([])
 
     const [emoji, setEmoji] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false)
@@ -52,7 +55,14 @@ const DocMessage = () => {
         })
     }, [socket])
 
-
+    //get all users for chat from booking
+    useEffect(()=>{
+        const fetch= async()=>{
+            const result = await getUsers(currentUser?._id)
+            setUsersForChat(result)
+        }
+        fetch()
+    },[])
 
     useEffect(() => {
         arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
@@ -60,12 +70,14 @@ const DocMessage = () => {
     }, [arrivalMessage, currentChat])
 
 
+    //get online users for chat
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
             console.log('online users in doc side', users);
+            setOnlineUsers(usersForChat.filter((item)=>users.some((user)=>user.userId ===item?._id)))
         })
-    }, [currentUser])
+    }, [])
 
 
 
@@ -219,7 +231,11 @@ const DocMessage = () => {
 
                 <div className="chatOnline">
                     <div className="chatOnlineWrapper">
-                        <ChatOnline />
+                        <DocChatOnline 
+                         onlineUsers={onlineUsers} 
+                         currentId={currentUser?._id}
+                         setCurrentChat={setCurrentChat}
+                        />
                     </div>
                 </div>
 

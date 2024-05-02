@@ -189,3 +189,15 @@ export const getDoctors = async(email)=>{
         console.log(error.message);
     }
 }
+
+
+//get users chat from booking for doctor
+export const getUsers =async(docId)=>{
+    try {
+        const result = await axiosApi.get(`${userRoutes.getUsers}/${docId}`)
+        console.log('users for doc chat--- ',result);
+        return  result?.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}

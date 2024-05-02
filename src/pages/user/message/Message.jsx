@@ -13,6 +13,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
+import { getDoctors } from '../../../api/userApi'
 
 
 
@@ -26,6 +27,7 @@ const Message = () => {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [showSendButton, setShowSendButton] = useState(false)
 
+    const [doctors,setDoctors] = useState([])
     const socket = useRef()
 
     const [emoji, setEmoji] = useState(null)
@@ -53,14 +55,22 @@ const Message = () => {
             setMessages((prev) => [...prev, arrivalMessage])
     }, [arrivalMessage, currentChat])
 
+    //get all doctors from the bookings for chat
+    useEffect(()=>{
+        const fetch = async()=>{
+            const result = await getDoctors(currentUser?.email) 
+            setDoctors(result)
+        }
+        fetch()
+    },[currentUser])
 
     useEffect(() => {
-        socket.current.emit('addUser', currentUser._id)
-        
+        socket.current.emit('addUser', currentUser._id)        
         socket.current.on("getUsers", users => {
-            setOnlineUsers(users)
+            // console.log('users333333333333-----',users);
+            setOnlineUsers(doctors.filter((doc)=>users.some((user)=>user.userId ===doc?._id)))
         })
-    }, [currentUser,text])
+    }, [currentUser,text,doctors])
 
 
 
@@ -88,7 +98,7 @@ const Message = () => {
         const Messages = async () => {
             const res = await getMessages(currentChat?._id)
             setMessages(res)
-            console.log('messages--', res);
+            // console.log('messages--', res);
         }
         Messages()
     }, [currentChat?._id])
@@ -119,13 +129,13 @@ const Message = () => {
         setShowEmoji(!showEmoji)
 
     }
-
+// console.log('doctors in message---0000', doctors);
 
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
 
-        console.log('currnt chat----', currentChat);
+        // console.log('currnt chat----', currentChat);
         const receiverId = currentChat.members.find((item) => item !== currentUser._id)
         console.log('recvr id----', receiverId);
         console.log('text-- sending0000', text);
@@ -139,7 +149,7 @@ const Message = () => {
             // console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
            
             console.log('text to send from user---',text);
-            if(text===''){return;}
+            if(text==='' && text.trim()===''){return;}
             const result = await send(conversationId, currentUser._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
@@ -152,6 +162,8 @@ const Message = () => {
             console.log(error.message);
         }
     }
+
+    // console.log('current chat -----',currentChat);
 
     return (
         <>

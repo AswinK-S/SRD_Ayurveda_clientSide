@@ -1,39 +1,30 @@
 import { useEffect, useState } from 'react'
 import './chatOnline.css'
 import propTypes from 'prop-types'
-import { useSelector } from 'react-redux'
-import { getDoctors } from '../../api/userApi'
 import { getConversations } from '../../api/conversationApi'
+import {getUsers} from '../../api/userApi' 
 
-const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
+const DocChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
+
     const [users, setUsers] = useState([])
     const [liveUsers, setLiveUsers] = useState([])
 
-    //to find doctors from booking using userEmail
-    const userData = useSelector((state) => state.user.user)
-    console.log('userData---->', userData);
-
-    //get doctors for chat
-    useEffect(() => {
+  
+     //get users for chat
+     useEffect(() => {
         const fetch = async () => {
-            console.log('sending email to get doctors--', userData?.email);
-
-            const result = await getDoctors(userData?.email)
+            const result = await getUsers(currentId)
             setUsers(result)
-
         }
         fetch()
-    }, [userData])
+    }, [currentId])
+
 
     //get online users
     useEffect(() => {
         setLiveUsers(users?.filter((online) => onlineUsers.some(onlineUser =>online?._id ===onlineUser?._id )))
     }, [users, onlineUsers])
 
-
-    console.log('doctors---', users)
-    console.log('online users---', onlineUsers)
-    console.log('live users---', liveUsers)
 
     //get the conversation of each doctor
     const handleClick = async(onLineUser)=>{
@@ -48,11 +39,10 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
 
     return (
-
         <>
             <div className='chatOnline'>
                 {liveUsers.map((onlineUser) => (
-                    <div key={onlineUser?._id} className="chatOnlineFriend" onClick={()=>{handleClick(onlineUser)}}>
+                    <div key={onlineUser?._id} className="chatOnlineFriend" onClick={() => { handleClick(onlineUser) }}>
                         <div className="chatOnlineImgContainer">
                             {onlineUser?.image ?
                                 (<img className='chatOnlineImg' src={onlineUser?.image} alt="" />) :
@@ -70,11 +60,10 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
     )
 }
 
-ChatOnline.propTypes = {
-    onlineUsers: propTypes.func.isRequired,
-    currentId: propTypes.func.isRequired,
-    setCurrentChat: propTypes.func.isRequired
 
+DocChatOnline.propTypes ={
+    onlineUsers:propTypes.func.isRequired,
+    currentId:propTypes.func.isRequired,
+    setCurrentChat:propTypes.func.isRequired
 }
-
-export default ChatOnline
+export default DocChatOnline

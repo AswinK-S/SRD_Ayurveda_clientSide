@@ -27,6 +27,20 @@ export const getConversation = async(userId)=>{
     }
 }
 
+//get conv includes two userId
+export const getConversations = async(firstId,secondId)=>{
+    try {
+        console.log('firstId--',firstId);
+        const result = await axiosApi.get(`${conversationRoute.getConversations}/${firstId}/${secondId}`)
+        console.log('res-----',result);
+        return result.data;
+    } catch (error) {
+      console.log(error.message);  
+    }
+}
+
+
+
 //get messages 
 export const getMessages = async (converSationId)=>{
     try {

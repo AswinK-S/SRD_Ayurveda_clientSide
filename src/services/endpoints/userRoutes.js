@@ -15,7 +15,9 @@ const userRoutes = {
     googleAuth:'/user/googleSignUp',
     googleLogin:'/user/googleLogin',
     bookings:'/user/bookings',
-    bookedDoctors:'/user/doctors'
+    bookedDoctors:'/user/doctors',
+    getUsers:'/user/getUsers'
+
 }
 
 
