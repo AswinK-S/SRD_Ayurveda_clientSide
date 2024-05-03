@@ -33,7 +33,8 @@ const BookTrtmnt = () => {
         doctorId:'',
         patientName:'',
         treatmentId:'',
-        subTreatmentId:''
+        subTreatmentId:'',
+        consultingDate:''
     })
    
     const selectedDoctorSlot = (id) => {
@@ -100,7 +101,6 @@ const BookTrtmnt = () => {
                 setDoctorsForTrtmnt(result?.data?.doctor)
             } catch (error) {
                 console.error('Error fetching doctors:', error);
-
             }
         }
         getDoctors(selectedSubTreatment, dateForTrtmt)
@@ -108,7 +108,6 @@ const BookTrtmnt = () => {
 
 
     useEffect(() => {
-
 
         const fetchData = async () => {
 
@@ -123,7 +122,6 @@ const BookTrtmnt = () => {
             } finally {
                 setLoading(false)
             }
-
 
         }
         fetchData()
@@ -141,7 +139,8 @@ const BookTrtmnt = () => {
         }
         setBookingData(PrevData =>({
             ...PrevData,
-        patientName:userId?.name
+        patientName:userId?.name,
+        consultingDate:date
         }))
         setShowModal(true)
         

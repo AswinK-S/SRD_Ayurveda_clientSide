@@ -53,30 +53,30 @@ const OnlineBooking = () => {
                 <Nav />
             </div>
             <ImgComponent text="Online Booking" />
-            <div className="mb-4 p-2 flex flex-col items-center overflow-hidden">
-                <div className="w-full max-w-md overflow-y-scroll p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black">
+            <div className="mb-4  p-3 flex flex-col   items-center overflow-hidden">
+                <div className="w-1/2 overflow-y-scroll p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black">
                     {bookinsData ? (
-                        <div className="grid grid-cols-1 gap-4 ">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             {bookinsData.map((booking, index) => (
                                 <div
                                     key={index}
                                     className="max-w-sm overflow-hidden rounded-lg shadow-lg  bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300  "
                                 >
                                     <div className="px-4 py-2 flex flex-row justify-center gap-4 items-center ">
-                <div className="font-bold text-lg">Doctor Name : </div>
-                <h1 className="text-gray-700 text-base"> {booking.doctorName}</h1>
-            </div>
-                                    <div className="px-4 py-2 flex flex-row justify-center gap-4 items-center ">
-                                        <div className="font-bold text-lg ">Treatment</div>
-                                        <p className="text-gray-700 text-base "> { booking.treatmentName}</p>
+                                        <div className="font-bold text-md">Doctor Name : </div>
+                                        <h1 className="text-gray-700 text-base font-bold"> {booking.doctorName}</h1>
                                     </div>
                                     <div className="px-4 py-2 flex flex-row justify-center gap-4 items-center ">
-                                        <div className="font-bold text-lg ">Sub-Treatment</div>
-                                        <p className="text-gray-700 text-base">{booking.subTreatmentName}</p>
+                                        <div className="font-bold text-md  ">Treatment :</div>
+                                        <p className="text-gray-700 text-base font-bold "> {booking.treatmentName}</p>
                                     </div>
                                     <div className="px-4 py-2 flex flex-row justify-center gap-4 items-center ">
-                                        <div className="font-bold text-lg ">Amount</div>
-                                        <p className="text-gray-700 text-base">{booking.amount}</p>
+                                        <div className="font-bold text-md ">Sub-Treatment :</div>
+                                        <p className="text-gray-700 text-base font-bold">{booking.subTreatmentName}</p>
+                                    </div>
+                                    <div className="px-4 py-2 flex flex-row justify-center gap-4 items-center ">
+                                        <div className="font-bold text-md ">Amount :</div>
+                                        <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
                                     </div>
                                 </div>
                             ))}

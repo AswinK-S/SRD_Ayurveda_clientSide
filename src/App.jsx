@@ -65,7 +65,7 @@ function App() {
           <Route path='/message' element={ <UserProtectedRoute allowedRole='user'>  <Message/> </UserProtectedRoute> }/>
           <Route path='/success' element={<BookingSuccess />} />
           <Route path='/cancel' element={<BookingCancel />} />
-          <Route path='/userProfile' element={<UserProfile/>}/>
+          <Route path='/userProfile' element={ <UserProtectedRoute allowedRole='user'> <UserProfile/> </UserProtectedRoute>  }/>
 
 
           {/* admin */}
