@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { docloginSuccess, logout } from "../../featuers/doctor/doctorSlice";
 import { jwtDecode } from "jwt-decode";
-// import ReactLoading from 'react-loading'
 import 'ldrs/quantum'
+
 const DocNav = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()

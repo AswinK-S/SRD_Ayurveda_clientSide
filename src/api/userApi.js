@@ -22,7 +22,8 @@ export const treatments = async () => {
         const res = await axiosApi.get(userRoutes.treatments)
         return res
     } catch (error) {
-        console.log(error.message);
+        console.log("network error",error.message);
+        return error.message
     }
 }
 

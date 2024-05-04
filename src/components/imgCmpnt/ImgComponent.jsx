@@ -1,5 +1,5 @@
+import propTypes from 'prop-types'
 
-// eslint-disable-next-line react/prop-types
 const ImgComponent = ({text}) => {
     return (
 
@@ -15,4 +15,7 @@ const ImgComponent = ({text}) => {
   )
 }
 
+ImgComponent.propTypes ={
+    text:propTypes.string.isRequired
+}
 export default ImgComponent

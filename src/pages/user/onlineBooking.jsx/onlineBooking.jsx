@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { bookings } from "../../../api/userApi";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from '../../../components/footer/footer'
+import PageNotFound from "../../../components/error/pageNotfound";
+
 
 const OnlineBooking = () => {
     const user = useSelector((state) => state.user.user);
@@ -39,6 +41,9 @@ const OnlineBooking = () => {
         }
     };
 
+
+    
+
     useEffect(() => {
         fetchBookings(1);
     }, []);
@@ -49,8 +54,6 @@ const OnlineBooking = () => {
 
     };
 
-
-    
 
     return (
 
@@ -65,11 +68,11 @@ const OnlineBooking = () => {
                 <div
                     id="parentScrollDiv"
                     className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px] overflow-auto">
-                    {bookinsData.length > 0 ? (
+                    {bookinsData?.length > 0 ? (
 
                         <InfiniteScroll
-                            
-                            dataLength={bookinsData.length}
+
+                            dataLength={bookinsData?.length}
                             next={loadMoreBookings}
                             hasMore={hasMore}
                             loader={<p className="text-center">Loading...</p>}
@@ -77,7 +80,7 @@ const OnlineBooking = () => {
                             scrollableTarget="parentScrollDiv"
                         >
                             <div id="bookingHistoryDiv" className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                {bookinsData.map((booking, index) => (
+                                {bookinsData?.map((booking, index) => (
                                     <div
                                         key={index}
 
@@ -111,11 +114,11 @@ const OnlineBooking = () => {
                                         <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                             <div className="font-bold text-sm ">Status:</div>
                                             {
-                                            booking?.status ==='Pending' ?(
-                                            <p className="text-orange-700 text-base font-bold">{booking?.status}</p>
-                                             ):(                                            
-                                             <p className="text-greeen-700 text-base font-bold">{booking?.status}</p>
-                                            )
+                                                booking?.status === 'Pending' ? (
+                                                    <p className="text-orange-700 text-base font-bold">{booking?.status}</p>
+                                                ) : (
+                                                    <p className="text-greeen-700 text-base font-bold">{booking?.status}</p>
+                                                )
                                             }
                                         </div>
                                         <div className="px-4  flex flex-row justify-center gap-2 items-center ">
@@ -130,14 +133,14 @@ const OnlineBooking = () => {
 
 
                     ) : (
-                        <p className="text-center">No bookings</p>
+                        <><PageNotFound/></>
                     )}
 
                 </div>
             </div>
 
             {loading && <p className="text-center">Loading...</p>}
-            <Footer/>
+            <Footer />
         </>
 
     );
