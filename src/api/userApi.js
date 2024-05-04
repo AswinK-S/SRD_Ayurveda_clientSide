@@ -137,9 +137,10 @@ export const doctor = async (slotData) => {
 }
 
 //get bookings detailfor user
-export const bookings = async (email,page)=>{
+export const bookings = async (email,page,pageSize)=>{
     try {
-        const result = await axiosApi.get(`${userRoutes.bookings}?email=${email}&page=${page}`)
+        console.log('pageSize--------?',pageSize);
+        const result = await axiosApi.get(`${userRoutes.bookings}/${email}/${page}/${pageSize}`);
         console.log('bkng details----->',result);
         return result.data
     } catch (error) {
