@@ -72,7 +72,7 @@ export const AddTBtn = ({ handleSearch, searchTerm }) => {
 export const AddUBtn = ({ handleSearchUser, searchTerm }) => {
   return (
     <>
-      <div className="flex items-center justify-between mb-4  px-20 ">
+      <div className="flex items-center justify-between mb-4  px-20  ">
 
         <div className='shadow-lg flex items-center border border-lime-200 rounded' >
           <span className="px-3 text-gray-500">

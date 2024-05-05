@@ -94,6 +94,8 @@ export function UserTable() {
     )
   })
 
+console.log('usersData--',usersData);  
+console.log('filtered Users',filteredusers);
 
 
   return (
