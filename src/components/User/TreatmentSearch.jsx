@@ -5,7 +5,7 @@ const TreatmentSearch = ({searchTerm,handleSearch})=>{
     return (
         <>
         <div className="flex items-center justify-between mb-4 px-20 ">
-            <div className="flex items-center border border-lime-200 shadow-lg rounded">
+            <div className="flex items-center border border-lime-200 shadow-md shadow-black rounded">
                 <span className="px-3 text-gray-500">
                     <FaSearch/>
                 </span>
@@ -14,6 +14,8 @@ const TreatmentSearch = ({searchTerm,handleSearch})=>{
                 placeholder="search"
                 className="px-4 py-3"
                 onChange={handleSearch}
+                value={searchTerm}
+
                 />
             </div>
         </div>

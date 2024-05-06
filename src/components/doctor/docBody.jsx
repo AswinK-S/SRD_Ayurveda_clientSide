@@ -46,6 +46,8 @@ const DocBody =()=>{
             }else if(response ==='doctor is not listed'){
                 setError("Doctor is not listed ")
                 return
+            }else if(response ==='doctor not exist in this mail'){
+                setError('Invalid mail or password!')
             }
 
             if (response?.data.message==='doctor logged in') {

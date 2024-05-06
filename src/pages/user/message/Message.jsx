@@ -104,7 +104,7 @@ const Message = () => {
     }, [currentChat?._id])
 
     const messageHandler = (e) => {
-        setText(e.target.value)
+         setText(e.target.value)
         console.log('text-----22',text);
         setShowSendButton(true)
     }
@@ -120,7 +120,7 @@ const Message = () => {
         // Update emoji state with the chosen emoji
         console.log('choose emoji----', emojiObject.native);
         setEmoji(emojiObject.native);
-        setText(text + emojiObject.native);        
+        setText(text+emojiObject.native)
         setShowSendButton(true)
 
     };
@@ -135,6 +135,11 @@ const Message = () => {
     const sendMessage = async (e) => {
         e.preventDefault()
 
+        // if(text===''&& emoji===null || text.trim()==='' && emoji===null  ){
+        //     console.log('empty   chat---',text);
+        //     return;
+        // }
+
         // console.log('currnt chat----', currentChat);
         const receiverId = currentChat.members.find((item) => item !== currentUser._id)
         console.log('recvr id----', receiverId);
@@ -147,13 +152,12 @@ const Message = () => {
         try {
             const conversationId = conversation.find(item => item._id)?._id;
             // console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
-           
-            console.log('text to send from user---',text);
-            if(text==='' && text.trim()===''){return;}
+         
             const result = await send(conversationId, currentUser._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
             setText('')
+            setEmoji(null)
             setShowEmoji(false)
             setShowSendButton(false)
 

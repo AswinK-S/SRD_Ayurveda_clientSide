@@ -21,7 +21,6 @@ import DoctorPrtctdRoute from './components/doctorPrtctdRoute'
 import AdminLogin from "./pages/admin/admin"
 import AdminDash from './pages/admin/adminDash'
 import Users from "./pages/admin/users/users"
-import Patients from "./pages/admin/patients/patients"
 import Treatments from "./pages/admin/treatments/treatments"
 import Doctors from "./pages/admin/doctor/doctors"
 import AddDoctor from "./pages/admin/doctor/AddDoctor"
@@ -39,6 +38,7 @@ import ChangePassword from './pages/doctor/ChangePassword'
 import ForgotPassword from './pages/user/login/ForgotPassword'
 import NwPsswrd from './pages/user/login/NwPsswrd'
 import DocMessage from './pages/doctor/DocMessage'
+import Patients from './pages/doctor/Patients'
 
 
 
@@ -72,7 +72,7 @@ function App() {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdmnProtectedRoute allowedRole='admin'> <AdminDash /> </AdmnProtectedRoute>} />
           <Route path='/admin/users' element={<AdmnProtectedRoute allowedRole='admin'> <Users /> </AdmnProtectedRoute>} />
-          <Route path="/admin/patients" element={<AdmnProtectedRoute allowedRole='admin'> <Patients /> </AdmnProtectedRoute>} />
+          {/* <Route path="/admin/patients" element={<AdmnProtectedRoute allowedRole='admin'> <Patients /> </AdmnProtectedRoute>} /> */}
           <Route path="/admin/treatments" element={<AdmnProtectedRoute allowedRole='admin'> <Treatments />  </AdmnProtectedRoute>} />
           <Route path="/admin/doctors" element={<AdmnProtectedRoute allowedRole='admin'> <Doctors /> </AdmnProtectedRoute>} />
           <Route path="/admin/addDoc" element={<AdmnProtectedRoute allowedRole='admin'> <AddDoctor /> </AdmnProtectedRoute>} />
@@ -87,6 +87,7 @@ function App() {
           <Route path='/doctor/slot' element={<DoctorPrtctdRoute allowedRole='doctor'> <Slot /> </DoctorPrtctdRoute>} />
           <Route path='/doctor/changePassword' element={<DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword /> </DoctorPrtctdRoute>} />
           <Route path='/doctor/docMessage' element={<DoctorPrtctdRoute allowedRole='doctor'> <DocMessage/> </DoctorPrtctdRoute> }/>
+          <Route path='/doctor/patients' element={<DoctorPrtctdRoute allowedRole='doctor'> <Patients/>  </DoctorPrtctdRoute>}/>
         </Routes>
       </BrowserRouter>
 

@@ -110,3 +110,14 @@ export const updatePassword = async(password,id)=>{
         console.log(error.message);
     }
 }
+
+
+export const getPatients = async(docId,page,limit)=>{
+    try {
+        console.log('doc Id sending',docId);
+        const result = await axiosApi.get(`${doctorRoute.getPatients}?docId=${docId}&limit=${limit}&page=${page}`)
+        console.log('patients--',result);
+    } catch (error) {
+        console.log(error.message);
+    }
+}

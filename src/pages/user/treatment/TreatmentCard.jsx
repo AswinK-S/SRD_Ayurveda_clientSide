@@ -10,11 +10,11 @@ const TreatmentCard = () => {
   const [treatmentData, setTreatmentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm,setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
 
 
- 
+
   useEffect(() => {
     const fetchTreatmentData = async () => {
       try {
@@ -50,18 +50,18 @@ const TreatmentCard = () => {
   }
 
   // search 
-  const handleSearch =(e)=>{
+  const handleSearch = (e) => {
     setSearchTerm(e.target.value)
   }
   //filtering treatments according to search
-  const filteredTreatments = treatmentData.filter((treat)=>{
+  const filteredTreatments = treatmentData.filter((treat) => {
     const treatmentName = `${treat.name}`.toLowerCase()
     const searchTermL = searchTerm.toLowerCase()
-    const subTrtmnt = treat.subTreatments.filter((item)=>{
-       return item.name.toLowerCase().includes(searchTermL)
-    })    
+    const subTrtmnt = treat.subTreatments.filter((item) => {
+      return item.name.toLowerCase().includes(searchTermL)
+    })
 
-    return (treatmentName.includes(searchTermL) || subTrtmnt.length > 0 )
+    return (treatmentName.includes(searchTermL) || subTrtmnt.length > 0)
   })
 
 
@@ -71,11 +71,11 @@ const TreatmentCard = () => {
   return (
     <>
 
-    
-    <TreatmentSearch searchTerm={searchTerm} handleSearch={handleSearch} />
+
+      <TreatmentSearch searchTerm={searchTerm} handleSearch={handleSearch} />
       <div className='w-full gap-10 flex flex-wrap flex-row justify-center my-10'>
         {
-          filteredTreatments?.length ?(
+          filteredTreatments?.length ? (
             filteredTreatments?.map((treatment) => (
               <div key={treatment.id} className="relative flex flex-col my-6  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black bg-clip-border rounded-xl sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 duration-1000">
                 <div className="relative h-56 mx-4 -mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl">
@@ -110,13 +110,13 @@ const TreatmentCard = () => {
                 </div>
               </div>
             ))
-          ):(<>
-          <div className='flex items-center flex-col'>
-          <p className='text-gray-400 font-bold border text-4xl '>No Treatments Found</p>
-            <img className='border' src="trtmnt2.png" alt="" />            
-          </div>
+          ) : (<>
+            <div className='flex items-center flex-col'>
+              <p className='text-gray-400 font-bold border text-4xl '>No Treatments Found</p>
+              <img className='border' src="trtmnt2.png" alt="" />
+            </div>
           </>)
-          
+
 
 
         }

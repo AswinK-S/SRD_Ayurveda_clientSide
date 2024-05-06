@@ -6,6 +6,7 @@ import { bookings } from "../../../api/userApi";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from '../../../components/footer/footer'
 import PageNotFound from "../../../components/error/pageNotfound";
+import 'ldrs/quantum'
 
 
 const OnlineBooking = () => {
@@ -42,7 +43,7 @@ const OnlineBooking = () => {
     };
 
 
-    
+
 
     useEffect(() => {
         fetchBookings(1);
@@ -75,7 +76,16 @@ const OnlineBooking = () => {
                             dataLength={bookinsData?.length}
                             next={loadMoreBookings}
                             hasMore={hasMore}
-                            loader={<p className="text-center">Loading...</p>}
+                            loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
+                                <div className=" p-5 flex-row items-center justify-center   ">
+                                    <l-quantum
+                                        size="80"
+                                        speed="1"
+                                        color="green"
+                                    ></l-quantum>
+                                    <p className="text-light-green-800">loading...</p>
+                                </div>
+                            </div>}
                             endMessage={<p className="text-center">No more bookings to load.</p>}
                             scrollableTarget="parentScrollDiv"
                         >
@@ -133,13 +143,22 @@ const OnlineBooking = () => {
 
 
                     ) : (
-                        <><PageNotFound/></>
+                        <><PageNotFound /></>
                     )}
 
                 </div>
             </div>
 
-            {loading && <p className="text-center">Loading...</p>}
+            {loading && <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
+                <div className=" p-5 flex-row items-center justify-center   ">
+                    <l-quantum
+                        size="80"
+                        speed="1.25"
+                        color="green"
+                    ></l-quantum>
+                    <p className="text-light-green-800">loading...</p>
+                </div>
+            </div>}
             <Footer />
         </>
 
