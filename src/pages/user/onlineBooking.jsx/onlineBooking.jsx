@@ -6,6 +6,7 @@ import { bookings } from "../../../api/userApi";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from '../../../components/footer/footer'
 import PageNotFound from "../../../components/error/pageNotfound";
+import { FaSearch } from "react-icons/fa";
 import 'ldrs/quantum'
 
 
@@ -15,8 +16,10 @@ const OnlineBooking = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('')
     const pageSize = 6;
 
+    const [fiterValue, setfilterVallue] = useState(null)
 
     const fetchBookings = async (pageNumber) => {
         setLoading(true);
@@ -55,6 +58,36 @@ const OnlineBooking = () => {
 
     };
 
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value)
+
+    }
+
+
+    //search booking on the basis of doctor,treatment,status,subTreatment and filter on the amount
+    const filteredData = bookinsData.filter((item) => {
+        const doctor = `${item.doctorName}`.toLowerCase()
+        const treatment = `${item.treatmentName}`.toLowerCase()
+        const status = `${item.status}`.toLowerCase()
+        const subTreatment = `${item.subTreatmentName}`.toLowerCase()
+        const searchItem = searchTerm.toLowerCase()
+
+        if (fiterValue) {
+            const [min, max] = fiterValue.split('-').map(Number);
+            const amount = Number(item.amount)
+
+            return amount >= min && amount <= max;
+        }
+
+        return (doctor.includes(searchItem) || treatment.includes(searchItem) || status.includes(searchItem)
+            || subTreatment.includes(searchItem))
+    })
+
+    const handleFilterChange = (event) => {
+        const selected = event.target.value;
+        console.log('seleted price', selected);
+        setfilterVallue(selected)
+    };
 
     return (
 
@@ -63,34 +96,67 @@ const OnlineBooking = () => {
                 <Nav />
             </div>
             <ImgComponent text="Online Booking" />
-            <div className="mb-4  p-3 flex flex-col   items-center ">
-                <p className=" flex justify-center px-12 py-3 mb-4 text-black text-base font-bold shadow-sm shadow-black  bg-gradient-to-r from-lime-400 via-lime-200 to-lime-400 ">Bookings List</p>
+            {/* search and filter  */}
+            <div className="flex flex-col  items-center mb-5 ">
 
+                <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+
+                    <div className="flex items-center border border-lime-200 shadow-sm   shadow-black rounded">
+                        <span className="px-2 text-gray-500">
+                            <FaSearch />
+                        </span>
+                        <input
+                            type="text"
+                            placeholder="search"
+                            className="px-4 py-2"
+                            onChange={handleSearch}
+                            value={searchTerm}
+                        />
+                    </div>
+
+                    <div className="flex  items-center  border border-lime-200 shadow-sm   shadow-black rounded">
+                        <span className="font-bold text-sm px-2 text-gray-500">Amount:</span>
+                        <select
+                            // value={selectedFilter}
+                            onChange={handleFilterChange}
+                            className=" py-2 "
+                        >
+                            <option value="">All</option>
+                            <option value="100-300">100-300</option>
+                            <option value="301-500">301-500</option>
+                            <option value="501-1000">501-1000</option>
+                            <option value="below300">Below 300</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div >
+
+            <div className="mb-4  p-3 flex flex-col   items-center ">
                 <div
                     id="parentScrollDiv"
                     className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px] overflow-auto">
                     {bookinsData?.length > 0 ? (
 
                         <InfiniteScroll
-
                             dataLength={bookinsData?.length}
                             next={loadMoreBookings}
                             hasMore={hasMore}
-                            loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
-                                <div className=" p-5 flex-row items-center justify-center   ">
-                                    <l-quantum
-                                        size="80"
-                                        speed="1"
-                                        color="green"
-                                    ></l-quantum>
-                                    <p className="text-light-green-800">loading...</p>
-                                </div>
-                            </div>}
+                            // loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
+                            //     <div className=" p-5 flex-row items-center justify-center   ">
+                            //         <l-quantum
+                            //             size="80"
+                            //             speed="1"
+                            //             color="green"
+                            //         ></l-quantum>
+                            //         <p className="text-light-green-800">loading...</p>
+                            //     </div>
+                            // </div>}
                             endMessage={<p className="text-center">No more bookings to load.</p>}
                             scrollableTarget="parentScrollDiv"
                         >
                             <div id="bookingHistoryDiv" className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                {bookinsData?.map((booking, index) => (
+                                {filteredData?.map((booking, index) => (
                                     <div
                                         key={index}
 
@@ -141,7 +207,6 @@ const OnlineBooking = () => {
 
                         </InfiniteScroll>
 
-
                     ) : (
                         <><PageNotFound /></>
                     )}
@@ -149,16 +214,18 @@ const OnlineBooking = () => {
                 </div>
             </div>
 
-            {loading && <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
-                <div className=" p-5 flex-row items-center justify-center   ">
-                    <l-quantum
-                        size="80"
-                        speed="1.25"
-                        color="green"
-                    ></l-quantum>
-                    <p className="text-light-green-800">loading...</p>
+            {
+                loading && <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
+                    <div className=" p-5 flex-row items-center justify-center   ">
+                        <l-quantum
+                            size="80"
+                            speed="1.25"
+                            color="green"
+                        ></l-quantum>
+                        <p className="text-light-green-800">loading...</p>
+                    </div>
                 </div>
-            </div>}
+            }
             <Footer />
         </>
 

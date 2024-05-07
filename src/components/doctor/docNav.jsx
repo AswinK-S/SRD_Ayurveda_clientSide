@@ -46,6 +46,7 @@ const DocNav = () => {
         localStorage.removeItem('doctor_data')
         localStorage.removeItem('docImg')
         dispatch(logout())
+        navigate('/doctor')
     }
 
     const toggleMenu = () => {

@@ -28,7 +28,8 @@ const FileSec = () => {
     const doctorfile = useSelector((state)=>state.doctor.doctorFile)
     //profile image
     const docProfile = useSelector((state)=>state.doctor.docImgFile)
-    console.log('doc file-----212',doctorfile);
+   
+    console.log('doctor file-----212',doctorfile);
     console.log('doc file-----213',docProfile);
 
 
@@ -46,6 +47,10 @@ const FileSec = () => {
                         console.log('doc data----22', result.data);
                         setDoctorDetails(result.data)
                         dispatch(docloginSuccess(result.data));
+                        dispatch(uploadFileSuccess(result.data));
+                    dispatch(uploadProfileImage(result.data))
+
+
 
                     } catch (error) {
                         console.log(error.message);
