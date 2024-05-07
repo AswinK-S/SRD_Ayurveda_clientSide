@@ -116,7 +116,8 @@ export const getPatients = async(docId,page,limit)=>{
     try {
         console.log('doc Id sending',docId);
         const result = await axiosApi.get(`${doctorRoute.getPatients}?docId=${docId}&limit=${limit}&page=${page}`)
-        console.log('patients--',result);
+        // console.log('patients--',result);
+        return result?.data
     } catch (error) {
         console.log(error.message);
     }
