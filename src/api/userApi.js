@@ -203,3 +203,13 @@ export const getUsers =async(docId)=>{
         console.log(error.message);
     }
 }
+
+// cancel booking 
+export const cancelBooking =async(id)=>{
+    try {
+        console.log('id sending to cancel',id);
+        const result = await axiosApi.put(`${userRoutes.cancelBooking}/${id}`)
+    } catch (error) {
+        console.log(error.message);
+    }
+}

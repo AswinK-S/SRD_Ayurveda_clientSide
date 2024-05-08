@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import ImgComponent from "../../../components/imgCmpnt/ImgComponent";
 import Nav from "../../../components/navbar/nav";
 import { useSelector } from "react-redux";
-import { bookings } from "../../../api/userApi";
+import { bookings, cancelBooking } from "../../../api/userApi";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from '../../../components/footer/footer'
 import PageNotFound from "../../../components/error/pageNotfound";
 import { FaSearch } from "react-icons/fa";
 import 'ldrs/quantum'
+import { toast } from 'react-toastify';
 
 
 const OnlineBooking = () => {
@@ -89,6 +90,26 @@ const OnlineBooking = () => {
         setfilterVallue(selected)
     };
 
+
+    function isWithin24Hours(consultationDate) {
+        const currentDate = new Date();
+        const consultationDateObj = new Date(consultationDate);
+        const differenceInTime = consultationDateObj.getTime() - currentDate.getTime();
+        const differenceInHours = differenceInTime / (1000 * 60 * 60);
+
+        return differenceInHours <= 24;
+    }
+
+    //cancel booking
+    const handleCancel = async (id) => {
+        try {
+            console.log('bookngid------>', id);
+            const result = await cancelBooking(id)
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     return (
 
         <>
@@ -136,7 +157,7 @@ const OnlineBooking = () => {
                 <div
                     id="parentScrollDiv"
                     className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px] overflow-auto">
-                    {bookinsData?.length > 0 ? (
+                    {bookinsData?.length ? (
 
                         <InfiniteScroll
                             dataLength={bookinsData?.length}
@@ -201,6 +222,24 @@ const OnlineBooking = () => {
                                             <div className="font-bold text-sm ">Amount :</div>
                                             <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
                                         </div>
+
+                                        <div className="flex justify-center p-2">
+                                            <button
+                                                onClick={() => {
+                                                    if (isWithin24Hours(booking?.consultationDate)) {
+                                                        handleCancel(booking?.id);
+                                                    } else {
+                                                        toast.error("Cancel is possible only before 24 hours");
+                                                    }
+                                                }}
+                                                disabled={isWithin24Hours(booking?.consultationDate)}
+                                                className={`bg-light-blue-700 px-3 shadow-sm shadow-black rounded-md text-white ${isWithin24Hours(booking?.consultationDate) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            >
+                                                cancel
+                                            </button>
+                                        </div>
+
+
                                     </div>
                                 ))}
                             </div>

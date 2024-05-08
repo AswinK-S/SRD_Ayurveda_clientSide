@@ -1,3 +1,5 @@
+import { cancelBooking } from "../../api/userApi"
+
     
 const userRoutes = {
     login:"/user/login",
@@ -16,7 +18,8 @@ const userRoutes = {
     googleLogin:'/user/googleLogin',
     bookings:'/user/bookings',
     bookedDoctors:'/user/doctors',
-    getUsers:'/user/getUsers'
+    getUsers:'/user/getUsers',
+    cancelBooking:'/user/canceBooking'
 
 }
 
