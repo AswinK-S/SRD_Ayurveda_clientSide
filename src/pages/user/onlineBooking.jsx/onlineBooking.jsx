@@ -93,18 +93,21 @@ const OnlineBooking = () => {
 
     function isWithin24Hours(consultationDate) {
         const currentDate = new Date();
+
         const consultationDateObj = new Date(consultationDate);
+        // console.log('consultation Date-->',consultationDate,'current date--',currentDate,'consultaition date---',consultationDateObj);
         const differenceInTime = consultationDateObj.getTime() - currentDate.getTime();
         const differenceInHours = differenceInTime / (1000 * 60 * 60);
-
-        return differenceInHours <= 24;
+        // console.log('differenceIn hours-->',differenceInHours);
+        return differenceInHours <= 12;
     }
 
     //cancel booking
-    const handleCancel = async (id) => {
+    const handleCancel = async (id, amount) => {
         try {
             console.log('bookngid------>', id);
-            const result = await cancelBooking(id)
+            const result = await cancelBooking(id, amount)
+            if(result)toast.success('Refund success')
         } catch (error) {
             console.log(error.message);
         }
@@ -213,10 +216,15 @@ const OnlineBooking = () => {
                                             {
                                                 booking?.status === 'Pending' ? (
                                                     <p className="text-orange-700 text-base font-bold">{booking?.status}</p>
+                                                ) : booking?.status === 'Cancelled' ? (
+                                                    <p className="text-red-700 text-base font-bold">{booking?.status}</p>
+                                                ) : booking?.status === 'Consulted' ? (
+                                                    <p className="text-green-700 text-base font-bold">{booking?.status}</p>
                                                 ) : (
-                                                    <p className="text-greeen-700 text-base font-bold">{booking?.status}</p>
+                                                    <p className="text-gray-700 text-base font-bold">{booking?.status}</p>
                                                 )
                                             }
+
                                         </div>
                                         <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                             <div className="font-bold text-sm ">Amount :</div>
@@ -226,14 +234,14 @@ const OnlineBooking = () => {
                                         <div className="flex justify-center p-2">
                                             <button
                                                 onClick={() => {
-                                                    if (isWithin24Hours(booking?.consultationDate)) {
-                                                        handleCancel(booking?.id);
+                                                    if (!isWithin24Hours(booking?.consultationDate)) {
+                                                        handleCancel(booking?.chargeId, booking?.amount);
                                                     } else {
-                                                        toast.error("Cancel is possible only before 24 hours");
+                                                        toast.error("Cancel is possible only before 12 hours");
                                                     }
                                                 }}
-                                                disabled={isWithin24Hours(booking?.consultationDate)}
-                                                className={`bg-light-blue-700 px-3 shadow-sm shadow-black rounded-md text-white ${isWithin24Hours(booking?.consultationDate) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                disabled={isWithin24Hours(booking?.consultationDate) || booking?.status==='Cancelled'}
+                                                className={`bg-light-blue-700 px-3 shadow-sm shadow-black rounded-md text-white ${isWithin24Hours(booking?.consultationDate) || booking?.status==='Cancelled' ||booking?.status==='Consulted' ? 'opacity-50 cursor-not-allowed' : ''}`}
                                             >
                                                 cancel
                                             </button>
@@ -253,7 +261,7 @@ const OnlineBooking = () => {
                 </div>
             </div>
 
-            {
+            {/* {
                 loading && <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
                     <div className=" p-5 flex-row items-center justify-center   ">
                         <l-quantum
@@ -264,7 +272,7 @@ const OnlineBooking = () => {
                         <p className="text-light-green-800">loading...</p>
                     </div>
                 </div>
-            }
+            } */}
             <Footer />
         </>
 
