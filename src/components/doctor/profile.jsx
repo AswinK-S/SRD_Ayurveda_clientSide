@@ -35,36 +35,29 @@ const Profile = () => {
         if (decode.role === 'doctor') {
 
           const id = decode.id
-          console.log('iiiiiiiiiiiiiiiiii', id);
           const modifiedFieldsKeys = Object.keys(modifiedData);
 
           if (modifiedFieldsKeys.length > 0) {
             const formValidateErrors = formValidation(modifiedData);
 
             if (Object.keys(formValidateErrors).length > 0) {
-              console.log('vldtn errs', formValidateErrors);
               setErrors(formValidateErrors);
             } else {
-              console.log('modifiedFields--', modifiedData);
               setErrors('');
               const result = await postDetails(modifiedData, id);
-              console.log('result doc details--', result);
 
               // Reset modifiedFields after successful update
               setModifiedData({});
             }
           } else {
-            console.log('No fields were modified.');
             setNoUpdate('No fields were modified.')
           }
 
         } else {
-          console.log('no token');
 
           navigate('/doctor')
         }
       } else {
-        console.log('no token');
         navigate('/doctor')
       }
 

@@ -99,6 +99,19 @@ export const updatePassword = async(newPassword,email)=>{
     }
 }
 
+
+//changePassword
+export const changePassword =async(id,password)=>{
+    try {
+        const result = await axiosApi.patch(`${userRoutes.changePassword}?id=${id}&password=${password}`)
+        console.log('result-->',result.data);
+        return result?.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 // get treatments for online booking
 export const getTreatments = async () => {
     try {

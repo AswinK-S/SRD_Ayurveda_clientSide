@@ -20,31 +20,25 @@ const FileSec = () => {
 
     const [pswrdModal, setPswrdModal] = useState(false)
 
-    const doctorData = useSelector((state) => state.doctor.doctor)
+    // const doctorData = useSelector((state) => state.doctor.doctor)
 
     const navigate = useNavigate()
-    console.log('doctor data---11>', doctorData.document)
     //document
-    const doctorfile = useSelector((state)=>state.doctor.doctorFile)
+    // const doctorfile = useSelector((state)=>state.doctor.doctorFile)
     //profile image
     const docProfile = useSelector((state)=>state.doctor.docImgFile)
    
-    console.log('doctor file-----212',doctorfile);
-    console.log('doc file-----213',docProfile);
-
+    
 
     useEffect(() => {
         const token = localStorage.getItem('doctortoken')
         if (token) {
             const doctor = jwtDecode(token)
-            console.log('doc---', doctor);
             if (doctor.role === 'doctor') {
-                console.log('3333');
 
                 const fetch = async (id) => {
                     try {
                         const result = await getdoctor(id)
-                        console.log('doc data----22', result.data);
                         setDoctorDetails(result.data)
                         dispatch(docloginSuccess(result.data));
                         dispatch(uploadFileSuccess(result.data));
@@ -71,7 +65,6 @@ const FileSec = () => {
 
     //document image change
     const handleFileChange = (e) => {
-        console.log('files   --', e.target.files[0]);
 
         const document = e.target.files[0]
         if (document) {
@@ -84,17 +77,13 @@ const FileSec = () => {
 
     //document image upload
     const uploadDoc = (e) => {
-        console.log('ee', e);
         e.preventDefault()
 
         if (fileUpload) {
             const uploadfile = async (document) => {
                 try {
-                    console.log('upld--->', document);
                     const docUpload = await uploadDocument(document)
-                    console.log('doc Up-->', docUpload.data);
                     if (docUpload) {
-                        console.log('ddd-----', docUpload.data);
                         dispatch(uploadFileSuccess(docUpload.data));
                         toast.success("Document uploaded successfully")
                     }
@@ -112,7 +101,6 @@ const FileSec = () => {
                 const formData = new FormData();
                 formData.append('image', fileUpload);
                 formData.append('id', id)
-
                 //call the function to make api call
                 uploadfile(formData)
             }
@@ -124,13 +112,10 @@ const FileSec = () => {
 
     //image uploading state change
     const handleImageChange = (e) => {
-        console.log('files   --', e.target.files[0]);
         const file = e.target.files[0];
         console.log(file)
         if (file) {
-
             setProfileImage(file)
-
         } else {
             setProfileImage(null)
         }
@@ -145,20 +130,14 @@ const FileSec = () => {
             try {
                 //api call to upload image
                 const result = await docImage(image)
-
-                console.log('iiiii', result);
                 if (result.request.status === 200) {
-                    console.log('oooooooo--', result.data);
                     const uploadImg = result.data
-                    // console.log('000009999--', uploadImg, typeof uploadImg);
-
                     setDoctorDetails((prevDetails) => ({
                         ...prevDetails,
                         ...uploadImg,
                     }));
                     dispatch(uploadProfileImage(uploadImg))
                     // dispatch(docloginSuccess(uploadImg))
-
                     toast.success('Image Uploaded')
                     setUploading('uploaded')
                 }
@@ -169,17 +148,13 @@ const FileSec = () => {
 
 
         if (profileImage) {
-            console.log('img name ---', profileImage);
-
             const token = localStorage.getItem('doctortoken')
             if (token) {
                 const decode = jwtDecode(token)
-                console.log('token ', decode);
                 const id = decode.id
                 const formData = new FormData();
                 formData.append('image', profileImage);
                 formData.append('id', id)
-
                 //call the function to make api call
                 res(formData)
             }
@@ -193,7 +168,6 @@ const FileSec = () => {
 
 
     const passwordModal = () => {
-        console.log('doc detail-------', doctorDetails._id);
         setPswrdModal(true)
     }
 

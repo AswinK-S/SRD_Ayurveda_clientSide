@@ -95,10 +95,8 @@ const OnlineBooking = () => {
         const currentDate = new Date();
 
         const consultationDateObj = new Date(consultationDate);
-        // console.log('consultation Date-->',consultationDate,'current date--',currentDate,'consultaition date---',consultationDateObj);
         const differenceInTime = consultationDateObj.getTime() - currentDate.getTime();
         const differenceInHours = differenceInTime / (1000 * 60 * 60);
-        // console.log('differenceIn hours-->',differenceInHours);
         return differenceInHours <= 12;
     }
 

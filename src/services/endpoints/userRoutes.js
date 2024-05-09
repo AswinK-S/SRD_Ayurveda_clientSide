@@ -1,4 +1,3 @@
-import { cancelBooking } from "../../api/userApi"
 
     
 const userRoutes = {
@@ -19,7 +18,8 @@ const userRoutes = {
     bookings:'/user/bookings',
     bookedDoctors:'/user/doctors',
     getUsers:'/user/getUsers',
-    cancelBooking:'/user/canceBooking'
+    cancelBooking:'/user/canceBooking',
+    changePassword:'/user/changePassword'
 
 }
 
