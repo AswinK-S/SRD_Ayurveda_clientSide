@@ -9,7 +9,6 @@ const DocChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
     const [users, setUsers] = useState([])
     const [liveUsers, setLiveUsers] = useState([])
 
-  
      //get users for chat
      useEffect(() => {
         const fetch = async () => {
@@ -19,25 +18,25 @@ const DocChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
         fetch()
     }, [currentId])
 
-
     //get online users
     useEffect(() => {
         setLiveUsers(users?.filter((online) => onlineUsers.some(onlineUser =>online?._id ===onlineUser?._id )))
     }, [users, onlineUsers])
 
-
     //get the conversation of each doctor
     const handleClick = async(onLineUser)=>{
         try {
+            console.log('online user--',onLineUser);
             const result = await getConversations(currentId,onLineUser?._id)
             console.log('result---in chatOnline',result);
+
             setCurrentChat(result[0])
         } catch (error) {
             console.log(error.message);
         }
     }
-
-
+    console.log('live users--',onlineUsers)
+    
     return (
         <>
             <div className='chatOnline'>

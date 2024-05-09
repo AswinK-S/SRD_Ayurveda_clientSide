@@ -17,11 +17,9 @@ export const login = async (loginData) => {
 }
 
 //get Treatments
-export const treatments = async ()=>{
+export const treatments = async () => {
     try {
-        console.log('req for trtmnt in api');
         const res = await axiosApi.get(adminRoutes.treatments)
-        console.log('res in api',res);
         return res
     } catch (error) {
         console.log(error.message);
@@ -29,34 +27,31 @@ export const treatments = async ()=>{
 }
 
 //get single treatmentdetail
-export const treatment = async(id)=>{
-    try{
-        console.log('02020---',id);
+export const treatment = async (id) => {
+    try {
         const result = await axiosApi.get(`${adminRoutes.treatment}/${id}`)
         return result
-    }catch(error){
+    } catch (error) {
         console.log(error.message);
     }
 }
 
 //add Treatments
-export const addTreatments = async(data)=>{
+export const addTreatments = async (data) => {
     try {
-        console.log('add trtmnt',data);
-        const res =await axiosApi.post(adminRoutes.addTreat,data)
+        const res = await axiosApi.post(adminRoutes.addTreat, data)
         console.log(res);
         return res
     } catch (error) {
-        console.log('err frm addtrnmnts',error.message);
+        console.log(error.message);
     }
 }
 
 
 
 //change treatment Status
-export const trtMntStatus = async(id)=>{
+export const trtMntStatus = async (id) => {
     try {
-        console.log('trt id ---',id);
         const result = await axiosApi.patch(`${adminRoutes.treatmentStatus}/${id}`)
         return result
     } catch (error) {
@@ -65,16 +60,19 @@ export const trtMntStatus = async(id)=>{
 }
 
 //remove subTreatment
-export const removeSubTreatment = async(editData)=>{
-    console.log('edit data----',editData);
-    const result = await axiosApi.delete(adminRoutes.removeSub_trtmnt,{data:editData})
+export const removeSubTreatment = async (editData) => {
+    try{
+    const result = await axiosApi.delete(adminRoutes.removeSub_trtmnt, { data: editData })
     return result
+    }catch(error){
+        console.log(error.message);
+    }
 }
 
 //edit Treatment Name
-export const editTrtmntName = async(trtmnt,editTrtmntId)=>{
+export const editTrtmntName = async (trtmnt, editTrtmntId) => {
     try {
-        const result =await axiosApi.patch(adminRoutes.editTreatmentName,{name:trtmnt,id:editTrtmntId}) 
+        const result = await axiosApi.patch(adminRoutes.editTreatmentName, { name: trtmnt, id: editTrtmntId })
         return result
     } catch (error) {
         console.log(error.message);
@@ -82,23 +80,19 @@ export const editTrtmntName = async(trtmnt,editTrtmntId)=>{
 }
 
 // edit Treatment
-export const updateTreatment =async(data)=>{
+export const updateTreatment = async (data) => {
     try {
-        console.log('iid----',data);
-        const result = await axiosApi.patch(adminRoutes.editTrtmnt,data)
-        console.log('rslt in api--',result  );
+        const result = await axiosApi.patch(adminRoutes.editTrtmnt, data)
         return result
     } catch (error) {
         console.log(error.message);
-    } 
+    }
 }
 
 //add Doctors
-export const addDoctor = async(doctorData)=>{
+export const addDoctor = async (doctorData) => {
     try {
-        console.log('doc data to submit--',doctorData);
-        const res = await axiosApi.post(adminRoutes.addDoctor,doctorData)
-        console.log('add doc res',res);
+        const res = await axiosApi.post(adminRoutes.addDoctor, doctorData)
         return res
     } catch (error) {
         console.log(error.message);
@@ -108,9 +102,7 @@ export const addDoctor = async(doctorData)=>{
 //get doctors
 export const doctors = async () => {
     try {
-        console.log('req in doctors');
         let res = await axiosApi.get(adminRoutes.doctors)
-        console.log('res doctors', res.data);
         return res
     } catch (error) {
         console.log(error.message);
@@ -121,9 +113,7 @@ export const doctors = async () => {
 //doctor status
 export const doctorStatus = async (id) => {
     try {
-        console.log('doctor id', id);
         const result = await axiosApi.post(`${adminRoutes.doctorStatus}/${id}`)
-        console.log('doc---------------res', result);
         return result
     } catch (error) {
         console.log(error.message);
@@ -133,10 +123,9 @@ export const doctorStatus = async (id) => {
 }
 
 // verify doctor 
-export const verifyDoctor = async(id)=>{
+export const verifyDoctor = async (id) => {
     try {
-        console.log('id-- in api',id);
-        const result = await axiosApi.post(`${adminRoutes.verifyDoc}/${id}`) 
+        const result = await axiosApi.post(`${adminRoutes.verifyDoc}/${id}`)
         return result
     } catch (error) {
         console.log(error.message)
@@ -146,9 +135,7 @@ export const verifyDoctor = async(id)=>{
 // get users 
 export const users = async (currentPage) => {
     try {
-        console.log('get users req-->',currentPage);
         const response = await axiosApi.get(`${adminRoutes.users}?page=${currentPage}`);
-        console.log('res frm user', response);
         return response.data
     } catch (err) {
         console.log(err.message)
@@ -159,8 +146,7 @@ export const users = async (currentPage) => {
 
 //user status
 export const userStatus = async (id) => {
-    console.log('api usrsts ---', id);
-    let res = await axiosApi.post(`${adminRoutes.userStatus}/${id}`)
-    console.log('res usrsts--', res);
-    return res
-}
+        const res = await axiosApi.post(`${adminRoutes.userStatus}/${id}`);
+        return res
+    
+}    

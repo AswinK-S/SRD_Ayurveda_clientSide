@@ -1,65 +1,73 @@
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getDataForOverview } from "../../api/doctorApi";
 
 const OverViewComponent = () => {
-  const TableData = [
-    {
-      productName: "Apple MacBook Pro 17\"",
-      color: "Silver",
-      category: "Laptop",
-      price: "$2999",
-    },
-  ];
+
+  const [patients, setPatients] = useState({})
+
+  const doctorData = useSelector((state) => state.doctor.doctor)
+  const doctor = JSON.parse(doctorData)
+
+  const fetch = useCallback(async () => {
+    const result = await getDataForOverview(doctor?._id);
+    setPatients(result);
+  }, [doctor]);
+
+  useEffect(() => {
+    fetch()
+  }, [fetch])
 
   return (
     <>
-        <div className="overflow-x-auto">
-          <table className="w-full md:max-w-5xl sm:max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Product name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Color
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Category
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Price
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <span className="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {TableData.map((item, index) => (
-                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    {item.productName}
-                  </th>
-                  <td className="px-6 py-4">{item.color}</td>
-                  <td className="px-6 py-4">{item.category}</td>
-                  <td className="px-6 py-4">{item.price}</td>
-                  <td className="px-6 py-4 text-right">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className=" flex justify-center">
+        <div className="bg-[#d3dd64] m-5 flex flex-row justify-center   rounded-lg shadow-md shadow-black p-2 md:w-1/2    md:overflow-x-auto">
+          <h1>Overview</h1>
         </div>
+      </div>
+
+      <div className="flex flex-wrap  gap-5 p-2 items-center justify-center ">
+
+        {/* Card for Total Patients */}
+        <div className=" w-full md:w-1/3 p-4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black  rounded-lg">
+          <div className="flex flex-col items-center ">
+            <div className="text-xl font-semibold">Total Patients</div>
+            <div className="text-2xl font-bold">{patients?.total}</div>
+            <div className="mt-4 text-gray-600">Total number of patients</div>
+          </div>
+        </div>
+
+        {/* Card for Confirmed Patients */}
+        <div className=" w-full md:w-1/3 p-4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black  rounded-lg mt-4 md:mt-0">
+          <div className="flex flex-col items-center">
+            <div className="text-xl font-semibold">Consulted Patients</div>
+            <div className="text-2xl font-bold">{patients?.consulted}</div>
+            <div className="mt-4 text-gray-600">Number of consulted patients</div>
+          </div>
+        </div>
+
+        {/* Card for pending Patients */}
+        <div className=" w-full md:w-1/3 p-4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black  rounded-lg mt-4 md:mt-0">
+          <div className="flex flex-col items-center">
+            <div className="text-xl font-semibold">Pending Patients</div>
+            <div className="text-2xl font-bold">{patients?.pending}</div>
+            <div className="mt-4 text-gray-600">Number of pending patients</div>
+          </div>
+        </div>
+
+        {/* Card for Cancelled Patients */}
+        <div className=" w-full md:w-1/3 p-4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black  rounded-lg mt-4 md:mt-0">
+          <div className="flex flex-col items-center">
+            <div className="text-xl font-semibold">Cancelled Patients</div>
+            <div className="text-2xl font-bold">{patients?.cancelled}</div>
+            <div className="mt-4 text-gray-600">Booking cancelled by the user</div>
+          </div>
+        </div>
+      </div>
     </>
   );
-  
-}
+};
+
+
 
 export default OverViewComponent

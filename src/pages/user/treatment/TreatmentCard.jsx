@@ -46,7 +46,7 @@ const TreatmentCard = () => {
   }
 
   if (error || !treatmentData?.length) {
-    return <><PageNotFound /></>
+    return <div className='p-3 flex justify-center '><PageNotFound /></div>
   }
 
   // search 

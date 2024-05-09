@@ -56,7 +56,7 @@ const AdmnNav = () => {
     <>
       {
         loading ?( 
-        <div className="fixed inset-0 flex items-center justify-center bg-yellow-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-yellow-100">
         <ReactLoading type="balls" color="lime" height={100} width={50} />
       </div>
       ):
@@ -92,9 +92,9 @@ const AdmnNav = () => {
                   <Link to="/admin/users" className="inline-flex hover:border-b-4  hover:border-lime-400 cursor-pointer py-2 px-4 sm:px-5">
                     Users
                   </Link>
-                  <Link to="/admin/patients" className="inline-flex hover:border-b-4  hover:border-lime-400 cursor-pointer py-2 px-4 sm:px-5">
+                  {/* <Link to="/admin/patients" className="inline-flex hover:border-b-4  hover:border-lime-400 cursor-pointer py-2 px-4 sm:px-5">
                     Patients
-                  </Link>
+                  </Link> */}
                   <Link to="/admin/treatments" className="inline-flex hover:border-b-4  hover:border-lime-400 cursor-pointer py-2 px-4 sm:px-5">
                     Treatments
                   </Link>

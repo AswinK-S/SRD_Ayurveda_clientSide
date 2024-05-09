@@ -15,7 +15,7 @@
 
 .chatBox{
     flex: 5.5;
-    background-color: rgb(237, 237, 165);
+    /* background-color: rgb(237, 237, 165); */
     border-radius: 10px;
     padding: 10px;
 

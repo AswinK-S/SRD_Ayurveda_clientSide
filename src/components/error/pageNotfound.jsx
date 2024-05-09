@@ -3,7 +3,7 @@
     const pageNotfound = () => {
         return (
             <>
-                <div className="main">
+                <div className="main border">
                     <svg
                         className=" shadow-sm shadow-black "
                         xmlns="http://www.w3.org/2000/svg"

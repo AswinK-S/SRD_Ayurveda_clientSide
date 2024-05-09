@@ -34,7 +34,7 @@ const OnlineBooking = () => {
                 setBookingsData((prevData) => [...prevData, ...response]);
             }
 
-            if (response.length < pageSize) {
+            if (response?.length < pageSize) {
                 setHasMore(false);
             } else {
                 setHasMore(true);
@@ -66,7 +66,7 @@ const OnlineBooking = () => {
 
 
     //search booking on the basis of doctor,treatment,status,subTreatment and filter on the amount
-    const filteredData = bookinsData.filter((item) => {
+    const filteredData = bookinsData?.filter((item) => {
         const doctor = `${item.doctorName}`.toLowerCase()
         const treatment = `${item.treatmentName}`.toLowerCase()
         const status = `${item.status}`.toLowerCase()

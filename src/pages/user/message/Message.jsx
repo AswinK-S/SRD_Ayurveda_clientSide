@@ -27,7 +27,7 @@ const Message = () => {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [showSendButton, setShowSendButton] = useState(false)
 
-    const [doctors,setDoctors] = useState([])
+    const [doctors, setDoctors] = useState([])
     const socket = useRef()
 
     const [emoji, setEmoji] = useState(null)
@@ -40,8 +40,8 @@ const Message = () => {
 
         socket?.current.on("getMessage", data => {
             setArrivalMessage({
-                sender: data.senderId,
-                text: data.text,
+                sender: data?.senderId,
+                text: data?.text,
                 createdAt: Date.now()
             })
         })
@@ -51,26 +51,26 @@ const Message = () => {
 
 
     useEffect(() => {
-        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+        arrivalMessage && currentChat?.members.includes(arrivalMessage?.sender) &&
             setMessages((prev) => [...prev, arrivalMessage])
+
     }, [arrivalMessage, currentChat])
 
     //get all doctors from the bookings for chat
-    useEffect(()=>{
-        const fetch = async()=>{
-            const result = await getDoctors(currentUser?.email) 
+    useEffect(() => {
+        const fetch = async () => {
+            const result = await getDoctors(currentUser?.email)
             setDoctors(result)
         }
         fetch()
-    },[currentUser])
+    }, [currentUser])
 
     useEffect(() => {
-        socket.current.emit('addUser', currentUser._id)        
+        socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            // console.log('users333333333333-----',users);
-            setOnlineUsers(doctors.filter((doc)=>users.some((user)=>user.userId ===doc?._id)))
+            setOnlineUsers(doctors?.filter((doc) => users?.some((user) => user.userId === doc?._id)))
         })
-    }, [currentUser,text,doctors])
+    }, [currentUser, text, doctors])
 
 
 
@@ -81,7 +81,6 @@ const Message = () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
-                    console.log('cnvrstn--->', result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -98,14 +97,12 @@ const Message = () => {
         const Messages = async () => {
             const res = await getMessages(currentChat?._id)
             setMessages(res)
-            // console.log('messages--', res);
         }
         Messages()
     }, [currentChat?._id])
 
     const messageHandler = (e) => {
-         setText(e.target.value)
-        console.log('text-----22',text);
+        setText(e.target.value)
         setShowSendButton(true)
     }
 
@@ -117,10 +114,8 @@ const Message = () => {
 
     // add emoji 
     const addEmoji = (emojiObject) => {
-        // Update emoji state with the chosen emoji
-        console.log('choose emoji----', emojiObject.native);
-        setEmoji(emojiObject.native);
-        setText(text+emojiObject.native)
+        setEmoji(emojiObject?.native);
+        setText(text + emojiObject?.native)
         setShowSendButton(true)
 
     };
@@ -129,30 +124,24 @@ const Message = () => {
         setShowEmoji(!showEmoji)
 
     }
-// console.log('doctors in message---0000', doctors);
 
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
+        console.log('sending msg----->', text);
+        if (text === '' && emoji === null || text.trim() === '') {
+            console.log('empty   chat---', text);
+            return;
+        }
 
-        // if(text===''&& emoji===null || text.trim()==='' && emoji===null  ){
-        //     console.log('empty   chat---',text);
-        //     return;
-        // }
-
-        // console.log('currnt chat----', currentChat);
-        const receiverId = currentChat.members.find((item) => item !== currentUser._id)
-        console.log('recvr id----', receiverId);
-        console.log('text-- sending0000', text);
+        const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
         socket.current.emit("sendMessage", {
-            senderId: currentUser._id,
+            senderId: currentUser?._id,
             receiverId,
-            text: text + (emoji ? emoji : '')
+            text
         })
         try {
-            const conversationId = conversation.find(item => item._id)?._id;
-            // console.log('cnvrstn id=', conversationId, 'sndr-', currentUser._id, 'text--', text);
-         
+            const conversationId = conversation?.find(item => item._id)?._id;
             const result = await send(conversationId, currentUser._id, text)
             console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
@@ -172,10 +161,10 @@ const Message = () => {
     return (
         <>
             <Nav />
-            <div className='messenger bg-white p-10 '>
+            <div className='messenger  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 p-10 gap-4 '>
 
                 <div className="chatMenu ">
-                    <div className="chatMenuWrapper">
+                    <div className="chatMenuWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
                         <input placeholder='search' className='chatMenuInput' />
                         {conversation?.map((c) => (
                             <div key={c?._id} onClick={() => { setCurrentChat(c) }}>
@@ -188,9 +177,9 @@ const Message = () => {
                 </div>
 
 
-                <div className="chatBox ">
+                <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
 
-                    <div className="chatBoxWrapper">
+                    <div className="chatBoxWrapper ">
                         {showEmoji && (
                             <div className='emojiPickerContainer'>
                                 <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class' data={data} onEmojiSelect={addEmoji} />
@@ -210,11 +199,11 @@ const Message = () => {
                                 <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
 
                                 {showSendButton ?
-                                     ( 
+                                    (
                                         <button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }} onClick={sendMessage} >
                                             <IoIosSend />
 
-                                    </button>
+                                        </button>
                                     ) : (null)}
 
                             </div>
@@ -225,11 +214,11 @@ const Message = () => {
 
 
                 <div className="chatOnline">
-                    <div className="chatOnlineWrapper">
-                        <ChatOnline  
-                        onlineUsers={onlineUsers} 
-                        currentId={currentUser?._id}
-                        setCurrentChat={setCurrentChat}
+                    <div className="chatOnlineWrapper  rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                        <ChatOnline
+                            onlineUsers={onlineUsers}
+                            currentId={currentUser?._id}
+                            setCurrentChat={setCurrentChat}
                         />
                     </div>
                 </div>

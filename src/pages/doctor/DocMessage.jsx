@@ -40,7 +40,6 @@ const DocMessage = () => {
     const token = localStorage.getItem('doctortoken')
     const currentUser = JSON.parse(docData)
 
-    // console.log('currnt user---000000>', currentUser);
 
     //conecting socket
     useEffect(() => {
@@ -74,10 +73,9 @@ const DocMessage = () => {
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            console.log('online users in doc side', users);
             setOnlineUsers(usersForChat.filter((item)=>users.some((user)=>user.userId ===item?._id)))
         })
-    }, [])
+    }, [currentUser._id,usersForChat])
 
 
 
@@ -101,9 +99,7 @@ const DocMessage = () => {
 
             try {
                 if (currentUser) {
-                    console.log('current user id', currentUser?._id);
                     const result = await getConversation(currentUser?._id)
-                    console.log('cnvrstn--->', result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -121,7 +117,6 @@ const DocMessage = () => {
         const Messages = async () => {
             const res = await getMessages(currentChat?._id)
             setMessages(res)
-            console.log('messages--', res);
         }
         Messages()
     }, [currentChat?._id])
@@ -142,10 +137,8 @@ const DocMessage = () => {
 
     // add emoji 
     const addEmoji = (emojiObject) => {
-        console.log('choose emoji----', emojiObject.native);
         setEmoji(emojiObject.native);
         setText(text + emojiObject.native);
-
         setShowSendButton(true)
 
     };
@@ -159,34 +152,37 @@ const DocMessage = () => {
     const sendMessage = async (e) => {
         e.preventDefault()
 
+        if(text===''&& emoji===null || text.trim()===''){
+            console.log('empty   chat---',text);
+            return;
+        }
+
         const receiverId = currentChat?.members.find((member) => member !== currentUser._id)
         socket.current.emit("sendMessage", {
             senderId: currentUser._id,
             receiverId,
-            text: text + (emoji ? emoji : '')
+            text
         })
         try {
             const conversationId = conversation.find(item => item._id)?._id;
-            console.log('cnvrstn id=', conversationId, 'sndr-', currentUser?._id, 'text--', text);
 
             const result = await send(conversationId, currentUser?._id, text)
-            console.log('result ---', result);
             setMessages(prevMessages => [...prevMessages, result])
             setText('')
+            setEmoji(null)
             setShowEmoji(false)
             setShowSendButton(false)
         } catch (error) {
             console.log(error.message);
         }
     }
-    console.log('messages---->', messages);
     return (
         <>
             <Nav />
-            <div className='messenger bg-white p-10 '>
+            <div className='messenger bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 p-10 gap-4 '>
 
                 <div className="chatMenu ">
-                    <div className="chatMenuWrapper">
+                    <div className="chatMenuWrapper bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
                         <input placeholder='search' className='chatMenuInput' />
                         {conversation?.map((c) => (
                             <div key={c?._id} onClick={() => { setCurrentChat(c) }}>
@@ -199,8 +195,8 @@ const DocMessage = () => {
                 </div>
 
 
-                <div className="chatBox ">
-                    <div className="chatBoxWrapper">
+                <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
+                    <div className="chatBoxWrapper  bg-">
                         {showEmoji &&
                             <div className='emojiPickerContainer'>
                                 <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class' data={data} onEmojiSelect={addEmoji} />
@@ -230,7 +226,7 @@ const DocMessage = () => {
 
 
                 <div className="chatOnline">
-                    <div className="chatOnlineWrapper">
+                    <div className="chatOnlineWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
                         <DocChatOnline 
                          onlineUsers={onlineUsers} 
                          currentId={currentUser?._id}

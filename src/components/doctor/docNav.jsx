@@ -58,7 +58,7 @@ const DocNav = () => {
         <>
             {
                 loading ? (
-                    <div className="fixed inset-0  flex items-center justify-center   bg-yellow-100   ">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center   bg-yellow-100   ">
                         <div className=" p-5 flex-row items-center justify-center   ">
                         <l-quantum
                             size="80"

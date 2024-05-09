@@ -7,9 +7,6 @@ const SideBar = () => {
     return (
         <>
 
-            {/* component */}
-            {/* <div className=" md:w-auto  bg-white "> */}
-            {/* <div className=" w-full  flex flex-col flex-auto shadow-md shadow-gray-800 antialiased rounded-md p-2 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 text-gray-900"> */}
             <div className="flex flex-col top-0 left-0 w-3/4 bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black">
                 <div className="flex items-center justify-center  h-14 border-b">
                     <div>Doctor Interface</div>
@@ -76,7 +73,7 @@ const SideBar = () => {
                         </Link>
 
 
-                        <li>
+                        {/* <li>
                             <a
                                 href="#"
                                 className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
@@ -102,9 +99,9 @@ const SideBar = () => {
                                 </span>
 
                             </a>
-                        </li>
+                        </li> */}
 
-                        <li>
+                        {/* <li>
                             <a
                                 href="#"
                                 className=" flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-900 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
@@ -129,7 +126,7 @@ const SideBar = () => {
                                     Appointments
                                 </span>
                             </a>
-                        </li>
+                        </li> */}
 
                         <Link to='/doctor/slot'>
                             <li>
@@ -252,11 +249,6 @@ const SideBar = () => {
                     </ul>
                 </div>
             </div>
-            {/* </div> */}
-            {/* </div> */}
-
-
-
 
 
         </>
