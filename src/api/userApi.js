@@ -111,6 +111,16 @@ export const changePassword =async(id,password)=>{
     }
 }
 
+// upload profile picture 
+export const profileImageUpload =async(image)=>{
+    try {
+        console.log('image to upload--',image);
+        const result = await axiosApi.post(userRoutes.uploadProfileImage,image)
+    } catch (error) {
+        console.log('up---',error.message);
+    }
+}
+
 
 // get treatments for online booking
 export const getTreatments = async () => {

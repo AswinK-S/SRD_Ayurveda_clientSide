@@ -33,8 +33,9 @@ const UserProfile = () => {
                             <div className="text-center mb-4">
                                 <h2 className="text-2xl font-bold text-teal-500">{userData.name}</h2>
                                 <p className="text-gray-600">{userData.email}</p>
+                               <Link to='/editProfile'> <a className='text-sm underline text-blue-900'>Edit Profile</a></Link>
                             </div>
-
+                            
 
                             <div className='flex gap-2 justify-center'>
                                 <button

@@ -65,7 +65,6 @@ const FileSec = () => {
 
     //document image change
     const handleFileChange = (e) => {
-
         const document = e.target.files[0]
         if (document) {
             setFileUpload(document)
@@ -158,7 +157,6 @@ const FileSec = () => {
                 //call the function to make api call
                 res(formData)
             }
-
         } else {
             console.error('No image selected or selected file is not an image');
         }
@@ -218,8 +216,6 @@ const FileSec = () => {
                                             Upload image
                                         </button>
                                     )}
-
-
 
                                 </div>
                             </div>

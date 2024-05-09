@@ -19,7 +19,8 @@ const userRoutes = {
     bookedDoctors:'/user/doctors',
     getUsers:'/user/getUsers',
     cancelBooking:'/user/canceBooking',
-    changePassword:'/user/changePassword'
+    changePassword:'/user/changePassword',
+    uploadProfileImage:'/user/proImageUpload'
 
 }
 

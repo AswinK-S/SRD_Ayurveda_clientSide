@@ -39,6 +39,7 @@ import ForgotPassword from './pages/user/login/ForgotPassword'
 import NwPsswrd from './pages/user/login/NwPsswrd'
 import DocMessage from './pages/doctor/DocMessage'
 import Patients from './pages/doctor/Patients'
+import EditProfile from './pages/user/profile/EditProfile'
 
 
 
@@ -66,7 +67,7 @@ function App() {
           <Route path='/success' element={<BookingSuccess />} />
           <Route path='/cancel' element={<BookingCancel />} />
           <Route path='/userProfile' element={ <UserProtectedRoute allowedRole='user'> <UserProfile/> </UserProtectedRoute>  }/>
-
+          <Route path='/editProfile' element={<UserProtectedRoute allowedRole='user'> <EditProfile/> </UserProtectedRoute>} />
 
           {/* admin */}
           <Route path="/admin" element={<AdminLogin />} />

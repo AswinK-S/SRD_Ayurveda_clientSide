@@ -20,9 +20,9 @@ const SignUp = () => {
     const [showOtpInput, setShowOtpInput] = useState(false)
     const [otpValue, setOtpValue] = useState('')
     const [otpError, setOtpError] = useState('')
-    const [resendOtpTimer,setResendOtpTimer] = useState(false)
+    const [resendOtpTimer, setResendOtpTimer] = useState(false)
 
-    const [gSignUpError,setGsignUpError] = useState('')
+    const [gSignUpError, setGsignUpError] = useState('')
 
     const [timer, setTimer] = useState(60); // Timer value in seconds
     const [timerId] = useState(null);
@@ -47,7 +47,7 @@ const SignUp = () => {
         return () => {
             clearInterval(id); // Clear the timer when the component unmounts or OTP input is hidden
         };
-    }, [showOtpInput, timer, timerId,resendOtpTimer]);
+    }, [showOtpInput, timer, timerId, resendOtpTimer]);
 
 
 
@@ -87,7 +87,7 @@ const SignUp = () => {
         setShowPassword(!showPassword)
     }
 
-    const   handleChange = (e) => {
+    const handleChange = (e) => {
 
         const { name, value } = e.target;
         setGsignUpError('')
@@ -153,11 +153,11 @@ const SignUp = () => {
 
                 setOtpError('')
                 if (otpValue) {
-                    const res = await registerUser(otpValue,formData.email)
+                    const res = await registerUser(otpValue, formData.email)
                     console.log('res--->', res);
 
-                    if(res ==='Wrong verification code'){
-                        setOtpError('Wrong verification code') 
+                    if (res === 'Wrong verification code') {
+                        setOtpError('Wrong verification code')
                         return
                     }
                     if (res.status === 200) {
@@ -188,48 +188,48 @@ const SignUp = () => {
     };
 
     //resend otp
-    const handleResendOtp =async()=>{
+    const handleResendOtp = async () => {
         try {
             console.log('rsnd otp clkd');
             const result = await resendOtp(formData)
-            console.log('result --in sgnUp',result);
-            if(result){
+            console.log('result --in sgnUp', result);
+            if (result) {
                 setResendOtpTimer(true)
                 setTimer(60);
 
             }
         } catch (error) {
-          console.log(error.message);  
+            console.log(error.message);
         }
     }
 
     //google auth
 
-    const sendDataToBackend = async(decode)=>{
+    const sendDataToBackend = async (decode) => {
         try {
 
-            const userDetail ={
-                email:decode?.email,
-                name:decode?.name,
-                mob:1234567892,
+            const userDetail = {
+                email: decode?.email,
+                name: decode?.name,
+                mob: 1234567892,
 
             }
             const result = await googleAuth(userDetail)
-            console.log('rslt-->',result);
-            if(result.message ==='user already exist in this email'){
+            console.log('rslt-->', result);
+            if (result.message === 'user already exist in this email') {
                 setGsignUpError('user already exist in this email')
-                return 
+                return
             }
-            if(result.message ==='user registered'){
-                if(result?.token){
-                    console.log('token',result.token);
-                    const tokn =  result.token;
-                    localStorage.setItem('usertoken',tokn)
+            if (result.message === 'user registered') {
+                if (result?.token) {
+                    console.log('token', result.token);
+                    const tokn = result.token;
+                    localStorage.setItem('usertoken', tokn)
                     const decode = jwtDecode(tokn)
-                    if(decode?.role==='user'){
+                    if (decode?.role === 'user') {
                         dispatch(loginSuccess(result.userId))
 
-                        console.log('role',decode.role);
+                        console.log('role', decode.role);
                         navigate('/')
 
                     }
@@ -271,7 +271,7 @@ const SignUp = () => {
                         {showOtpInput ? "Submit OTP" : "Sign Up"}
                     </h1>
 
-                   
+
 
                     <form className=" bg-transparent mt-6" onSubmit={handleSubmit} >
 
@@ -394,37 +394,32 @@ const SignUp = () => {
                         )}
 
                         <div className="mt-6 bg-transparent flex justify-center gap-5">
-                           
+
 
                             <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold text-black border rounded-md "
                             >
                                 {showOtpInput ? "Enter OTP" : "Sign Up"}
                             </button>
-                            <GoogleLogin  
+                            <GoogleLogin
                                 onSuccess={credentialResponse => {
                                     const decode = jwtDecode(credentialResponse?.credential);
-                                    console.log(decode,'---oath');
+                                    console.log(decode, '---oath');
                                     sendDataToBackend(decode)
-                                   
+
                                 }}
                                 onError={() => {
                                     console.log('Login Failed');
                                 }}
-                                 onClick={()=>{setGsignUpError('')}}
+                                onClick={() => { setGsignUpError('') }}
                             />
 
                         </div>
                         <div className="flex justify-center p-2">
-                        {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
-                        {gSignUpError && <p className="text-sm text-red-600">{gSignUpError}</p>}
+                            {submissionError && <p className="text-red-500 text-sm mb-2">{submissionError}</p>}
+                            {gSignUpError && <p className="text-sm text-red-600">{gSignUpError}</p>}
                         </div>
                     </form>
-                    <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-                    </div>
-
-                    <div className="flex  mt-4 gap-x-2">
-
-                    </div>
+                   
                     <p className="mt-8 text-sm bg-transparent font-normal text-center text-gray-700">
                         {" "}
                         have an account?{" "}
