@@ -20,7 +20,8 @@ const userRoutes = {
     getUsers:'/user/getUsers',
     cancelBooking:'/user/canceBooking',
     changePassword:'/user/changePassword',
-    uploadProfileImage:'/user/proImageUpload'
+    uploadProfileImage:'/user/proImageUpload',
+    updateProfile:'/user/updateProfile'
 
 }
 

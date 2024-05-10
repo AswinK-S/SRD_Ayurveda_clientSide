@@ -23,12 +23,19 @@ const UserProfile = () => {
                 <div className="max-w-lg mx-auto p-8 bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 rounded-lg shadow-lg m-10">
                     {userData ? (
                         <div>
-                          
+                          {userData?.image?(
+                            <img
+                                className="rounded-full h-24 w-24 mx-auto mb-4"
+                                src={userData?.image}
+                                alt={userData.name}
+                            />):(
                             <img
                                 className="rounded-full h-24 w-24 mx-auto mb-4"
                                 src={`https://avatars.dicebear.com/api/avataaars/${userData.name}.svg`}
                                 alt={userData.name}
-                            />
+                            />)
+                            }
+                            
 
                             <div className="text-center mb-4">
                                 <h2 className="text-2xl font-bold text-teal-500">{userData.name}</h2>

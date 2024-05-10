@@ -63,20 +63,16 @@ const Login = () => {
         try {
             const formData = { email, password }
             const response = await login(formData)
-            console.log('response===>', response);
             // invalid credentials
 
             if (response === 'Invalid credentials') {
-                console.log('000');
                 setError('invalid email id or password')
-                console.log('err--->', error);
                 return
             }
 
             if (response?.status == 200) {
                 dispatch(loginSuccess(response.data.user))
                 localStorage.setItem('usertoken', response.data.token)
-                // localStorage.setItem('userDetails',JSON.stringify(response.data.user))
                 navigate('/')
             } else {
                 console.log('invalid-- ', response);

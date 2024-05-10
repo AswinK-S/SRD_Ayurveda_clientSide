@@ -114,10 +114,20 @@ export const changePassword =async(id,password)=>{
 // upload profile picture 
 export const profileImageUpload =async(image)=>{
     try {
-        console.log('image to upload--',image);
         const result = await axiosApi.post(userRoutes.uploadProfileImage,image)
+        return result?.data
     } catch (error) {
-        console.log('up---',error.message);
+        console.log(error.message);
+    }
+}
+
+//update userProfile
+export const updateUserData = async(formData)=>{
+    try {
+        const result = await axiosApi.patch(userRoutes.updateProfile,formData)
+        return result?.data
+    } catch (error) {
+        console.log(error.message);
     }
 }
 

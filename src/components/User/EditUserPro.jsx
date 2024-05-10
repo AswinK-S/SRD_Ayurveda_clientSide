@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { profileImageUpload } from "../../api/userApi";
+import { useDispatch, useSelector } from "react-redux";
+import { profileImageUpload, updateUserData } from "../../api/userApi";
+import { toast } from "react-toastify";
+import { loginSuccess } from "../../featuers/user/userSlice";
 
 const EditUserPro = () => {
 
     const [uploading, setUploading] = useState('')
     const [profileImage, setProfileImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null)
+    const dispatch = useDispatch()
 
-    const user = useSelector((state)=>state.user.user)
+    const user = useSelector((state) => state.user.user)
     //formData 
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        mob: '',
+        name: user?.name,
+        email: user?.email,
+        mob: user?.mob,
+        id: user?._id
 
     })
 
@@ -20,11 +25,13 @@ const EditUserPro = () => {
     //image uploading state change
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        console.log('profile image--->', file)
         if (file) {
             setProfileImage(file)
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedImage(imageUrl);
         } else {
             setProfileImage(null)
+            setSelectedImage(null)
         }
     };
 
@@ -33,18 +40,22 @@ const EditUserPro = () => {
         e.preventDefault()
         setUploading('uploading')
 
-        const imageUpload=async( image)=>{
+        const imageUpload = async (image) => {
             const result = await profileImageUpload(image)
+            if (result) {
+                setUploading('Uploaded')
+                toast.success('Profile image updated')
+                dispatch(loginSuccess(result))
+            }
         }
 
-        if(profileImage){
+        if (profileImage) {
             const formData = new FormData();
             formData.append('image', profileImage);
-            formData.append('id',user?._id)
+            formData.append('id', user?._id)
             imageUpload(formData)
         }
 
-        
     }
 
     //input field errors
@@ -86,12 +97,18 @@ const EditUserPro = () => {
             newErrors.mob = 'Mobile number should have exactly 10 digits';
         }
 
-        console.log('errors--', Object.keys(newErrors).length);
         if (Object.keys(newErrors).length > 0) {
-            // Update errors state with new error messages
             setErrors(newErrors);
-            return; // Exit early if there are errors
+            return;
         }
+
+        const result = await updateUserData(formData)
+        if(result){
+            toast.success('Profile Updated')
+            dispatch(loginSuccess(result))
+
+        }
+
     }
 
 
@@ -117,9 +134,13 @@ const EditUserPro = () => {
                                 htmlFor="image"
                                 className="relative flex min-h-[50px] items-center justify-center rounded-md border border-dashed border-[#515050] p-2 text-center"
                             >
-                                <span className="inline-flex rounded px-4 border border-[#1e1d1d]  text-base font-medium text-[#07074D]">
-                                    Browse
-                                </span>
+                                {selectedImage ? (
+                                    <img src={selectedImage} alt="Selected" className="w-20 h-20 object-cover rounded-full" />
+                                ) : (
+                                    <span className="inline-flex rounded px-4 border border-[#1e1d1d] text-base font-medium text-[#07074D]">
+                                        Browse
+                                    </span>
+                                )}
                             </label>
                         </div>
                         <div className=" mt-2  flex justify-center">
@@ -150,7 +171,9 @@ const EditUserPro = () => {
                             <div className="flex  flex-col  items-start mt-2 mb-2">
                                 <label className="text-sm text-gray-600">Email</label>
                                 <input type="email" placeholder="Enter email" name='email' onChange={handleChange}
-                                    className="w-full  p-2 border rounded-md" />
+                                    className="w-full  p-2 border rounded-md"
+                                    value={formData?.email}
+                                    disabled />
                                 {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
                             </div>
@@ -158,7 +181,8 @@ const EditUserPro = () => {
                             <div className="flex  flex-col  items-start mt-2 mb-2">
                                 <label className="text-sm text-gray-600">Full Name</label>
                                 <input type="text" placeholder="Enter full name" name='name' onChange={handleChange}
-                                    className="w-full  p-2 border rounded-md" />
+                                    className="w-full  p-2 border rounded-md"
+                                    value={formData?.name} />
                                 {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
 
                             </div>
@@ -166,7 +190,8 @@ const EditUserPro = () => {
                             <div className="flex  flex-col  items-start mt-2 mb-2">
                                 <label className="text-sm text-gray-600">Mobile</label>
                                 <input type="number" placeholder="Enter valid mobile" name='mob' onChange={handleChange}
-                                    className="w-full  p-2 border rounded-md" />
+                                    className="w-full  p-2 border rounded-md"
+                                    value={formData?.mob} />
                                 {errors.mob && <p className="text-red-500 text-sm mb-2">{errors.mob}</p>}
 
                             </div>
