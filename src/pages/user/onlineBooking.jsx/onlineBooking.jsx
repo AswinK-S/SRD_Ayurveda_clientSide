@@ -103,9 +103,8 @@ const OnlineBooking = () => {
     //cancel booking
     const handleCancel = async (id, amount) => {
         try {
-            console.log('bookngid------>', id);
             const result = await cancelBooking(id, amount)
-            if(result)toast.success('Refund success')
+            if (result) toast.success('Refund success')
         } catch (error) {
             console.log(error.message);
         }
@@ -157,104 +156,112 @@ const OnlineBooking = () => {
             <div className="mb-4  p-3 flex flex-col   items-center ">
                 <div
                     id="parentScrollDiv"
-                    className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px] overflow-auto">
-                    {bookinsData?.length ? (
+                    className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px]
+                     overflow-auto flex align-middle  ">
+                    
+                        {filteredData?.length ? (
+                            <div className="p-2 ">
+                            <InfiniteScroll
+                                dataLength={filteredData?.length}
+                                next={loadMoreBookings}
+                                hasMore={hasMore}
+                                // loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
+                                //     <div className=" p-5 flex-row items-center justify-center   ">
+                                //         <l-quantum
+                                //             size="80"
+                                //             speed="1"
+                                //             color="green"
+                                //         ></l-quantum>
+                                //         <p className="text-light-green-800">loading...</p>
+                                //     </div>
+                                // </div>}
+                                endMessage={<p className="text-center">No more bookings to load.</p>}
+                                scrollableTarget="parentScrollDiv"
+                            >
+                                <div id="bookingHistoryDiv" className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    {filteredData?.map((booking, index) => (
+                                        <div
+                                            key={index}
 
-                        <InfiniteScroll
-                            dataLength={bookinsData?.length}
-                            next={loadMoreBookings}
-                            hasMore={hasMore}
-                            // loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
-                            //     <div className=" p-5 flex-row items-center justify-center   ">
-                            //         <l-quantum
-                            //             size="80"
-                            //             speed="1"
-                            //             color="green"
-                            //         ></l-quantum>
-                            //         <p className="text-light-green-800">loading...</p>
-                            //     </div>
-                            // </div>}
-                            endMessage={<p className="text-center">No more bookings to load.</p>}
-                            scrollableTarget="parentScrollDiv"
-                        >
-                            <div id="bookingHistoryDiv" className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                {filteredData?.map((booking, index) => (
-                                    <div
-                                        key={index}
+                                            className="max-w-sm py-3 overflow-hidden rounded-lg shadow-lg  bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300  "
+                                        >
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm">Doctor Name : </div>
+                                                <h1 className="text-gray-700 text-base font-bold"> {booking.doctorName}</h1>
+                                            </div>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm  ">Treatment :</div>
+                                                <p className="text-gray-700 text-base font-bold "> {booking.treatmentName}</p>
+                                            </div>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm ">Sub-Treatment :</div>
+                                                <p className="text-gray-700 text-base font-bold">{booking.subTreatmentName}</p>
+                                            </div>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm ">Consulting Date:</div>
+                                                <p className="text-red-700 text-base font-bold">
+                                                    {new Date(booking?.consultationDate).toLocaleDateString()}
+                                                </p>
+                                            </div>
 
-                                        className="max-w-sm py-3 overflow-hidden rounded-lg shadow-lg  bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300  "
-                                    >
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm">Doctor Name : </div>
-                                            <h1 className="text-gray-700 text-base font-bold"> {booking.doctorName}</h1>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm ">Booking Date:</div>
+                                                <p className="text-blue-700 text-base font-bold">
+                                                    {new Date(booking?.bookingDate).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm ">Status:</div>
+                                                {
+                                                    booking?.status === 'Pending' ? (
+                                                        <p className="text-orange-700 text-base font-bold">{booking?.status}</p>
+                                                    ) : booking?.status === 'Cancelled' ? (
+                                                        <p className="text-red-700 text-base font-bold">{booking?.status}</p>
+                                                    ) : booking?.status === 'Consulted' ? (
+                                                        <p className="text-green-700 text-base font-bold">{booking?.status}</p>
+                                                    ) : (
+                                                        <p className="text-gray-700 text-base font-bold">{booking?.status}</p>
+                                                    )
+                                                }
+
+                                            </div>
+                                            <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <div className="font-bold text-sm ">Amount :</div>
+                                                <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
+                                            </div>
+
+                                            <div className="flex justify-center p-2">
+                                                <button
+                                                    onClick={() => {
+                                                        if (!isWithin24Hours(booking?.consultationDate)) {
+                                                            handleCancel(booking?.chargeId, booking?.amount);
+                                                        } else {
+                                                            toast.error("Cancel is possible only before 12 hours");
+                                                        }
+                                                    }}
+                                                    disabled={isWithin24Hours(booking?.consultationDate) || booking?.status === 'Cancelled'}
+                                                    className={`bg-light-blue-700 px-3 shadow-sm shadow-black rounded-md text-white ${isWithin24Hours(booking?.consultationDate) || booking?.status === 'Cancelled' || booking?.status === 'Consulted' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                >
+                                                    cancel
+                                                </button>
+                                            </div>
+
+
                                         </div>
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm  ">Treatment :</div>
-                                            <p className="text-gray-700 text-base font-bold "> {booking.treatmentName}</p>
-                                        </div>
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm ">Sub-Treatment :</div>
-                                            <p className="text-gray-700 text-base font-bold">{booking.subTreatmentName}</p>
-                                        </div>
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm ">Consulting Date:</div>
-                                            <p className="text-red-700 text-base font-bold">
-                                                {new Date(booking?.consultationDate).toLocaleDateString()}
-                                            </p>
-                                        </div>
+                                    ))}
+                                </div>
 
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm ">Booking Date:</div>
-                                            <p className="text-blue-700 text-base font-bold">
-                                                {new Date(booking?.bookingDate).toLocaleDateString()}
-                                            </p>
-                                        </div>
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm ">Status:</div>
-                                            {
-                                                booking?.status === 'Pending' ? (
-                                                    <p className="text-orange-700 text-base font-bold">{booking?.status}</p>
-                                                ) : booking?.status === 'Cancelled' ? (
-                                                    <p className="text-red-700 text-base font-bold">{booking?.status}</p>
-                                                ) : booking?.status === 'Consulted' ? (
-                                                    <p className="text-green-700 text-base font-bold">{booking?.status}</p>
-                                                ) : (
-                                                    <p className="text-gray-700 text-base font-bold">{booking?.status}</p>
-                                                )
-                                            }
-
-                                        </div>
-                                        <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                            <div className="font-bold text-sm ">Amount :</div>
-                                            <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
-                                        </div>
-
-                                        <div className="flex justify-center p-2">
-                                            <button
-                                                onClick={() => {
-                                                    if (!isWithin24Hours(booking?.consultationDate)) {
-                                                        handleCancel(booking?.chargeId, booking?.amount);
-                                                    } else {
-                                                        toast.error("Cancel is possible only before 12 hours");
-                                                    }
-                                                }}
-                                                disabled={isWithin24Hours(booking?.consultationDate) || booking?.status==='Cancelled'}
-                                                className={`bg-light-blue-700 px-3 shadow-sm shadow-black rounded-md text-white ${isWithin24Hours(booking?.consultationDate) || booking?.status==='Cancelled' ||booking?.status==='Consulted' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                            >
-                                                cancel
-                                            </button>
-                                        </div>
+                            </InfiniteScroll>
+                    </div>
 
 
-                                    </div>
-                                ))}
-                            </div>
-
-                        </InfiniteScroll>
-
-                    ) : (
-                        <><PageNotFound /></>
-                    )}
+                        ) : (
+                            <>
+                                <div className=" h-fit rounded-md shadow-md shadow-gray-500 overflow-x-hidden">
+                                    < PageNotFound />
+                                </div>
+                            </>
+                        )}
 
                 </div>
             </div>
