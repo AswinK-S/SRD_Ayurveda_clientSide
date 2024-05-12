@@ -104,7 +104,6 @@ export const updatePassword = async(newPassword,email)=>{
 export const changePassword =async(id,password)=>{
     try {
         const result = await axiosApi.patch(`${userRoutes.changePassword}?id=${id}&password=${password}`)
-        console.log('result-->',result.data);
         return result?.data
     } catch (error) {
         console.log(error.message);
@@ -173,6 +172,7 @@ export const bookingDetail = async (docId, treatmentId, subTreatmentId) => {
         }
         const params = new URLSearchParams(booking).toString()
         const result = await axiosApi.get(`${userRoutes.getBkngDtails}?${params}`)
+        console.log('booking details-----dddd',result?.data);
         return result.data
     } catch (error) {
         console.log(error.message);

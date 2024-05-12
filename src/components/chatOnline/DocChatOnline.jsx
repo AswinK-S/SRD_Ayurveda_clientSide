@@ -26,16 +26,12 @@ const DocChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
     //get the conversation of each doctor
     const handleClick = async(onLineUser)=>{
         try {
-            console.log('online user--',onLineUser);
             const result = await getConversations(currentId,onLineUser?._id)
-            console.log('result---in chatOnline',result);
-
             setCurrentChat(result[0])
         } catch (error) {
             console.log(error.message);
         }
     }
-    console.log('live users--',onlineUsers)
     
     return (
         <>

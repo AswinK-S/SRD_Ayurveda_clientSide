@@ -12,12 +12,14 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
     const [bkngDetail, setbkngDetail] = useState({})
     const user = useSelector((state)=>state.user.user)
 
-
+    console.log('bookingData in BookSlotModal-->',bookingData);
     useEffect(() => {
         const fetchData = async () => {
             const result = await bookingDetail(bookingData?.doctorId, bookingData?.treatmentId, bookingData?.subTreatmentId)
             console.log('result----bb', result);
             result.email = user.email
+            result.consultingDate=bookingData?.consultingDate
+            result.userId =bookingData?.user_Id
             setbkngDetail(result)
             dispatch(bookingDatas(result))
         }
@@ -28,7 +30,7 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
 
 
     const handleBooking = async()=>{
-        const updatedBkngDetail = {...bkngDetail, consultingDate: bookingData.consultingDate };
+        const updatedBkngDetail = {...bkngDetail, consultingDate: bookingData?.consultingDate };
 
             await loadStripe('pk_test_51P2yGBSGV6hrQc7cK3KHLXeHHyd9h645uNtMyMIfJoP8QH7Lz6PR1GD5BxLoZarWVNYlKXDiwXp3QqihCB0QOjdW00Kjf8FBNx')
             const result = await payment(updatedBkngDetail)

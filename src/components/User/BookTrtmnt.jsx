@@ -34,11 +34,11 @@ const BookTrtmnt = () => {
         patientName:'',
         treatmentId:'',
         subTreatmentId:'',
-        consultingDate:''
+        consultingDate:'',
+        user_Id:''
     })
    
     const selectedDoctorSlot = (id) => {
-        console.log('doc id----->', id);
 
         setBookingData(PrevData=>({
             ...PrevData,
@@ -47,7 +47,6 @@ const BookTrtmnt = () => {
 
         const doc = doctorsForTrtmnt.filter((item) => { return item.doctor._id === id })
         const slot = doc.map((item) => item.slots)
-        console.log('sel---d------', slot)
         setSlotsForTretment(slot)
     }
 
@@ -55,7 +54,6 @@ const BookTrtmnt = () => {
 
     const handleTreatmentChange = (e) => {
         const selectedTreatment = treatments.find(item => item._id === e.target.value)
-        console.log('treatment id-->',selectedTreatment);
 
         setBookingData(PrevData=>({
             ...PrevData,
@@ -67,7 +65,6 @@ const BookTrtmnt = () => {
     }
 
     const handleSubTreatmentChange = (e) => {
-        console.log('selected sbtt---->', e.target.value);
         const sbTrtmntId = e.target.value
         setBookingData(PrevData =>({
             ...PrevData,
@@ -80,24 +77,16 @@ const BookTrtmnt = () => {
 
     const handleDate = (e) => {
         if (!selectedSubTreatment) {
-            console.log('select doctors');
             // setDateError('first select treatment and subTreatment')
             return
         }
-        console.log('date', e.target.value);
         const dateForTrtmt = e.target.value
         setDate(e.target.value)
 
         const getDoctors = async (sbTrtmntId, date) => {
-            console.log('sbtrt-------->', sbTrtmntId, 'date------>', date);
             try {
                 const slotData = { sbTrtmntId, date }
-                const result = await doctor(slotData)
-                console.log('dctr for trtmnt---', result?.data?.doctor);
-                const doc = result?.data?.doctor
-                doc.map((item) => {
-                    console.log('ddddd-----', item);
-                })
+                const result = await doctor(slotData)             
                 setDoctorsForTrtmnt(result?.data?.doctor)
             } catch (error) {
                 console.error('Error fetching doctors:', error);
@@ -113,9 +102,7 @@ const BookTrtmnt = () => {
 
             try {
                 const result = await getTreatments()
-                console.log('trtmnts--', result.data.filter((item) => item.status));
                 const available_treatment = result.data.filter((item) => item.status)
-                console.log('avlble trtmnt --', available_treatment);
                 setTreatments(available_treatment)
             } catch (error) {
                 console.log('err in fetching treatmnt', error.message);
@@ -128,7 +115,6 @@ const BookTrtmnt = () => {
     }, [])
 
 
-    console.log('selected trtmnt', selectedTreatment);
 
     const modalConfirmation = (count) => {
         console.log('user---',userId,'count--->',count);
@@ -140,7 +126,8 @@ const BookTrtmnt = () => {
         setBookingData(PrevData =>({
             ...PrevData,
         patientName:userId?.name,
-        consultingDate:date
+        consultingDate:date,
+        user_Id:userId?._id
         }))
         setShowModal(true)
         

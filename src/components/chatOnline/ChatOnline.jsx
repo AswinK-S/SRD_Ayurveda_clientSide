@@ -11,13 +11,10 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
     //to find doctors from booking using userEmail
     const userData = useSelector((state) => state.user.user)
-    // console.log('userData---->', userData);
 
     //get doctors for chat
     useEffect(() => {
         const fetch = async () => {
-            // console.log('sending email to get doctors--', userData?.email);
-
             const result = await getDoctors(userData?.email)
             setUsers(result)
 
@@ -31,15 +28,10 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
     }, [users, onlineUsers])
 
 
-    // console.log('doctors---', users)
-    // console.log('online users---', onlineUsers)
-    // console.log('live users---', liveUsers)
-
     //get the conversation of each doctor
     const handleClick = async(onLineUser)=>{
         try {
             const result = await getConversations(currentId,onLineUser?._id)
-            // console.log('result---in chatOnline',result);
             setCurrentChat(result[0])
         } catch (error) {
             console.log(error.message);

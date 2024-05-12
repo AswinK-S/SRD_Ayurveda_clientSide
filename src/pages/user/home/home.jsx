@@ -10,16 +10,16 @@ const Home = () => {
         <>
             <div className="" >
                 <div className="sticky top-0  flex justify-center ">
-                    <Nav />
+                    <Nav/>
                 </div>
 
                 <div className="">
                     <img className="w-full object-fill   " src='/inner-bg.jpg' alt='' />
                 </div>
                 <div className=" flex items-center justify-center ">
-                    <Body />
+                    <Body/>
                 </div>
-                <Footer />
+                <Footer/>
             </div>
 
         </>

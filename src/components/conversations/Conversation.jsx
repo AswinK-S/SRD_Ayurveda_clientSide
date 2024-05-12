@@ -7,15 +7,13 @@ const Conversation = ({ conversation, currentUser }) => {
 
   const [messenger, setMessenger] = useState(null)
 
-  console.log('frn Conversation');
   useEffect(() => {
-    const messengerId = conversation?.members.find((m) => m !== currentUser?._id)
-    console.log('msngr Id -->', messengerId);
+    // const messengerId = conversation?.members.find((m) => m !== currentUser?._id)
+    const messengerId = conversation?._id
 
     const getMessenger = async () => {
       try {
         const result = await getdoctor(messengerId)
-        console.log('msngr dtls-->', result?.data);
         setMessenger(result?.data)
       } catch (error) {
         console.log(error.message);
@@ -25,8 +23,7 @@ const Conversation = ({ conversation, currentUser }) => {
     getMessenger()
   }, [conversation, currentUser])
 
-  console.log('crnt usr frm Cnvrstn pg-->', currentUser);
-  console.log('cnvrstn frm  Cnvrstn pg-->', conversation);
+ 
 
   return (
     <>

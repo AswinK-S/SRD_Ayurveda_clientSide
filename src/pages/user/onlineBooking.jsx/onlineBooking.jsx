@@ -27,7 +27,6 @@ const OnlineBooking = () => {
         try {
             // Make an API call to fetch bookings data from backend
             const response = await bookings(user.email, pageNumber, pageSize);
-            console.log('response from backend-->', response);
             if (pageNumber === 1) {
                 setBookingsData(response);
             } else {
@@ -138,7 +137,6 @@ const OnlineBooking = () => {
                     <div className="flex  items-center  border border-lime-200 shadow-sm   shadow-black rounded">
                         <span className="font-bold text-sm px-2 text-gray-500">Amount:</span>
                         <select
-                            // value={selectedFilter}
                             onChange={handleFilterChange}
                             className=" py-2 "
                         >
@@ -157,24 +155,15 @@ const OnlineBooking = () => {
                 <div
                     id="parentScrollDiv"
                     className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px]
-                     overflow-auto flex align-middle  ">
-                    
-                        {filteredData?.length ? (
-                            <div className="p-2 ">
+                     overflow-auto   ">
+
+                    {filteredData?.length ? (
+                        <div className="p-2 flex flex-col items-center ">
                             <InfiniteScroll
                                 dataLength={filteredData?.length}
                                 next={loadMoreBookings}
                                 hasMore={hasMore}
-                                // loader={<div className=" inset-0 flex items-center justify-center   bg-yellow-100   ">
-                                //     <div className=" p-5 flex-row items-center justify-center   ">
-                                //         <l-quantum
-                                //             size="80"
-                                //             speed="1"
-                                //             color="green"
-                                //         ></l-quantum>
-                                //         <p className="text-light-green-800">loading...</p>
-                                //     </div>
-                                // </div>}
+
                                 endMessage={<p className="text-center">No more bookings to load.</p>}
                                 scrollableTarget="parentScrollDiv"
                             >
@@ -252,32 +241,19 @@ const OnlineBooking = () => {
                                 </div>
 
                             </InfiniteScroll>
-                    </div>
+                        </div>
 
 
-                        ) : (
-                            <>
-                                <div className=" h-fit rounded-md shadow-md shadow-gray-500 overflow-x-hidden">
-                                    < PageNotFound />
-                                </div>
-                            </>
-                        )}
+                    ) : (
+                        <>
+                            <div className="h-full items-center flex justify-center">
+                                < PageNotFound />
+                            </div>
+                        </>
+                    )}
 
                 </div>
             </div>
-
-            {/* {
-                loading && <div className="h-screen inset-0 flex items-center justify-center   bg-yellow-100   ">
-                    <div className=" p-5 flex-row items-center justify-center   ">
-                        <l-quantum
-                            size="80"
-                            speed="1.25"
-                            color="green"
-                        ></l-quantum>
-                        <p className="text-light-green-800">loading...</p>
-                    </div>
-                </div>
-            } */}
             <Footer />
         </>
 

@@ -1,25 +1,46 @@
 .messenger{
-    height:calc(100vh - 115px);
+    height:calc(100vh - 150px);
+    width: 80%;
     display:flex;
+    justify-content: center;
 }
 
 .chatMenu{
-    flex: 3.5;
+    flex: 3;
 }
 .chatMenuInput{
-    width: 90%;
-    padding: 10px 0;
+    width: 100%;
+    padding: 10px;
     border:none;
     border-bottom: 1px solid gray;
+    margin-top: 5px;
+    border-radius: 5px;
+
+   }
+
+.chatlist{
+    padding:10px;
+    display:flex;
+    justify-content: center;
+    background-color: rgb(18, 157, 157);
+    color:white;
+    margin-bottom:5px;
+    border-radius: 5px;
 }
 
 .chatBox{
-    flex: 5.5;
-    /* background-color: rgb(237, 237, 165); */
+    flex: 5;
     border-radius: 10px;
-    padding: 10px;
+    padding: 20px;
 
 
+}
+.chatBoxIdentifier{
+    background-color: rgb(18, 157, 157);
+    padding:5px;
+    display:flex;
+    justify-content:center;
+    border-radius:5px;
 }
 
 .emojiPickerContainer {
@@ -76,6 +97,14 @@
 
 .chatOnline{
     flex: 3;
+}
+.online{
+    padding:10px;
+    display:flex;
+    justify-content: center;
+    background-color:rgb(18, 157, 157);
+    border-radius: 5px;
+    color:white
 }
 
 .chatMenuWrapper,.chatBoxWrapper,.chatOnlineWrapper{

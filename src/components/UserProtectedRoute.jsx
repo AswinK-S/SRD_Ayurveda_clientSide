@@ -17,13 +17,10 @@ const UserProtectedRoute = ({ children, allowedRole }) => {
     try {
       if (token) {
         const decode = jwtDecode(token);
-        console.log('ttttt user',decode.role);
-        console.log('allowed role user',allowedRole);
         setRole(decode.role);
 
         if (decode.role !== allowedRole) {
           // Navigate to a different page or show an error message
-          console.log('role !== user');
           navigate('/');
         }
       } else {
@@ -32,7 +29,6 @@ const UserProtectedRoute = ({ children, allowedRole }) => {
       }
 
     } catch (error) {
-      console.error('Error decoding token:', error);
       // Handle error if necessary, e.g., redirect to a login page
       navigate('/login');
     } finally {

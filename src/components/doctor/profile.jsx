@@ -44,7 +44,7 @@ const Profile = () => {
               setErrors(formValidateErrors);
             } else {
               setErrors('');
-              const result = await postDetails(modifiedData, id);
+             await postDetails(modifiedData, id);
 
               // Reset modifiedFields after successful update
               setModifiedData({});

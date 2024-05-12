@@ -26,10 +26,9 @@ const Message = () => {
     const [arrivalMessage, setArrivalMessage] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
     const [showSendButton, setShowSendButton] = useState(false)
-
+    const [conversationId, setConversationId] = useState('')
     const [doctors, setDoctors] = useState([])
     const socket = useRef()
-
     const [emoji, setEmoji] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false)
 
@@ -45,15 +44,11 @@ const Message = () => {
                 createdAt: Date.now()
             })
         })
-
     }, [socket])
 
-
-
     useEffect(() => {
-        arrivalMessage && currentChat?.members.includes(arrivalMessage?.sender) &&
+        arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
             setMessages((prev) => [...prev, arrivalMessage])
-
     }, [arrivalMessage, currentChat])
 
     //get all doctors from the bookings for chat
@@ -77,7 +72,6 @@ const Message = () => {
     const scrollRef = useRef()
     useEffect(() => {
         const fetch = async () => {
-
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
@@ -95,11 +89,21 @@ const Message = () => {
     //get messages
     useEffect(() => {
         const Messages = async () => {
-            const res = await getMessages(currentChat?._id)
+            const res = await getMessages(conversationId)
             setMessages(res)
         }
         Messages()
-    }, [currentChat?._id])
+    }, [conversationId])
+
+    //get conversation id  to 
+    const getCurrentChatId = (c) => {
+        console.log('current chat-->', c);
+        const convrstn_Id = conversation?.find(item => item.members?.includes(c?._id) && item.members?.includes(currentUser?._id))?._id
+        console.log('cnvr id---', convrstn_Id);
+        setCurrentChat(c)
+        setConversationId(convrstn_Id)
+
+    }
 
     const messageHandler = (e) => {
         setText(e.target.value)
@@ -122,28 +126,25 @@ const Message = () => {
 
     const toggleEmojiPicker = () => {
         setShowEmoji(!showEmoji)
-
     }
 
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
-        console.log('sending msg----->', text);
         if (text === '' && emoji === null || text.trim() === '') {
-            console.log('empty   chat---', text);
             return;
         }
 
-        const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
+        // const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
+        const receiverId = currentChat?._id
         socket.current.emit("sendMessage", {
             senderId: currentUser?._id,
             receiverId,
             text
         })
         try {
-            const conversationId = conversation?.find(item => item._id)?._id;
             const result = await send(conversationId, currentUser._id, text)
-            console.log('result ---', result);
+            console.log('rrrrsslt--->', result);
             setMessages(prevMessages => [...prevMessages, result])
             setText('')
             setEmoji(null)
@@ -156,73 +157,77 @@ const Message = () => {
         }
     }
 
-    // console.log('current chat -----',currentChat);
-
     return (
         <>
             <Nav />
-            <div className='messenger  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 p-10 gap-4 '>
+            <div className='flex justify-center'>
+                <div className='messenger   p-10 gap-5 '>
 
-                <div className="chatMenu ">
-                    <div className="chatMenuWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                        <input placeholder='search' className='chatMenuInput' />
-                        {conversation?.map((c) => (
-                            <div key={c?._id} onClick={() => { setCurrentChat(c) }}>
-                                <Conversation conversation={c} currentUser={currentUser} />
-                            </div>
+                    <div className="chatMenu ">
+                        <div className="chatMenuWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                            <span className='chatlist'>Chat List</span>
+                            <input placeholder='search' className='chatMenuInput' />
+                            {doctors?.map((c) => (
+                                // <div key={c?._id} onClick={() =>  setCurrentChat(c) }>
+                                <div key={c?._id} onClick={() => getCurrentChatId(c)}>
+                                    <Conversation conversation={c} currentUser={currentUser} />
+                                </div>
 
-                        ))}
+                            ))}
 
+                        </div>
                     </div>
-                </div>
 
 
-                <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
+                    <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
 
-                    <div className="chatBoxWrapper ">
-                        {showEmoji && (
-                            <div className='emojiPickerContainer'>
-                                <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class' data={data} onEmojiSelect={addEmoji} />
-                            </div>
-                        )}
-                        {currentChat ? (<>
-                            <div className="chatBoxTop">
-                                {messages.map((m) => (
-                                    <div key={m?._id} ref={scrollRef}>
-                                        <Messages message={m} own={m.sender === currentUser?._id} />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="chatBoxBottom">
-                                <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon"><MdOutlineEmojiEmotions /></span>
+                        <div className="chatBoxWrapper ">
+                            {showEmoji && (
+                                <div className='emojiPickerContainer'>
+                                    <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class' data={data} onEmojiSelect={addEmoji} />
+                                </div>
+                            )}
+                            {currentChat ? (<>
+                                <div className="chatBoxTop">
+                                    {messages?.map((m) => (
+                                        <div key={m?._id} ref={scrollRef}>
+                                            <Messages message={m} own={m.sender === currentUser?._id} />
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="chatBoxBottom">
+                                    <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon"><MdOutlineEmojiEmotions /></span>
 
-                                <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
+                                    <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
 
-                                {showSendButton ?
-                                    (
-                                        <button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }} onClick={sendMessage} >
-                                            <IoIosSend />
+                                    {showSendButton ?
+                                        (
+                                            <button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }}
+                                                onClick={sendMessage} >
+                                                <IoIosSend />
 
-                                        </button>
-                                    ) : (null)}
+                                            </button>
+                                        ) : (null)}
 
-                            </div>
-                        </>) : (<span className='noConversation'>Open a conversation to start a chat </span>)
-                        }
+                                </div>
+                            </>) : (<span className='noConversation'>Open a conversation to start a chat </span>)
+                            }
+                        </div>
                     </div>
-                </div>
 
 
-                <div className="chatOnline">
-                    <div className="chatOnlineWrapper  rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                        <ChatOnline
-                            onlineUsers={onlineUsers}
-                            currentId={currentUser?._id}
-                            setCurrentChat={setCurrentChat}
-                        />
+                    <div className="chatOnline">
+                        <div className="chatOnlineWrapper  rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                            <span className='online'>Online</span>
+                            <ChatOnline
+                                onlineUsers={onlineUsers}
+                                currentId={currentUser?._id}
+                                setCurrentChat={setCurrentChat}
+                            />
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
             <Footer />
         </>
