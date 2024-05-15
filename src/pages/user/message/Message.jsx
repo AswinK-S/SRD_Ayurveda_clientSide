@@ -28,11 +28,11 @@ const Message = () => {
     const [showSendButton, setShowSendButton] = useState(false)
     const [conversationId, setConversationId] = useState('')
     const [doctors, setDoctors] = useState([])
-    const socket = useRef()
+   
     const [emoji, setEmoji] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false)
 
-
+    const socket = useRef()
     //connect to socket server
     useEffect(() => {
         socket.current = io('ws://localhost:3001')

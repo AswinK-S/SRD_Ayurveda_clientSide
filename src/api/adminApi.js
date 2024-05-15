@@ -150,3 +150,14 @@ export const userStatus = async (id) => {
         return res
     
 }    
+
+//get data for dashboard
+export const dashBoardData = async()=>{
+    try {
+        const result = await axiosApi.get(adminRoutes.dashData)
+        return result.data
+    } catch (error) {
+        console.log(error.message);
+    }
+   
+}

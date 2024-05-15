@@ -14,6 +14,7 @@ const adminRoutes ={
     removeSub_trtmnt:'admin/removeSubTrtmnt',
     editTrtmnt:'admin/edit_trtmnt',
     verifyDoc:'admin/verifyDoctor',
+    dashData:'admin/dashData'
 
 
 }

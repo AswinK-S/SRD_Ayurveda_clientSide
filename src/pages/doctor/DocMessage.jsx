@@ -6,8 +6,6 @@ import Nav from '../../components/doctor/docNav'
 import '../user/message/Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send } from '../../api/conversationApi'
-import { jwtDecode } from 'jwt-decode'
-import { useNavigate } from 'react-router-dom'
 
 import { io } from "socket.io-client"
 import data from '@emoji-mart/data'
@@ -19,8 +17,6 @@ import { getUsers } from '../../api/userApi'
 
 const DocMessage = () => {
 
-    const navigate = useNavigate()
-    const socket = useRef()
 
     const docData = useSelector((state) => state.doctor.doctor)
     const [conversation, setConverstion] = useState([])
@@ -36,8 +32,8 @@ const DocMessage = () => {
 
     const [receiverId, setReceiverId] = useState('')
 
-    const token = localStorage.getItem('doctortoken')
     const currentUser = JSON.parse(docData)
+    const socket = useRef()
 
     //conecting socket
     useEffect(() => {
@@ -69,13 +65,14 @@ const DocMessage = () => {
         fetch()
     }, [currentUser?._id])
 
+
     //get online users for chat
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            setOnlineUsers(usersForChat.filter((item) => users.some((user) => user.userId === item?._id)))
+            setOnlineUsers(usersForChat?.filter((item) => users.some((user) => user?.userId === item?._id)))
         })
-    }, [currentUser._id, usersForChat])
+    }, [currentUser._id, usersForChat,text])
 
 
     const scrollRef = useRef()
@@ -118,18 +115,6 @@ const DocMessage = () => {
     }
 
 
-    useEffect(() => {
-        if (token) {
-            const decode = jwtDecode(token)
-            if (!decode.role === 'doctor') {
-                console.log('no doc');
-                navigate('/doctor')
-            }
-        } else {
-            console.log('no doctoken');
-            navigate('/doctor')
-        }
-    }, [navigate, token])
 
     const messageHandler = (e) => {
         setText(e.target.value)

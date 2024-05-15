@@ -32,6 +32,7 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
     const handleClick = async(onLineUser)=>{
         try {
             const result = await getConversations(currentId,onLineUser?._id)
+            console.log('current chat in chatOnline-->',result);
             setCurrentChat(result[0])
         } catch (error) {
             console.log(error.message);
