@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { FaSearch } from "react-icons/fa";
 
 const Patients = () => {
-    const tableHeadings = [' Name', 'Treatment', 'Sub-Trt', 'Checkup-Date', 'Status'];
-    const dataKeys = ['userName', 'treatmentName', 'subTrtmntName', 'consultingDate', 'status'];
+    const tableHeadings = [' Name', 'Treatment', 'Sub-Trt', 'Checkup-Date', 'Status','Id'];
+    const dataKeys = ['userName', 'treatmentName', 'subTrtmntName', 'consultingDate', 'status','bookingId'];
     const text = "PATIENTS"
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -28,6 +28,7 @@ const Patients = () => {
             console.log(error.message);
         }
     }
+
     useEffect(() => {
         fetch()
     }, [currentPage])
@@ -43,7 +44,7 @@ const Patients = () => {
         const status = `${item.status}`.toLowerCase()
         const searchTermS = searchTerm.toLowerCase()
 
-        return (treatmentName.includes(searchTermS) || subTreatmentName.includes(searchTermS)|| patientName.includes(searchTermS) || status.includes(searchTermS))
+        return (   treatmentName.includes(searchTermS) || subTreatmentName.includes(searchTermS)|| patientName.includes(searchTermS) || status.includes(searchTermS))
      })
 
     return (
@@ -75,7 +76,8 @@ const Patients = () => {
                         </div>
 
                     </div>
-                    <CustomTable data={filteredData} tableHeadings={tableHeadings} dataKeys={dataKeys} text={text} />
+                    <CustomTable  data={filteredData} tableHeadings={tableHeadings} dataKeys={dataKeys} text={text} doctor={doctor} 
+                    setData={setData} />
                     <div className="flex justify-center  m-4">
                         <button className="px-3 py-1 text-xs bg-blue-gray-100 rounded-md shadow-sm shadow-black" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
                             Prev

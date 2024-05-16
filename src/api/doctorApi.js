@@ -119,3 +119,15 @@ export const getDataForOverview = async(id)=>{
         console.log(error.message);
     }
 }
+
+
+//confirm patient confirmation
+export const confirmConsultation = async (docId,bookingId)=>{
+    try {
+        console.log('bbbbbid',bookingId);
+        const result = await axiosApi.post(doctorRoute.confirmConsultation,{docId,bookingId})
+        return result?.data
+    } catch (error) {
+        console.log(error.message);
+    }
+}

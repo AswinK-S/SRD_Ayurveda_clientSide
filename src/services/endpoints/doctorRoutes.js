@@ -11,7 +11,8 @@ const doctorRoute ={
     verifyOtp:'doctor/verifyOtp',
     updatePassword:'doctor/updatePassword',
     getPatients:'doctor/getDocPatients',
-    getDateForOverview:'doctor/overview'
+    getDateForOverview:'doctor/overview',
+    confirmConsultation:'doctor/confirmC'
 }
 
 export default doctorRoute

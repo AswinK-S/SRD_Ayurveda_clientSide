@@ -9,7 +9,7 @@ const UsrPswrdChnge = ({ setShowModal }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const user= useSelector((state)=>state.user.user)
+    const user = useSelector((state) => state.user.user)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,12 +36,12 @@ const UsrPswrdChnge = ({ setShowModal }) => {
             }
             setErrorMessage('');
 
-            const result = await changePassword(user?._id,newPassword)
-            if(result){
-                console.log('result----',result);
+            const result = await changePassword(user?._id, newPassword)
+            if (result) {
+                console.log('result----', result);
                 toast.success("Successfully changed the password!");
                 setShowModal(false)
-            }else{
+            } else {
                 toast.error('Something went Wrong')
                 // setShowModal(false)
             }
