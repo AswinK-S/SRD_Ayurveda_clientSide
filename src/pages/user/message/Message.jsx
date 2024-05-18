@@ -6,7 +6,7 @@ import Messages from '../../../components/message/Messages'
 import Nav from '../../../components/navbar/nav'
 import './Message.css'
 import { useEffect, useRef, useState } from 'react'
-import { getConversation, getMessages, send } from '../../../api/conversationApi'
+import { getConversation, getMessages, send, uploadMedia } from '../../../api/conversationApi'
 
 import { io } from 'socket.io-client'
 import data from '@emoji-mart/data'
@@ -14,7 +14,10 @@ import Picker from '@emoji-mart/react'
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
 import { getDoctors } from '../../../api/userApi'
-
+import addIcon from '../../../../public/app.png'
+import imgIcon from '../../../../public/image.png'
+import videoIcon from '../../../../public/video.png'
+import docsIcon from '../../../../public/google-docs.png'
 
 
 const Message = () => {
@@ -28,9 +31,13 @@ const Message = () => {
     const [showSendButton, setShowSendButton] = useState(false)
     const [conversationId, setConversationId] = useState('')
     const [doctors, setDoctors] = useState([])
-   
+
     const [emoji, setEmoji] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false)
+
+    const [showPopUp, setShowPopUp] = useState(false)
+    const [file, setFile] = useState(null)
+    const [showSelectedMedia, setShowSelectedMedia] = useState('')
 
     const socket = useRef()
     //connect to socket server
@@ -46,6 +53,7 @@ const Message = () => {
         })
     }, [socket])
 
+    // Handle arrival of new messages
     useEffect(() => {
         arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
             setMessages((prev) => [...prev, arrivalMessage])
@@ -54,12 +62,18 @@ const Message = () => {
     //get all doctors from the bookings for chat
     useEffect(() => {
         const fetch = async () => {
-            const result = await getDoctors(currentUser?.email)
-            setDoctors(result)
+            try {
+                const result = await getDoctors(currentUser?.email)
+                setDoctors(result)
+            } catch (error) {
+                console.log(error.message);
+            }
+
         }
         fetch()
     }, [currentUser])
 
+    //add user to socket server and set online users
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
@@ -68,8 +82,9 @@ const Message = () => {
     }, [currentUser, text, doctors])
 
 
-
     const scrollRef = useRef()
+
+    //fetch conversation(id of the members)
     useEffect(() => {
         const fetch = async () => {
             try {
@@ -89,17 +104,20 @@ const Message = () => {
     //get messages
     useEffect(() => {
         const Messages = async () => {
-            const res = await getMessages(conversationId)
-            setMessages(res)
+            try {
+                console.log('gt msgssss---',conversationId);
+                const res = await getMessages(conversationId)
+                setMessages(res)
+            } catch (error) {
+                console.log(error.message);
+            }
         }
         Messages()
     }, [conversationId])
 
-    //get conversation id  to 
+    //get conversation id  
     const getCurrentChatId = (c) => {
-        console.log('current chat-->', c);
         const convrstn_Id = conversation?.find(item => item.members?.includes(c?._id) && item.members?.includes(currentUser?._id))?._id
-        console.log('cnvr id---', convrstn_Id);
         setCurrentChat(c)
         setConversationId(convrstn_Id)
 
@@ -131,31 +149,77 @@ const Message = () => {
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
-        if (text === '' && emoji === null || text.trim() === '') {
+        console.log('sending--', file);
+        if (text === '' && emoji === null && file.length < 1) {
+            console.log('no data');
             return;
         }
 
-        // const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
-        const receiverId = currentChat?._id
-        socket.current.emit("sendMessage", {
-            senderId: currentUser?._id,
-            receiverId,
-            text
-        })
         try {
-            const result = await send(conversationId, currentUser._id, text)
-            console.log('rrrrsslt--->', result);
-            setMessages(prevMessages => [...prevMessages, result])
-            setText('')
-            setEmoji(null)
-            setShowEmoji(false)
-            setShowSendButton(false)
+
+            let mediaUrl = []
+            if (file) {
+                    const formData = new FormData()
+                    formData.append('medias', file)
+                    console.log('send rrrr--');
+                    const mediatoCloudinary = await uploadMedia(formData)
+                
+            }
+
+            if (mediaUrl) {
+
+                // const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
+                const receiverId = currentChat?._id
+                socket.current.emit("sendMessage", {
+                    senderId: currentUser?._id,
+                    receiverId,
+                    text,
+                    media: file
+                })
+
+                const result = await send(conversationId, currentUser._id, text)
+                console.log('rrrrsslt--->', result);
+                setMessages(prevMessages => [...prevMessages, result])
+                setText('')
+                setEmoji(null)
+                setShowEmoji(false)
+                setShowSendButton(false)
+            }
 
 
         } catch (error) {
             console.log(error.message);
         }
     }
+
+
+
+    const togglePopUp = () => {
+        setShowPopUp(!showPopUp)
+        setShowSelectedMedia('')
+    }
+
+    const handleFileSelection = (e) => {
+        const files = e.target.files;
+        console.log('files--', files);
+        if (files.length > 0) {
+            const file = files[0];
+            const mediaLink = URL.createObjectURL(file);
+            console.log('link', mediaLink);
+
+            // Check the file type using the 'type' property
+            const fileType = file.type;
+            console.log('clg file type', fileType);
+            const isImage = fileType.startsWith('image/');
+            const isVideo = fileType.startsWith('video/');
+            const isDocument = fileType === 'application/pdf' || fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'text/plain';
+
+            setShowSelectedMedia({ url: mediaLink, type: fileType, isImage, isVideo, isDocument });
+            setFile(file);
+            setShowSendButton(true);
+            setShowPopUp(false);
+        }
+    };
 
     return (
         <>
@@ -191,12 +255,78 @@ const Message = () => {
                                 <div className="chatBoxTop">
                                     {messages?.map((m) => (
                                         <div key={m?._id} ref={scrollRef}>
-                                            <Messages message={m} own={m.sender === currentUser?._id} />
+                                            <Messages message={m} own={m?.sender === currentUser?._id} />
                                         </div>
                                     ))}
                                 </div>
-                                <div className="chatBoxBottom">
-                                    <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon"><MdOutlineEmojiEmotions /></span>
+                                <div className="chatBoxBottom relative">
+                                    <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon">
+                                        <MdOutlineEmojiEmotions />
+                                    </span>
+
+                                    <div className=' '>
+                                        <button className='' onClick={togglePopUp}>
+                                            <img className='w-8' src={addIcon} alt="" />
+                                        </button>
+                                        {showPopUp && (
+                                            <div className='absolute bottom-20 flex flex-col gap-3 bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-2 rounded border mt-2 w-40 '>
+                                                <label className="cursor-pointer flex items-center" htmlFor="image-input">
+                                                    <img src={imgIcon} alt="Image Icon" className="w-6 h-6 mr-2" />
+                                                    Images
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="image-input"
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleFileSelection}
+                                                />
+                                                <label className="cursor-pointer flex items-center" htmlFor="video-input">
+                                                    <img src={videoIcon} alt="Video Icon" className="w-6 h-6 mr-2" />
+                                                    Videos
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="video-input"
+                                                    accept="video/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleFileSelection}
+                                                />
+                                                <label className="cursor-pointer flex items-center" htmlFor="document-input">
+                                                    <img src={docsIcon} alt="Document Icon" className="w-6 h-6 mr-2" />
+                                                    Documents
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="document-input"
+                                                    accept=".pdf,.doc,.docx,.txt"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleFileSelection}
+                                                />
+                                            </div>
+                                        )}
+                                        {showSelectedMedia && (
+                                            <div className='absolute bottom-20 p-2'>
+                                                {
+                                                    showSelectedMedia.isVideo ? (
+                                                        <div className=' bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 p-3 shadow-sm shadow-black rounded'>
+
+                                                            <iframe src={showSelectedMedia?.url} className='overflow-hidden' />
+                                                        </div>
+                                                    ) : showSelectedMedia.isImage ? (
+                                                        <div className='p-3 shadow-sm shadow-black rounded'>
+                                                            <img src={showSelectedMedia?.url} alt="" />
+                                                        </div>
+                                                    ) : showSelectedMedia.isDocument ? (
+                                                        <div className=' bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-5 rounded'>
+                                                            <span>Document selected: {showSelectedMedia.url}</span>
+                                                        </div>
+                                                    ) : (null)
+                                                }
+                                            </div>
+                                        )
+                                        }
+                                    </div>
 
                                     <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
 
@@ -210,7 +340,8 @@ const Message = () => {
                                         ) : (null)}
 
                                 </div>
-                            </>) : (<span className='noConversation'>Open a conversation to start a chat </span>)
+                            </>) :
+                                (<span className='noConversation'>Open a conversation to start a chat </span>)
                             }
                         </div>
                     </div>

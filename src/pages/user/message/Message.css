@@ -78,6 +78,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .chatMessageInput{
@@ -91,7 +92,8 @@
     height: 40px;
     border:none;
     border-radius: 5px;
-    background-color: rgb(119, 142, 57);
+    /* background-color: rgb(119, 142, 57); */
+    background-color: rgb(27, 26, 26);
     color: white;
 }
 
