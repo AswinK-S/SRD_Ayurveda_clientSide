@@ -8,10 +8,10 @@ const Messages = ({message,own}) => {
             <div className={own ? 'message own': 'message'}>
                 <div className="messageTop">
                     {/* <img className='messageImg' src="" alt="" /> */}
-                    <p className='messageText'>{message.text}</p>
+                    <p className='messageText'>{message?.text}</p>
                 </div>
                 <div className="messageBottom">
-                    {format(message.createdAt)}
+                    {format(message?.createdAt)}
                 </div>
             </div>
         </>

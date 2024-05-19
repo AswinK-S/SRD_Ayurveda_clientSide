@@ -39,6 +39,9 @@ const Message = () => {
     const [file, setFile] = useState(null)
     const [showSelectedMedia, setShowSelectedMedia] = useState('')
 
+    const [mediaError, setMediaError] = useState('')
+
+
     const socket = useRef()
     //connect to socket server
     useEffect(() => {
@@ -64,6 +67,7 @@ const Message = () => {
         const fetch = async () => {
             try {
                 const result = await getDoctors(currentUser?.email)
+
                 setDoctors(result)
             } catch (error) {
                 console.log(error.message);
@@ -90,6 +94,7 @@ const Message = () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
+
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -105,7 +110,7 @@ const Message = () => {
     useEffect(() => {
         const Messages = async () => {
             try {
-                console.log('gt msgssss---',conversationId);
+                console.log('gt msgssss---', conversationId);
                 const res = await getMessages(conversationId)
                 setMessages(res)
             } catch (error) {
@@ -117,7 +122,7 @@ const Message = () => {
 
     //get conversation id  
     const getCurrentChatId = (c) => {
-        const convrstn_Id = conversation?.find(item => item.members?.includes(c?._id) && item.members?.includes(currentUser?._id))?._id
+        const convrstn_Id = conversation?.find(item => item?.members?.includes(c?._id) && item?.members?.includes(currentUser?._id))?._id
         setCurrentChat(c)
         setConversationId(convrstn_Id)
 
@@ -159,11 +164,15 @@ const Message = () => {
 
             let mediaUrl = []
             if (file) {
-                    const formData = new FormData()
-                    formData.append('medias', file)
-                    console.log('send rrrr--');
-                    const mediatoCloudinary = await uploadMedia(formData)
-                
+                const formData = new FormData()
+                formData.append('medias', file)
+                const mediatoCloudinary = await uploadMedia(formData)
+                if (mediatoCloudinary?.data?.error === 'File size exceeds the limit.') {
+                    setMediaError('File size exceeds the limit')
+                }
+                else if(mediatoCloudinary?.data?.error === 'No media file found.'){
+                    setMediaError('No media file found.')
+                }
             }
 
             if (mediaUrl) {
@@ -197,6 +206,7 @@ const Message = () => {
     const togglePopUp = () => {
         setShowPopUp(!showPopUp)
         setShowSelectedMedia('')
+        setMediaError('')
     }
 
     const handleFileSelection = (e) => {
@@ -218,6 +228,7 @@ const Message = () => {
             setFile(file);
             setShowSendButton(true);
             setShowPopUp(false);
+            setMediaError('')
         }
     };
 
@@ -322,7 +333,16 @@ const Message = () => {
                                                             <span>Document selected: {showSelectedMedia.url}</span>
                                                         </div>
                                                     ) : (null)
+
                                                 }
+                                                {mediaError ?
+                                                    (
+                                                        <div className='bg-red-100 mt-2 p-3 shadow-sm shadow-black rounded'>
+                                                            {mediaError}
+                                                        </div>
+                                                    ) : null
+                                                }
+
                                             </div>
                                         )
                                         }

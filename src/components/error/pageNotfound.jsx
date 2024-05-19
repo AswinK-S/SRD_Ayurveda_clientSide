@@ -1,9 +1,10 @@
-    // import './error.css'
+    import './error.css'
 
     const pageNotfound = () => {
         return (
             <>
-                <div className="main border">
+            
+                <div className="main  ">
                     <svg
                         className=" shadow-sm shadow-black "
                         xmlns="http://www.w3.org/2000/svg"

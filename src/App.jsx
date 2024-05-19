@@ -40,7 +40,7 @@ import NwPsswrd from './pages/user/login/NwPsswrd'
 import DocMessage from './pages/doctor/DocMessage'
 import Patients from './pages/doctor/Patients'
 import EditProfile from './pages/user/profile/EditProfile'
-
+import PageNotFoundError from './pages/PageNotFoundError'
 
 
 
@@ -89,6 +89,8 @@ function App() {
           <Route path='/doctor/changePassword' element={<DoctorPrtctdRoute allowedRole='doctor'> <ChangePassword /> </DoctorPrtctdRoute>} />
           <Route path='/doctor/docMessage' element={<DoctorPrtctdRoute allowedRole='doctor'> <DocMessage/> </DoctorPrtctdRoute> }/>
           <Route path='/doctor/patients' element={<DoctorPrtctdRoute allowedRole='doctor'> <Patients/>  </DoctorPrtctdRoute>}/>
+
+          <Route path='/*' element={<PageNotFoundError/>}/>
         </Routes>
       </BrowserRouter>
 

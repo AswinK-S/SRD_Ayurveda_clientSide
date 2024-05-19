@@ -197,7 +197,8 @@ export const getDoctors = async(email)=>{
         const result = await axiosApi.get(`${userRoutes.bookedDoctors}?email= ${email}`);
         return result.data
     } catch (error) {
-        console.log(error.message);
+        console.log('ddddddd---',error.message);
+        return error.message
     }
 }
 
@@ -208,7 +209,7 @@ export const getUsers =async(docId)=>{
         const result = await axiosApi.get(`${userRoutes.getUsers}/${docId}`)
         return  result?.data
     } catch (error) {
-        console.log(error.message);
+        console.log("cccc",error.message);
     }
 }
 

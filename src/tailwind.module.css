@@ -1,34 +1,33 @@
 /* UserTable.module.css */
 .tableHead {
-    @apply border-b border-blue-gray-100 bg-blue-gray-50 p-4;
-   }
-   
-   .tableCell {
-    @apply p-4 border-b border-blue-gray-50;
-   }
-   
-   .tableCellLast {
-    @apply p-4;
-   }
-   
-   .editLink {
-    @apply font-medium text-blue-gray-500 hover:text-blue-gray-700;
-   }
-   
+  @apply border-b border-blue-gray-100 bg-blue-gray-50 p-4;
+ }
+ 
+ .tableCell {
+  @apply p-4 border-b border-blue-gray-50;
+ }
+ 
+ .tableCellLast {
+  @apply p-4;
+ }
+ 
+ .editLink {
+  @apply font-medium text-blue-gray-500 hover:text-blue-gray-700;
+ }
+ 
 
-   @keyframes shake {
-    0%, 100% {
-      transform: translateX(0);
-    }
-    25%, 75% {
-      transform: translateX(-5px);
-    }
-    50% {
-      transform: translateX(5px);
-    }
+ @keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
   }
-  
-  .animate-shake {
-    animation: shake 0.5s ease-in-out infinite;
+  25%, 75% {
+    transform: translateX(-5px);
   }
-  
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out infinite;
+}

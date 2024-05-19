@@ -19,7 +19,8 @@ export const getConversation = async(userId)=>{
         const result = await axiosApi.get(`${conversationRoute.getConversation}/${userId}`)
         return result?.data
     } catch (error) {
-        console.log(error.message);
+        console.log('yyyyy',error.message);
+        return error.message
     }
 }
 
@@ -29,7 +30,7 @@ export const getConversations = async(firstId,secondId)=>{
         const result = await axiosApi.get(`${conversationRoute.getConversations}/${firstId}/${secondId}`)
         return result.data;
     } catch (error) {
-      console.log(error.message);  
+      console.log('pppppp',error.message);  
     }
 }
 
@@ -59,12 +60,10 @@ export const send = async(conversationId,sender,text)=>{
 
 //upload media 
 export const uploadMedia = async(formData)=>{
-    try {
-        console.log('rrr--',formData);
+    try {   
         const result = await axiosApi.post(messagesRoute.sendMedia,formData)
-        console.log('media link',result);
         return result.data
     } catch (error) {
-        console.log(error.message);
+        return error.response
     }
 }
