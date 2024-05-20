@@ -22,6 +22,10 @@
     color:white;
     max-width: 300px;
 }
+.messageMedia{
+    max-width: 300px;
+
+}
 
 .messageBottom{
     font-size: 12px;

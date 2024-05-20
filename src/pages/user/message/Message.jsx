@@ -6,7 +6,7 @@ import Messages from '../../../components/message/Messages'
 import Nav from '../../../components/navbar/nav'
 import './Message.css'
 import { useEffect, useRef, useState } from 'react'
-import { getConversation, getMessages, send, uploadMedia } from '../../../api/conversationApi'
+import { getConversation, getMessages, send, storeMedia, uploadMedia } from '../../../api/conversationApi'
 
 import { io } from 'socket.io-client'
 import data from '@emoji-mart/data'
@@ -37,7 +37,7 @@ const Message = () => {
 
     const [showPopUp, setShowPopUp] = useState(false)
     const [file, setFile] = useState(null)
-    const [showSelectedMedia, setShowSelectedMedia] = useState('')
+    const [showSelectedMedia, setShowSelectedMedia] = useState(null)
 
     const [mediaError, setMediaError] = useState('')
 
@@ -110,7 +110,6 @@ const Message = () => {
     useEffect(() => {
         const Messages = async () => {
             try {
-                console.log('gt msgssss---', conversationId);
                 const res = await getMessages(conversationId)
                 setMessages(res)
             } catch (error) {
@@ -154,36 +153,55 @@ const Message = () => {
     //send message
     const sendMessage = async (e) => {
         e.preventDefault()
-        console.log('sending--', file);
         if (text === '' && emoji === null && file.length < 1) {
-            console.log('no data');
             return;
         }
 
         try {
 
-            let mediaUrl = []
+            //if there is any media selected
             if (file) {
                 const formData = new FormData()
                 formData.append('medias', file)
-                const mediatoCloudinary = await uploadMedia(formData)
-                if (mediatoCloudinary?.data?.error === 'File size exceeds the limit.') {
+                const uploadToMulter = await uploadMedia(formData)
+
+
+                if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
                 }
-                else if(mediatoCloudinary?.data?.error === 'No media file found.'){
+                else if (uploadToMulter?.data?.error === 'No media file found.') {
                     setMediaError('No media file found.')
+                }
+
+                if (typeof uploadToMulter === 'string') {
+                    console.log(' type---');
+                    const receiverId = currentChat?._id
+                    socket.current.emit("sendMessage", {
+                        senderId: currentUser?._id,
+                        receiverId,
+                        text,
+                    })
+
+                    const result = await storeMedia(conversationId, currentUser._id, uploadToMulter)
+                    setMessages(prevMessages => [...prevMessages, result])
+                    setText('')
+                    setEmoji(null)
+                    setShowEmoji(false)
+                    setShowSendButton(false)
+                    setShowSelectedMedia(null)
                 }
             }
 
-            if (mediaUrl) {
+           
 
+
+            if (text || emoji) {
                 // const receiverId = currentChat?.members.find((item) => item !== currentUser?._id)
                 const receiverId = currentChat?._id
                 socket.current.emit("sendMessage", {
                     senderId: currentUser?._id,
                     receiverId,
                     text,
-                    media: file
                 })
 
                 const result = await send(conversationId, currentUser._id, text)
@@ -194,7 +212,6 @@ const Message = () => {
                 setShowEmoji(false)
                 setShowSendButton(false)
             }
-
 
         } catch (error) {
             console.log(error.message);

@@ -58,12 +58,23 @@ export const send = async(conversationId,sender,text)=>{
     }
 }
 
-//upload media 
+//upload media to cloudinary
 export const uploadMedia = async(formData)=>{
     try {   
         const result = await axiosApi.post(messagesRoute.sendMedia,formData)
+        console.log('upload lnk',result);
         return result.data
     } catch (error) {
         return error.response
+    }
+}
+
+//store the chat  media to db
+export const storeMedia =async(conversationId,sender, mediaUrl)=>{
+    try{
+        const result = await axiosApi.post(messagesRoute.storeMedia,{conversationId,sender, mediaUrl})
+        return result.data
+    }catch(error){
+        console.log(error.message);
     }
 }
