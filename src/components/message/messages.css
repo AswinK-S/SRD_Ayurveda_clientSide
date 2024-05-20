@@ -22,8 +22,11 @@
     color:white;
     max-width: 300px;
 }
-.messageMedia{
+.messageMedia.own{
     max-width: 300px;
+    padding: 5px;
+    background-color: white;
+    
 
 }
 

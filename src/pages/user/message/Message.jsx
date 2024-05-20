@@ -21,6 +21,7 @@ import docsIcon from '../../../../public/google-docs.png'
 
 
 const Message = () => {
+
     const currentUser = useSelector((state) => state.user.user)
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
@@ -67,7 +68,6 @@ const Message = () => {
         const fetch = async () => {
             try {
                 const result = await getDoctors(currentUser?.email)
-
                 setDoctors(result)
             } catch (error) {
                 console.log(error.message);
@@ -163,9 +163,10 @@ const Message = () => {
             if (file) {
                 const formData = new FormData()
                 formData.append('medias', file)
+                console.log('sending to upld in multer--');
                 const uploadToMulter = await uploadMedia(formData)
 
-
+                console.log('multer upload result--', uploadToMulter);
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
                 }
@@ -192,7 +193,7 @@ const Message = () => {
                 }
             }
 
-           
+
 
 
             if (text || emoji) {
@@ -219,7 +220,7 @@ const Message = () => {
     }
 
 
-
+    //pop up to select the media
     const togglePopUp = () => {
         setShowPopUp(!showPopUp)
         setShowSelectedMedia('')
@@ -228,7 +229,6 @@ const Message = () => {
 
     const handleFileSelection = (e) => {
         const files = e.target.files;
-        console.log('files--', files);
         if (files.length > 0) {
             const file = files[0];
             const mediaLink = URL.createObjectURL(file);
@@ -236,13 +236,13 @@ const Message = () => {
 
             // Check the file type using the 'type' property
             const fileType = file.type;
-            console.log('clg file type', fileType);
             const isImage = fileType.startsWith('image/');
             const isVideo = fileType.startsWith('video/');
             const isDocument = fileType === 'application/pdf' || fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'text/plain';
 
             setShowSelectedMedia({ url: mediaLink, type: fileType, isImage, isVideo, isDocument });
             setFile(file);
+            setText(file)
             setShowSendButton(true);
             setShowPopUp(false);
             setMediaError('')
@@ -276,7 +276,8 @@ const Message = () => {
                         <div className="chatBoxWrapper ">
                             {showEmoji && (
                                 <div className='emojiPickerContainer'>
-                                    <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class' data={data} onEmojiSelect={addEmoji} />
+                                    <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class'
+                                        data={data} onEmojiSelect={addEmoji} />
                                 </div>
                             )}
                             {currentChat ? (<>
