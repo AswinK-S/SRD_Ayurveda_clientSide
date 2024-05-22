@@ -3,7 +3,7 @@ import './Conversation.css'
 import propTypes from 'prop-types'
 import { getdoctor } from '../../api/doctorApi'
 
-const Conversation = ({ conversation, currentUser }) => {
+const Conversation = ({ conversation }) => {
 
   const [messenger, setMessenger] = useState(null)
 
@@ -21,7 +21,7 @@ const Conversation = ({ conversation, currentUser }) => {
     }
 
     getMessenger()
-  }, [conversation, currentUser])
+  }, [])
 
  
 

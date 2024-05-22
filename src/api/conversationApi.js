@@ -6,6 +6,7 @@ import messagesRoute from "../services/endpoints/messageRoute";
 //get userDetails
 export const getUserData = async(userId)=>{
     try {
+        console.log('get users info');
         const result = await axiosApi.get(`${conversationRoute.getUser}/${userId}`)
         return result.data
     } catch (error) {
@@ -16,6 +17,7 @@ export const getUserData = async(userId)=>{
 //get conversation details
 export const getConversation = async(userId)=>{
     try {
+        console.log('cnvrstn');
         const result = await axiosApi.get(`${conversationRoute.getConversation}/${userId}`)
         return result?.data
     } catch (error) {
@@ -50,7 +52,9 @@ export const getMessages = async (converSationId)=>{
 // send message 
 export const send = async(conversationId,sender,text)=>{
     try {
+        console.log('sending msg-- cId--',conversationId,'sender--',sender,'text--',text);
         const result= await axiosApi.post(messagesRoute.sendMessage,{conversationId,sender,text})
+        console.log('send msg rslt---',result);
         return result.data
 
     } catch (error) {

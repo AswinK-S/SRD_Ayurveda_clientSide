@@ -18,6 +18,9 @@ import imgIcon from '../../../public/image.png'
 import videoIcon from '../../../public/video.png'
 import docsIcon from '../../../public/google-docs.png'
 
+import ReactLoading from 'react-loading'
+
+
 
 const DocMessage = () => {
 
@@ -29,6 +32,7 @@ const DocMessage = () => {
     const [arrivalMessage, setArrivalMessage] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
     const [showSendButton, setShowSendButton] = useState(false)
+    const [conversationId, setConversationId] = useState('')
     const [usersForChat, setUsersForChat] = useState([])
     const [emoji, setEmoji] = useState(null)
     const [showEmoji, setShowEmoji] = useState(false)
@@ -40,35 +44,46 @@ const DocMessage = () => {
 
     const [mediaError, setMediaError] = useState('')
 
+    const [loading, setLoading] = useState(false)
+
+
     const currentUser = JSON.parse(docData)
+
+
 
     const socket = useRef()
     //conecting socket
     useEffect(() => {
         socket.current = io('ws://localhost:3001')
 
-        socket.current.on('getMessage', data => {
+        socket?.current.on('getMessage', data => {
+            console.log('get message in doc-->', data);
             setArrivalMessage({
-                sender: data.senderId,
+                sender: data?.senderId,
                 text: data?.text,
+                media: data?.media,
                 createdAt: Date.now()
             })
         })
-    }, [socket])
+    }, [])
 
     //handle arrival of new message
     useEffect(() => {
-        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+        console.log('current chat in  arrival-- in doc', currentChat);
+
+        arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
             setMessages((prev) => [...prev, arrivalMessage])
     }, [arrivalMessage, currentChat])
 
+    // console.log(' arrival messagge-- in doc', arrivalMessage);
+    // console.log('messages in doc-', messages);
 
     //get all users for chat from booking
     useEffect(() => {
         const fetch = async () => {
             try {
                 const result = await getUsers(currentUser?._id)
-                console.log('users for chat --', result);
+                // console.log('doctor Id',currentUser?._id);
                 setUsersForChat(result)
             } catch (error) {
                 console.log(error.message);
@@ -78,23 +93,24 @@ const DocMessage = () => {
     }, [currentUser?._id])
 
 
-    //get online users for chat
+    //add user to socket get online users for chat
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            setOnlineUsers(usersForChat?.filter((item) => users.some((user) => user?.userId === item?._id)))
+            // console.log('users in doc---',users ,'users for chat --',usersForChat);
+            setOnlineUsers(usersForChat?.filter((item) => users?.some((user) => user?.userId === item?._id)))
         })
-    }, [currentUser._id, usersForChat, text])
-
+    }, [text, usersForChat])
 
     const scrollRef = useRef()
 
+    //get conversation 
     useEffect(() => {
         const fetch = async () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
-                    console.log('conversation in doc chat---', result);
+                    console.log('conversation in doc---', result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -107,35 +123,35 @@ const DocMessage = () => {
     }, [])
 
 
-    //get messages
+    //get messages, 
     useEffect(() => {
         const Messages = async () => {
             try {
-                const res = await getMessages(currentChat?._id)
-                console.log('messages of doc side--', res);
+                const res = await getMessages(conversationId)
+                console.log('messages in doc messss---', res);
                 setMessages(res)
             } catch (error) {
                 console.log(error.message);
             }
         }
         Messages()
-    }, [currentChat?._id])
+    }, [conversationId])
 
     // get id of the currentChat user
-    const getCurrentChatId = async (c) => {
+    const getCurrentChatId = (c) => {
         const rcvrId = c?.members.find((item) => item !== currentUser?._id)
-        console.log('current user-->', rcvrId, '  currentChat-->', c);
+        console.log('current user-->', rcvrId, '  currentChat-->', c, 'converSation Id--', c?._id);
         setReceiverId(rcvrId)
         setCurrentChat(c)
+        setConversationId(c?._id)
     }
-
 
 
     const messageHandler = (e) => {
         setText(e.target.value)
         setShowSendButton(true)
-
     }
+
 
     //automatic scroll when there is new message
     useEffect(() => {
@@ -160,7 +176,7 @@ const DocMessage = () => {
     const sendMessage = async (e) => {
         e.preventDefault()
 
-        if (text === '' && emoji === null || file.length < 1) {
+        if (text === '' && emoji === null && file.length < 1) {
             return;
         }
 
@@ -168,6 +184,8 @@ const DocMessage = () => {
 
             //if there is any media selected
             if (file) {
+                setLoading(true)
+
                 const formData = new FormData()
                 formData.append('medias', file)
                 console.log('sending to upld in multer--');
@@ -176,27 +194,33 @@ const DocMessage = () => {
                 console.log('multer upload result--', uploadToMulter);
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
+                    setLoading(false)
                 }
                 else if (uploadToMulter?.data?.error === 'No media file found.') {
                     setMediaError('No media file found.')
+                    setLoading(false)
                 }
 
                 if (typeof uploadToMulter === 'string') {
-                    console.log(' type---');
-                    const receiverId = currentChat?._id
+                
+                    
                     socket.current.emit("sendMessage", {
                         senderId: currentUser?._id,
                         receiverId,
-                        text,
+                        media: uploadToMulter,
                     })
 
                     const result = await storeMedia(conversationId, currentUser._id, uploadToMulter)
+                    if (result) {
+                        setLoading(false)
+                    }
                     setMessages(prevMessages => [...prevMessages, result])
                     setText('')
                     setEmoji(null)
                     setShowEmoji(false)
                     setShowSendButton(false)
                     setShowSelectedMedia(null)
+                    setFile(null)
                 }
             }
 
@@ -208,17 +232,16 @@ const DocMessage = () => {
                     text
                 })
 
-
-                const conversationId = currentChat?._id
+                // const conversationId = currentChat?._id
+                console.log('snd msg from doc');
                 const result = await send(conversationId, currentUser?._id, text)
+                console.log('snd msg rslt in doc ', result);
                 setMessages(prevMessages => [...prevMessages, result])
                 setText('')
                 setEmoji(null)
                 setShowEmoji(false)
                 setShowSendButton(false)
             }
-
-
 
         } catch (error) {
             console.log(error.message);
@@ -230,6 +253,7 @@ const DocMessage = () => {
         setShowPopUp(!showPopUp)
         setShowSelectedMedia('')
         setMediaError('')
+        setLoading(false)
     }
 
 
@@ -248,7 +272,6 @@ const DocMessage = () => {
 
             setShowSelectedMedia({ url: mediaLink, type: fileType, isImage, isVideo, isDocument });
             setFile(file);
-            setText(file)
             setShowSendButton(true);
             setShowPopUp(false);
             setMediaError('')
@@ -290,13 +313,14 @@ const DocMessage = () => {
                             {currentChat ? (<>
                                 <div className="chatBoxTop">
 
-                                    {messages.map((m) => (
+                                    {messages?.map((m) => (
                                         <div key={m?._id} ref={scrollRef}>
                                             <Messages message={m}
-                                                own={m.sender === currentUser._id} />
+                                                own={m?.sender === currentUser._id} />
                                         </div>
                                     ))}
                                 </div>
+
                                 <div className="chatBoxBottom">
                                     <span onClick={toggleEmojiPicker}
                                         style={{ fontSize: '30px', cursor: 'pointer' }}
@@ -349,17 +373,42 @@ const DocMessage = () => {
                                             <div className='absolute bottom-20 p-2'>
                                                 {
                                                     showSelectedMedia.isVideo ? (
-                                                        <div className=' bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 p-3 shadow-sm shadow-black rounded'>
+                                                        <div className={`relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded`}>
+                                                            {loading ? (
+                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                </div>
+                                                            ) : (null)
+                                                            }
 
-                                                            <iframe src={showSelectedMedia?.url} className='overflow-hidden' />
+                                                            <div className=''>
+                                                                <iframe src={showSelectedMedia?.url} className='overflow-hidden ' />
+                                                            </div>
                                                         </div>
                                                     ) : showSelectedMedia.isImage ? (
-                                                        <div className='p-3 shadow-sm shadow-black rounded'>
+
+                                                        <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
+
+                                                            {loading ? (
+                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                </div>
+                                                            ) : (null)
+                                                            }
                                                             <img src={showSelectedMedia?.url} alt="" />
                                                         </div>
                                                     ) : showSelectedMedia.isDocument ? (
-                                                        <div className=' bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-5 rounded'>
-                                                            <span>Document selected: {showSelectedMedia.url}</span>
+                                                        <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 shadow-sm shadow-black rounded'>
+                                                            {loading ? (
+                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                </div>
+                                                            ) : (null)
+                                                            }
+                                                            <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
                                                         </div>
                                                     ) : (null)
 

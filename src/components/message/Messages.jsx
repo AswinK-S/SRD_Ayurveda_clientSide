@@ -16,6 +16,7 @@ const Messages = ({ message, own }) => {
 
         if (isImage) {
             // Render image component
+
             return <div className={own ? 'messageMedia own rounded-md ' : 'messageMedia '}>
                 <img src={message.media} alt="Media" className='rounded-md'  />
             </div>;
@@ -46,7 +47,6 @@ const Messages = ({ message, own }) => {
         <>
             <div className={own ? 'message own' : 'message'}>
                 <div className="messageTop">
-                    {/* <img className='messageImg' src="" alt="" /> */}
                     {message?.text && <p className='messageText'>{message?.text}</p>}
                     {getMediaComponent()}
                 </div>
