@@ -25,6 +25,7 @@ const Login = () => {
         if (token) {
             const decode = jwtDecode(token)
             if (decode.role == "user") {
+                console.log('user role',decode);
                 navigate('/')
             } else {
                 navigate('/login')

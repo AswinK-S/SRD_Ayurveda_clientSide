@@ -88,8 +88,8 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor,setData }) => {
           ) : (
             <tr>
               <td colSpan={tableHeadings.length}>
-                <div className="flex flex-col items-center justify-center">
-                  <img src="/noData.jpg" alt="" />
+                <div className="flex flex-col items-center justify-center bg-white h-96 ">
+                  <img className='h-full' src="/noData.jpg" alt="" />
                 </div>
               </td>
             </tr>

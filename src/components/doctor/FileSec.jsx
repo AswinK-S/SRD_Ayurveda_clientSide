@@ -15,16 +15,15 @@ const FileSec = () => {
     const [fileUpload, setFileUpload] = useState(null)
 
     const [uploading, setUploading] = useState('')
+    const [fileUploading,setFileUploading]= useState('')
     const [doctorDetails, setDoctorDetails] = useState(null)
     const dispatch = useDispatch()
 
     const [pswrdModal, setPswrdModal] = useState(false)
 
-    // const doctorData = useSelector((state) => state.doctor.doctor)
 
     const navigate = useNavigate()
     //document
-    // const doctorfile = useSelector((state)=>state.doctor.doctorFile)
     //profile image
     const docProfile = useSelector((state)=>state.doctor.docImgFile)
    
@@ -39,10 +38,10 @@ const FileSec = () => {
                 const fetch = async (id) => {
                     try {
                         const result = await getdoctor(id)
-                        setDoctorDetails(result.data)
-                        dispatch(docloginSuccess(result.data));
-                        dispatch(uploadFileSuccess(result.data));
-                    dispatch(uploadProfileImage(result.data))
+                        setDoctorDetails(result?.data)
+                        dispatch(docloginSuccess(result?.data));
+                        dispatch(uploadFileSuccess(result?.data));
+                    dispatch(uploadProfileImage(result?.data))
 
 
 
@@ -50,7 +49,7 @@ const FileSec = () => {
                         console.log(error.message);
                     }
                 }
-                fetch(doctor.id)
+                fetch(doctor?.id)
             }else{
                 navigate('/doctor')
 
@@ -79,12 +78,14 @@ const FileSec = () => {
         e.preventDefault()
 
         if (fileUpload) {
+            setFileUploading('uploading..')
             const uploadfile = async (document) => {
                 try {
                     const docUpload = await uploadDocument(document)
                     if (docUpload) {
-                        dispatch(uploadFileSuccess(docUpload.data));
+                        dispatch(uploadFileSuccess(docUpload?.data));
                         toast.success("Document uploaded successfully")
+                        setFileUploading('uploaded')
                     }
 
                 } catch (error) {
@@ -104,6 +105,9 @@ const FileSec = () => {
                 uploadfile(formData)
             }
 
+        }else{
+            toast.error("Please select a file to upload")
+            return
         }
 
     }
@@ -123,14 +127,18 @@ const FileSec = () => {
     // uploading image 
     const uploadImage = (e) => {
         e.preventDefault()
+        if(!profileImage){
+            toast.error("Please select an image")
+            return
+        }
         setUploading('uploading')
 
         const res = async (image) => {
             try {
                 //api call to upload image
                 const result = await docImage(image)
-                if (result.request.status === 200) {
-                    const uploadImg = result.data
+                if (result?.request?.status === 200) {
+                    const uploadImg = result?.data
                     setDoctorDetails((prevDetails) => ({
                         ...prevDetails,
                         ...uploadImg,
@@ -176,7 +184,7 @@ const FileSec = () => {
                 <div className="flex flex-col md:flex-row bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-gray-800 antialiased rounded-md p-3">
                     <div className="md:w-auto p-4">
                         <div className="flex justify-center mb-4">
-                            {docProfile ? (
+                            {docProfile?.image ? (
                                 <img
                                     src={docProfile?.image}
                                     alt="Profile"
@@ -198,7 +206,6 @@ const FileSec = () => {
                                     id="image"
                                     name="image"
                                     accept="image/*"
-                                    // disabled={uploading}
                                     onChange={handleImageChange}
                                     className="border border-gray-600   rounded-md p-2 w-full"
                                 />
@@ -234,7 +241,11 @@ const FileSec = () => {
                                 />
 
                                 <div className=' mt-2 mb-2'>
-                                    <button className='p-2 rounded bg-[#BEC944]  hover:bg-[#d5e887] text-xs shadow-md shadow-gray-700' onClick={uploadDoc}> Upload file</button>
+                                    {fileUploading}
+                                    <button className='p-2 rounded bg-[#BEC944]  hover:bg-[#d5e887] 
+                                    text-xs shadow-md shadow-gray-700' onClick={uploadDoc}>
+                                         Upload file
+                                         </button>
                                 </div>
                             </div>
 

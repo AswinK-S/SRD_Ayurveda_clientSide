@@ -26,8 +26,20 @@ const BookTrtmnt = () => {
     // const [dateError,setDateError] = useState('')
 
     const [showModal, setShowModal] = useState(false)
+    const [userId,setUserId] = useState('')
 
-    const userId = useSelector((state)=>state.user.user)
+    const user = useSelector((state)=>state.user.user)
+
+    useEffect(()=>{
+        const token = localStorage.getItem('usertoken')
+        if(token){
+            if(user?.user?.isGoogle){
+                setUserId(user?.user)
+            }else{
+                setUserId(user)
+            }
+        }
+    },[])
 
     const [bookingData,setBookingData] = useState({
         doctorId:'',
@@ -124,10 +136,12 @@ const BookTrtmnt = () => {
              return
         }
         setBookingData(PrevData =>({
+            
             ...PrevData,
         patientName:userId?.name,
         consultingDate:date,
         user_Id:userId?._id
+
         }))
         setShowModal(true)
         

@@ -11,6 +11,8 @@ const Nav = () => {
   const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
 
+ 
+
   const [showMenu, setShowMenu] = useState(false)
 
   const logoutUser = () => {

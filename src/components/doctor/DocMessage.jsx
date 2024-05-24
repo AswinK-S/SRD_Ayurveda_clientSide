@@ -30,7 +30,7 @@ const DocMessage = ({ message, own }) => {
         } else if (isDocument) {
             // Render document component
             return (
-                <a href={message.media} target="_blank" rel="noopener noreferrer" className={own ?
+                <a href={message?.media} target="_blank" rel="noopener noreferrer" className={own ?
                     "messageMedia own flex items-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 p-3 rounded shadow-sm shadow-black" :
                     "messageMedia rounded-md"}>
                     <span className='p-2'>{message?.media.split('/').pop()}</span>

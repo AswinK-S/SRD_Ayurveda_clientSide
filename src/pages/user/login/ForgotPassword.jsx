@@ -69,7 +69,6 @@ const ForgotPassword = () => {
             const result = await verifyEmail(email)
             if (result === 'success') {
                 dispatch(emailToChngePsswrd(email))
-                console.log('sss--');
                 setOtpField(true)
                 setTimer(60)
             }

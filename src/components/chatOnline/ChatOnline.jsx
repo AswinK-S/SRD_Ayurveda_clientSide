@@ -24,7 +24,7 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
     //get online users
     useEffect(() => {
-        setLiveUsers(users?.filter((online) => onlineUsers.some(onlineUser =>online?._id ===onlineUser?._id )))
+        setLiveUsers(users?.filter((online) => onlineUsers?.some(onlineUser =>online?._id ===onlineUser?._id )))
     }, [users, onlineUsers])
 
 

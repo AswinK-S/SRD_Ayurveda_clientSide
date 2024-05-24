@@ -6,13 +6,12 @@ import 'ldrs/quantum'
 import TreatmentSearch from '../../../components/User/TreatmentSearch';
 
 
+
 const TreatmentCard = () => {
   const [treatmentData, setTreatmentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('')
-
-
 
 
   useEffect(() => {
@@ -85,7 +84,7 @@ const TreatmentCard = () => {
                     className="object-cover  w-full h-full"
                   />
                 </div>
-                <div className="p-6 flex flex-col items-center">
+                <div className="p-6  flex flex-col items-center">
                   <div className='flex justify-center w-full overflow-x-hidden '>
                     <h5 className="block font-serif  text-xl uppercase antialiased font-extrabold text-black ">
                       {treatment.name}
@@ -97,16 +96,18 @@ const TreatmentCard = () => {
                   {treatment.subTreatments && treatment.subTreatments.length > 0 && (
                     <div className="mt-4">
                       <h6 className="font-bold font-serif text-blue-gray-700">Sub-Treatments:</h6>
-                      <ul className="list-decimal flex flex-col items-center ml-4">
-                        {treatment.subTreatments.map((subTreatment) => (
-                          <li className='uppercase font-semibold font-serif' key={subTreatment.id}>{subTreatment.name}</li>
+                      <ul className="list-decimal flex flex-col items-center  ml-4">
+                        {treatment.subTreatments.map((subTreatment, index) => (
+                          <li className='treatment-list uppercase font-semibold font-serif mt-2   
+                          text-ellipsis whitespace-nowrap w-80 overflow-hidden' key={subTreatment.id}>{index + 1}.&nbsp;{subTreatment.name}</li>
                         ))}
                       </ul>
                     </div>
                   )}
-                  <Link to={`/treatment/${treatment._id}`}>
-                    <button className='p-2 my-3 bg-lime-900 text-white rounded-md hover:bg-lime-800 shadow-md shadow-black'>Book Now</button>
-                  </Link>
+                    <Link to={`/treatment/${treatment._id}`}>
+                      <button className='p-2 my-3 bg-lime-900 text-white rounded-md hover:bg-lime-800 shadow-md shadow-black'>Book Now</button>
+                    </Link>
+
                 </div>
               </div>
             ))

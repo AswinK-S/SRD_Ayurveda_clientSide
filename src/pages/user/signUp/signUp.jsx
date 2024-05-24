@@ -30,6 +30,17 @@ const SignUp = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        const token = localStorage.getItem('usertoken')
+        if (token) {
+            const decode = jwtDecode(token)
+            if (decode.role == "user") {
+                console.log('user role',decode);
+                navigate('/')
+            } 
+        } 
+    }, [navigate])
+
+    useEffect(() => {
         let id;
         if (showOtpInput && timer > 0 || resendOtpTimer) {
             // Start the timer only when OTP input is shown and timer > 0

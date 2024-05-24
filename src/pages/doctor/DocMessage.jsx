@@ -20,6 +20,7 @@ import docsIcon from '../../../public/google-docs.png'
 
 import ReactLoading from 'react-loading'
 
+import noMsg from '../../../public/no-messages.webp'
 
 
 const DocMessage = () => {
@@ -69,21 +70,17 @@ const DocMessage = () => {
 
     //handle arrival of new message
     useEffect(() => {
-        console.log('current chat in  arrival-- in doc', currentChat);
 
         arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
             setMessages((prev) => [...prev, arrivalMessage])
     }, [arrivalMessage, currentChat])
 
-    // console.log(' arrival messagge-- in doc', arrivalMessage);
-    // console.log('messages in doc-', messages);
 
     //get all users for chat from booking
     useEffect(() => {
         const fetch = async () => {
             try {
                 const result = await getUsers(currentUser?._id)
-                // console.log('doctor Id',currentUser?._id);
                 setUsersForChat(result)
             } catch (error) {
                 console.log(error.message);
@@ -110,7 +107,7 @@ const DocMessage = () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
-                    console.log('conversation in doc---', result);
+                    console.log('conversation in doc',result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -127,9 +124,12 @@ const DocMessage = () => {
     useEffect(() => {
         const Messages = async () => {
             try {
-                const res = await getMessages(conversationId)
-                console.log('messages in doc messss---', res);
-                setMessages(res)
+                if (conversationId) {
+                    const res = await getMessages(conversationId)
+                    console.log('messages--', res);
+                    setMessages(res)
+                }
+              
             } catch (error) {
                 console.log(error.message);
             }
@@ -139,8 +139,8 @@ const DocMessage = () => {
 
     // get id of the currentChat user
     const getCurrentChatId = (c) => {
+        console.log('current chat--', c);
         const rcvrId = c?.members.find((item) => item !== currentUser?._id)
-        console.log('current user-->', rcvrId, '  currentChat-->', c, 'converSation Id--', c?._id);
         setReceiverId(rcvrId)
         setCurrentChat(c)
         setConversationId(c?._id)
@@ -188,7 +188,6 @@ const DocMessage = () => {
 
                 const formData = new FormData()
                 formData.append('medias', file)
-                console.log('sending to upld in multer--');
                 const uploadToMulter = await uploadMedia(formData)
 
                 console.log('multer upload result--', uploadToMulter);
@@ -202,8 +201,8 @@ const DocMessage = () => {
                 }
 
                 if (typeof uploadToMulter === 'string') {
-                
-                    
+
+
                     socket.current.emit("sendMessage", {
                         senderId: currentUser?._id,
                         receiverId,
@@ -225,17 +224,13 @@ const DocMessage = () => {
             }
 
             if (text || emoji) {
-                console.log('receiver id', receiverId, 'sender id', currentUser?._id);
                 socket.current.emit("sendMessage", {
                     senderId: currentUser?._id,
                     receiverId,
                     text
                 })
 
-                // const conversationId = currentChat?._id
-                console.log('snd msg from doc');
                 const result = await send(conversationId, currentUser?._id, text)
-                console.log('snd msg rslt in doc ', result);
                 setMessages(prevMessages => [...prevMessages, result])
                 setText('')
                 setEmoji(null)
@@ -262,7 +257,6 @@ const DocMessage = () => {
         if (files.length > 0) {
             const file = files[0];
             const mediaLink = URL.createObjectURL(file);
-            console.log('link', mediaLink);
 
             // Check the file type using the 'type' property
             const fileType = file.type;
@@ -278,183 +272,194 @@ const DocMessage = () => {
         }
     };
 
+    console.log('userSfor chat ', usersForChat, 'conversationId ', conversationId);
 
     return (
         <>
             <Nav />
-            <div className='  flex justify-center'>
+            {usersForChat ? (
+                <div className='  flex justify-center'>
 
-                <div className='messenger  p-10 gap-5 '>
+                    <div className='messenger  p-10 gap-5 '>
 
-                    <div className="chatMenu ">
-                        <div className="chatMenuWrapper rounded-md bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                            <span className='chatlist'>Chat List</span>
-                            <input placeholder='search' className='chatMenuInput' />
-                            {conversation?.map((c) => (
-                                <div key={c?._id} onClick={() => { getCurrentChatId(c) }}>
-                                    <Conversation conversation={c} currentUser={currentUser} />
-                                </div>
-
-                            ))}
-
-                        </div>
-                    </div>
-
-
-                    <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
-                        <div className="chatBoxWrapper  bg-">
-                            {showEmoji &&
-                                <div className='emojiPickerContainer'>
-                                    <Picker perLine={7} emojiSize={20} emojiButtonSize={28}
-                                        className='custom-picker-class'
-                                        data={data} onEmojiSelect={addEmoji} />
-                                </div>
-                            }
-                            {currentChat ? (<>
-                                <div className="chatBoxTop">
-
-                                    {messages?.map((m) => (
-                                        <div key={m?._id} ref={scrollRef}>
-                                            <Messages message={m}
-                                                own={m?.sender === currentUser._id} />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="chatBoxBottom">
-                                    <span onClick={toggleEmojiPicker}
-                                        style={{ fontSize: '30px', cursor: 'pointer' }}
-                                        className="emojiIcon">
-                                        <MdOutlineEmojiEmotions />
-                                    </span>
-
-                                    <div className=''>
-                                        <button className='' onClick={togglePopUp}>
-                                            <img className='w-8' src={addIcon} alt="" />
-                                        </button>
-                                        {showPopUp && (
-                                            <div className='absolute bottom-20 flex flex-col gap-3 bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-2 rounded border mt-2 w-40 '>
-                                                <label className="cursor-pointer flex items-center" htmlFor="image-input">
-                                                    <img src={imgIcon} alt="Image Icon" className="w-6 h-6 mr-2" />
-                                                    Images
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="image-input"
-                                                    accept="image/*"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                                <label className="cursor-pointer flex items-center" htmlFor="video-input">
-                                                    <img src={videoIcon} alt="Video Icon" className="w-6 h-6 mr-2" />
-                                                    Videos
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="video-input"
-                                                    accept="video/*"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                                <label className="cursor-pointer flex items-center" htmlFor="document-input">
-                                                    <img src={docsIcon} alt="Document Icon" className="w-6 h-6 mr-2" />
-                                                    Documents
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="document-input"
-                                                    accept=".pdf,.doc,.docx,.txt"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                            </div>
-                                        )}
-                                        {showSelectedMedia && (
-                                            <div className='absolute bottom-20 p-2'>
-                                                {
-                                                    showSelectedMedia.isVideo ? (
-                                                        <div className={`relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded`}>
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-
-                                                            <div className=''>
-                                                                <iframe src={showSelectedMedia?.url} className='overflow-hidden ' />
-                                                            </div>
-                                                        </div>
-                                                    ) : showSelectedMedia.isImage ? (
-
-                                                        <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
-
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-                                                            <img src={showSelectedMedia?.url} alt="" />
-                                                        </div>
-                                                    ) : showSelectedMedia.isDocument ? (
-                                                        <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                        via-lime-50 to-lime-100 shadow-sm shadow-black rounded'>
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-                                                            <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
-                                                        </div>
-                                                    ) : (null)
-
-                                                }
-                                                {mediaError ?
-                                                    (
-                                                        <div className='bg-red-100 mt-2 p-3 shadow-sm shadow-black rounded'>
-                                                            {mediaError}
-                                                        </div>
-                                                    ) : null
-                                                }
-
-                                            </div>
-                                        )
-                                        }
+                        <div className="chatMenu ">
+                            <div className="chatMenuWrapper rounded-md bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                                <span className='chatlist'>Chat List</span>
+                                <input placeholder='search' className='chatMenuInput' />
+                                {conversation?.map((c) => (
+                                    <div key={c?._id} onClick={() => { getCurrentChatId(c) }}>
+                                        <Conversation conversation={c} currentUser={currentUser} />
                                     </div>
 
-                                    <input type='text'
-                                        className='chatMessageInput rounded-md'
-                                        placeholder='write something..' value={text}
-                                        onChange={messageHandler} ></input>
+                                ))}
 
-                                    {showSendButton ?
-                                        (<button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }} onClick={sendMessage} >
-                                            <IoIosSend />
-                                        </button>) : (null)}
-                                </div>
-                            </>) : (<span className='noConversation'>Open a conversation to start a chat </span>)
-                            }
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div className="chatOnline">
-                        <div className="chatOnlineWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                            <span className='online'>Online</span>
-                            <DocChatOnline
-                                onlineUsers={onlineUsers}
-                                currentId={currentUser?._id}
-                                setCurrentChat={setCurrentChat}
-                            />
+                        <div className="chatBox bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black ">
+                            <div className="chatBoxWrapper  bg-gradient-to-r from-lime-200 via-lime-50 to-lime-200 p-4  rounded-2xl">
+                                {showEmoji &&
+                                    <div className='emojiPickerContainer'>
+                                        <Picker perLine={7} emojiSize={20} emojiButtonSize={28}
+                                            className='custom-picker-class'
+                                            data={data} onEmojiSelect={addEmoji} />
+                                    </div>
+                                }
+                                {currentChat ? (<>
+                                    <div className="chatBoxTop">
+
+                                        {messages?.map((m) => (
+                                            <div key={m?._id} ref={scrollRef}>
+                                                <Messages message={m}
+                                                    own={m?.sender === currentUser._id} />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="chatBoxBottom">
+                                        <span onClick={toggleEmojiPicker}
+                                            style={{ fontSize: '30px', cursor: 'pointer' }}
+                                            className="emojiIcon">
+                                            <MdOutlineEmojiEmotions />
+                                        </span>
+
+                                        <div className=''>
+                                            <button className='' onClick={togglePopUp}>
+                                                <img className='w-8' src={addIcon} alt="" />
+                                            </button>
+                                            {showPopUp && (
+                                                <div className='absolute bottom-20 flex flex-col gap-3 bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-2 rounded border mt-2 w-40 '>
+                                                    <label className="cursor-pointer flex items-center" htmlFor="image-input">
+                                                        <img src={imgIcon} alt="Image Icon" className="w-6 h-6 mr-2" />
+                                                        Images
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="image-input"
+                                                        accept="image/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                    <label className="cursor-pointer flex items-center" htmlFor="video-input">
+                                                        <img src={videoIcon} alt="Video Icon" className="w-6 h-6 mr-2" />
+                                                        Videos
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="video-input"
+                                                        accept="video/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                    <label className="cursor-pointer flex items-center" htmlFor="document-input">
+                                                        <img src={docsIcon} alt="Document Icon" className="w-6 h-6 mr-2" />
+                                                        Documents
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="document-input"
+                                                        accept=".pdf,.doc,.docx,.txt"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                </div>
+                                            )}
+                                            {showSelectedMedia && (
+                                                <div className='absolute bottom-20 p-2'>
+                                                    {
+                                                        showSelectedMedia.isVideo ? (
+                                                            <div className={`relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded`}>
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+
+                                                                <div className=''>
+                                                                    <iframe src={showSelectedMedia?.url} className='overflow-hidden ' />
+                                                                </div>
+                                                            </div>
+                                                        ) : showSelectedMedia.isImage ? (
+
+                                                            <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                         via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
+
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <img src={showSelectedMedia?.url} alt="" />
+                                                            </div>
+                                                        ) : showSelectedMedia.isDocument ? (
+                                                            <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 shadow-sm shadow-black rounded'>
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
+                                                            </div>
+                                                        ) : (null)
+
+                                                    }
+                                                    {mediaError ?
+                                                        (
+                                                            <div className='bg-red-100 mt-2 p-3 shadow-sm shadow-black rounded'>
+                                                                {mediaError}
+                                                            </div>
+                                                        ) : null
+                                                    }
+
+                                                </div>
+                                            )
+                                            }
+                                        </div>
+
+                                        <input type='text'
+                                            className='chatMessageInput rounded-md'
+                                            placeholder='write something..' value={text}
+                                            onChange={messageHandler} ></input>
+
+                                        {showSendButton ?
+                                            (<button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }} onClick={sendMessage} >
+                                                <IoIosSend />
+                                            </button>) : (null)}
+                                    </div>
+                                </>) : (<span className='noConversation'>Open a conversation to start a chat </span>)
+                                }
+                            </div>
                         </div>
-                    </div>
 
+
+                        <div className="chatOnline">
+                            <div className="chatOnlineWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                                <span className='online'>Online</span>
+                                <DocChatOnline
+                                    onlineUsers={onlineUsers}
+                                    currentId={currentUser?._id}
+                                    setCurrentChat={setCurrentChat}
+                                />
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <>
+                    <div className='flex flex-col items-center justify-center h-[621px]'>
+                        <p className='mt-5 text-blue-gray-600 text-xl font-bold'>Messages will be available only after getting booking</p>
+                        <img src={noMsg} alt="" />
+                    </div>
+                </>
+            )}
+
         </>
 
     )

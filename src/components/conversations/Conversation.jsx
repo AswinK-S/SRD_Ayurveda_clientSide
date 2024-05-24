@@ -13,8 +13,11 @@ const Conversation = ({ conversation }) => {
 
     const getMessenger = async () => {
       try {
-        const result = await getdoctor(messengerId)
-        setMessenger(result?.data)
+        if (messengerId) {
+          const result = await getdoctor(messengerId)
+          setMessenger(result?.data)
+        }
+
       } catch (error) {
         console.log(error.message);
       }
@@ -23,7 +26,7 @@ const Conversation = ({ conversation }) => {
     getMessenger()
   }, [])
 
- 
+
 
   return (
     <>

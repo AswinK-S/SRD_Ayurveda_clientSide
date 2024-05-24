@@ -11,7 +11,7 @@ const OverViewComponent = () => {
 
   const fetch = useCallback(async () => {
     const result = await getDataForOverview(doctor?._id);
-    console.log('doctor id',doctor?._id);
+    console.log('result',result);
     setPatients(result);
   }, [doctor]);
 

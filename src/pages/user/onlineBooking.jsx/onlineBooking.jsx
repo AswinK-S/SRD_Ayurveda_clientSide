@@ -9,6 +9,8 @@ import PageNotFound from "../../../components/error/pageNotfound";
 import { FaSearch } from "react-icons/fa";
 import 'ldrs/quantum'
 import { toast } from 'react-toastify';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 
 const OnlineBooking = () => {
@@ -21,6 +23,19 @@ const OnlineBooking = () => {
     const pageSize = 6;
 
     const [fiterValue, setfilterVallue] = useState(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const token = localStorage.getItem('usertoken')
+        if (token) {
+            const decode = jwtDecode(token)
+            if (decode.role !== "user") {
+                navigate('/login')
+            } 
+        } else{
+            navigate('/login')
+        }
+    }, [navigate])
 
     const fetchBookings = async (pageNumber) => {
         setLoading(true);
@@ -85,7 +100,6 @@ const OnlineBooking = () => {
 
     const handleFilterChange = (event) => {
         const selected = event.target.value;
-        console.log('seleted price', selected);
         setfilterVallue(selected)
     };
 

@@ -10,23 +10,39 @@ import propTypes from 'prop-types'
 const BookSlotModal = ({ setShowModal, bookingData }) => {
     const dispatch = useDispatch()
     const [bkngDetail, setbkngDetail] = useState({})
-    const user = useSelector((state)=>state.user.user)
+    const [user,setUser]= useState('')
+
+    const userData = useSelector((state)=>state.user.user)
+    
 
     console.log('bookingData in BookSlotModal-->',bookingData);
+
+    useEffect(()=>{
+        const token = localStorage.getItem('usertoken')
+        if(token){
+            if(userData?.user?.isGoogle){
+                setUser(userData?.user)
+
+            }else{
+                setUser(userData)
+            }
+        }
+    },[])
+
     useEffect(() => {
         const fetchData = async () => {
             const result = await bookingDetail(bookingData?.doctorId, bookingData?.treatmentId, bookingData?.subTreatmentId)
-            console.log('result----bb', result);
+            console.log('result----bb', result,'user--',user);
             result.email = user.email
             result.consultingDate=bookingData?.consultingDate
-            result.userId =bookingData?.user_Id
+            result.userId =bookingData?.user_Id || user?._id
             setbkngDetail(result)
             dispatch(bookingDatas(result))
         }
         fetchData()
+
     }, [bookingData,setbkngDetail,dispatch,user])
 
-    console.log('rrr', bkngDetail);
 
 
     const handleBooking = async()=>{

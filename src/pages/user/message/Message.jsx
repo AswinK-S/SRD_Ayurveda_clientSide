@@ -21,9 +21,14 @@ import docsIcon from '../../../../public/google-docs.png'
 
 import ReactLoading from 'react-loading'
 
+import noMsg from '../../../../public/no-messages.webp'
+import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
+
 const Message = () => {
 
-    const currentUser = useSelector((state) => state.user.user)
+    const user = useSelector((state) => state.user.user)
+    const [currentUser,setCurrentUser] = useState('')
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
@@ -45,6 +50,27 @@ const Message = () => {
 
     const [loading, setLoading] = useState(false)
 
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const token = localStorage.getItem('usertoken')
+        if (token) {
+
+            if(user?.user?.isGoogle){
+                setCurrentUser(user?.user)
+            }else{
+                setCurrentUser(user)
+            }
+
+            const decode = jwtDecode(token)
+            if (decode.role !== "user") {
+                navigate('/login')
+            } 
+        } else {
+            navigate('/login')
+        }
+    }, [navigate,user])
+
 
     const socket = useRef()
     //connect to socket server
@@ -52,7 +78,6 @@ const Message = () => {
         socket.current = io('ws://localhost:3001')
 
         socket?.current.on("getMessage", data => {
-            console.log('get message--> in user', data);
             setArrivalMessage({
                 sender: data?.senderId,
                 text: data?.text,
@@ -66,15 +91,11 @@ const Message = () => {
     useEffect(() => {
         console.log('current chat in user--', currentChat);
         console.log('arrival message in user--',arrivalMessage);
-        // arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
-        //     setMessages((prev) => [...prev, arrivalMessage])
         arrivalMessage && currentChat?._id === arrivalMessage?.sender &&
             setMessages((prev) => [...prev, arrivalMessage])
 
     }, [arrivalMessage, currentChat])
 
-    // console.log(' arrival messagge-- in user',arrivalMessage);
-    // console.log('messages in user-',messages);
 
     //get all doctors from the bookings for chat
     useEffect(() => {
@@ -106,12 +127,15 @@ const Message = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
+                console.log('userId 3333==',currentUser?._id);
+
                 if (currentUser) {
+                    console.log('userId ==',currentUser?._id);
                     const result = await getConversation(currentUser?._id)
-                    // console.log('conversation in user--',result);
+                    console.log('conversation in user--',result);
                     setConverstion(result)
                 } else {
-                    console.log('no user');
+                    console.log('no userrr');
                 }
             } catch (error) {
                 console.log(error.message);
@@ -124,8 +148,11 @@ const Message = () => {
     useEffect(() => {
         const Messages = async () => {
             try {
-                const res = await getMessages(conversationId)
-                setMessages(res)
+                if(conversationId){
+                    const res = await getMessages(conversationId)
+                    setMessages(res)
+                }
+              
             } catch (error) {
                 console.log(error.message);
             }
@@ -178,7 +205,6 @@ const Message = () => {
                 setLoading(true)
                 const formData = new FormData()
                 formData.append('medias', file)
-                console.log('sending to upld in multer--');
                 const uploadToMulter = await uploadMedia(formData)
 
                 console.log('multer upload result--', uploadToMulter);
@@ -194,7 +220,6 @@ const Message = () => {
                 }
 
                 if (typeof uploadToMulter === 'string') {
-                    console.log(' type---');
                     const receiverId = currentChat?._id
                     socket.current.emit("sendMessage", {
                         senderId: currentUser?._id,
@@ -272,7 +297,8 @@ const Message = () => {
     return (
         <>
             <Nav />
-            <div className='flex justify-center'>
+            {doctors && conversation ? (
+                <div className='flex justify-center'>
                 <div className='messenger   p-10 gap-5 '>
 
                     <div className="chatMenu ">
@@ -291,9 +317,9 @@ const Message = () => {
                     </div>
 
 
-                    <div className="chatBox bg-gradient-to-r from-lime-200 via-lime-100 to-lime-200 shadow-md shadow-black ">
+                    <div className="chatBox bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black ">
 
-                        <div className="chatBoxWrapper ">
+                        <div className="chatBoxWrapper bg-gradient-to-r from-lime-200 via-lime-50 to-lime-200 p-4  rounded-2xl ">
                             {showEmoji && (
                                 <div className='emojiPickerContainer'>
                                     <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class'
@@ -441,6 +467,16 @@ const Message = () => {
 
                 </div>
             </div>
+            ):(
+                <>
+
+                <div className='flex flex-col items-center justify-center'>
+                <p className='mt-5 text-blue-gray-600 text-xl font-bold'>Messages will be available only after booking</p>
+                    <img src={noMsg} alt="" />
+                </div>
+            </>
+            )}
+            
             <Footer />
         </>
 
