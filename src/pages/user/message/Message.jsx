@@ -28,7 +28,7 @@ import { useNavigate } from 'react-router-dom'
 const Message = () => {
 
     const user = useSelector((state) => state.user.user)
-    const [currentUser,setCurrentUser] = useState('')
+    const [currentUser, setCurrentUser] = useState('')
     const [conversation, setConverstion] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
     const [messages, setMessages] = useState([])
@@ -56,20 +56,20 @@ const Message = () => {
         const token = localStorage.getItem('usertoken')
         if (token) {
 
-            if(user?.user?.isGoogle){
+            if (user?.user?.isGoogle) {
                 setCurrentUser(user?.user)
-            }else{
+            } else {
                 setCurrentUser(user)
             }
 
             const decode = jwtDecode(token)
             if (decode.role !== "user") {
                 navigate('/login')
-            } 
+            }
         } else {
             navigate('/login')
         }
-    }, [navigate,user])
+    }, [navigate, user])
 
 
     const socket = useRef()
@@ -89,8 +89,6 @@ const Message = () => {
 
     // Handle arrival of new messages
     useEffect(() => {
-        console.log('current chat in user--', currentChat);
-        console.log('arrival message in user--',arrivalMessage);
         arrivalMessage && currentChat?._id === arrivalMessage?.sender &&
             setMessages((prev) => [...prev, arrivalMessage])
 
@@ -101,23 +99,34 @@ const Message = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const result = await getDoctors(currentUser?.email)
-                setDoctors(result)
+
+                console.log('currentUser email', currentUser);
+                if (currentUser?.email) {
+                    const result = await getDoctors(currentUser?.email)
+                    console.log('doctors--', result);
+                    if (result.length) {
+                        setDoctors(result)
+                    }
+                }
             } catch (error) {
                 console.log(error.message);
             }
-
         }
         fetch()
     }, [currentUser])
 
     //add user to socket server and set online users
     useEffect(() => {
-        socket.current.emit('addUser', currentUser?._id)
+        if(doctors.length ){
+            socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            // console.log('users in user--',users,'doctors for chat--',doctors);
+            console.log('users in user--',users,'doctors for chat--',doctors);
+
             setOnlineUsers(doctors?.filter((doc) => users?.some((user) => user.userId === doc?._id)))
         })
+
+        }
+        
     }, [currentUser, text, doctors])
 
 
@@ -127,12 +136,11 @@ const Message = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
-                console.log('userId 3333==',currentUser?._id);
+                console.log('userId 3333==', currentUser?._id);
 
                 if (currentUser) {
-                    console.log('userId ==',currentUser?._id);
+                    console.log('userId ==', currentUser?._id);
                     const result = await getConversation(currentUser?._id)
-                    console.log('conversation in user--',result);
                     setConverstion(result)
                 } else {
                     console.log('no userrr');
@@ -148,11 +156,11 @@ const Message = () => {
     useEffect(() => {
         const Messages = async () => {
             try {
-                if(conversationId){
+                if (conversationId) {
                     const res = await getMessages(conversationId)
                     setMessages(res)
                 }
-              
+
             } catch (error) {
                 console.log(error.message);
             }
@@ -299,184 +307,184 @@ const Message = () => {
             <Nav />
             {doctors && conversation ? (
                 <div className='flex justify-center'>
-                <div className='messenger   p-10 gap-5 '>
+                    <div className='messenger   p-10 gap-5 '>
 
-                    <div className="chatMenu ">
-                        <div className="chatMenuWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                            <span className='chatlist'>Chat List</span>
-                            <input placeholder='search' className='chatMenuInput' />
-                            {doctors?.map((c) => (
-                                // <div key={c?._id} onClick={() =>  setCurrentChat(c) }>
-                                <div key={c?._id} onClick={() => getCurrentChatId(c)}>
-                                    <Conversation conversation={c} currentUser={currentUser} />
-                                </div>
-
-                            ))}
-
-                        </div>
-                    </div>
-
-
-                    <div className="chatBox bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black ">
-
-                        <div className="chatBoxWrapper bg-gradient-to-r from-lime-200 via-lime-50 to-lime-200 p-4  rounded-2xl ">
-                            {showEmoji && (
-                                <div className='emojiPickerContainer'>
-                                    <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class'
-                                        data={data} onEmojiSelect={addEmoji} />
-                                </div>
-                            )}
-                            {currentChat ? (<>
-                                <div className="chatBoxTop">
-                                    {messages?.map((m) => (
-                                        <div key={m?._id} ref={scrollRef}>
-                                            <Messages message={m} own={m?.sender === currentUser?._id} />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="chatBoxBottom relative">
-                                    <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon">
-                                        <MdOutlineEmojiEmotions />
-                                    </span>
-
-                                    <div className=' '>
-                                        <button className='' onClick={togglePopUp}>
-                                            <img className='w-8' src={addIcon} alt="" />
-                                        </button>
-                                        {showPopUp && (
-                                            <div className='absolute bottom-20 flex flex-col gap-3 bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-2 rounded border mt-2 w-40 '>
-                                                <label className="cursor-pointer flex items-center" htmlFor="image-input">
-                                                    <img src={imgIcon} alt="Image Icon" className="w-6 h-6 mr-2" />
-                                                    Images
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="image-input"
-                                                    accept="image/*"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                                <label className="cursor-pointer flex items-center" htmlFor="video-input">
-                                                    <img src={videoIcon} alt="Video Icon" className="w-6 h-6 mr-2" />
-                                                    Videos
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="video-input"
-                                                    accept="video/*"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                                <label className="cursor-pointer flex items-center" htmlFor="document-input">
-                                                    <img src={docsIcon} alt="Document Icon" className="w-6 h-6 mr-2" />
-                                                    Documents
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="document-input"
-                                                    accept=".pdf,.doc,.docx,.txt"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelection}
-                                                />
-                                            </div>
-                                        )}
-                                        {showSelectedMedia && (
-                                            <div className='absolute bottom-20 p-2'>
-                                                {
-                                                    showSelectedMedia.isVideo ? (
-                                                        <div className=' relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                        via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
-
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-                                                            <iframe src={showSelectedMedia?.url} className='overflow-hidden' />
-                                                        </div>
-                                                    ) : showSelectedMedia.isImage ? (
-                                                        <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                        via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-                                                            <img src={showSelectedMedia?.url} alt="" />
-                                                        </div>
-                                                    ) : showSelectedMedia.isDocument ? (
-                                                        <div className=' relative bg-gradient-to-r from-lime-100 flex h-full items-center
-                                                        via-lime-50 to-lime-100 shadow-sm shadow-black rounded'>
-                                                            {loading ? (
-                                                                <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
-                                                                    <ReactLoading type="bars" color="white" height={50} width={25} />
-                                                                </div>
-                                                            ) : (null)
-                                                            }
-                                                            <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
-
-                                                        </div>
-                                                    ) : (null)
-
-                                                }
-                                                {mediaError ?
-                                                    (
-                                                        <div className='bg-red-100 mt-2 p-3 shadow-sm shadow-black rounded'>
-                                                            {mediaError}
-                                                        </div>
-                                                    ) : null
-                                                }
-
-                                            </div>
-                                        )
-                                        }
+                        <div className="chatMenu ">
+                            <div className="chatMenuWrapper rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                                <span className='chatlist'>Chat List</span>
+                                <input placeholder='search' className='chatMenuInput' />
+                                {doctors?.map((c) => (
+                                    // <div key={c?._id} onClick={() =>  setCurrentChat(c) }>
+                                    <div key={c?._id} onClick={() => getCurrentChatId(c)}>
+                                        <Conversation conversation={c} currentUser={currentUser} />
                                     </div>
 
-                                    <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
+                                ))}
 
-                                    {showSendButton ?
-                                        (
-                                            <button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }}
-                                                onClick={sendMessage} >
-                                                <IoIosSend />
+                            </div>
+                        </div>
 
+
+                        <div className="chatBox bg-gradient-to-r from-lime-300 via-lime-100 to-lime-300 shadow-md shadow-black ">
+
+                            <div className="chatBoxWrapper bg-gradient-to-r from-lime-200 via-lime-50 to-lime-200 p-4  rounded-2xl ">
+                                {showEmoji && (
+                                    <div className='emojiPickerContainer'>
+                                        <Picker perLine={7} emojiSize={20} emojiButtonSize={28} className='custom-picker-class'
+                                            data={data} onEmojiSelect={addEmoji} />
+                                    </div>
+                                )}
+                                {currentChat ? (<>
+                                    <div className="chatBoxTop">
+                                        {messages?.map((m) => (
+                                            <div key={m?._id} ref={scrollRef}>
+                                                <Messages message={m} own={m?.sender === currentUser?._id} />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="chatBoxBottom relative">
+                                        <span onClick={toggleEmojiPicker} style={{ fontSize: '30px', cursor: 'pointer' }} className="emojiIcon">
+                                            <MdOutlineEmojiEmotions />
+                                        </span>
+
+                                        <div className=' '>
+                                            <button className='' onClick={togglePopUp}>
+                                                <img className='w-8' src={addIcon} alt="" />
                                             </button>
-                                        ) : (null)}
+                                            {showPopUp && (
+                                                <div className='absolute bottom-20 flex flex-col gap-3 bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-sm shadow-black p-2 rounded border mt-2 w-40 '>
+                                                    <label className="cursor-pointer flex items-center" htmlFor="image-input">
+                                                        <img src={imgIcon} alt="Image Icon" className="w-6 h-6 mr-2" />
+                                                        Images
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="image-input"
+                                                        accept="image/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                    <label className="cursor-pointer flex items-center" htmlFor="video-input">
+                                                        <img src={videoIcon} alt="Video Icon" className="w-6 h-6 mr-2" />
+                                                        Videos
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="video-input"
+                                                        accept="video/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                    <label className="cursor-pointer flex items-center" htmlFor="document-input">
+                                                        <img src={docsIcon} alt="Document Icon" className="w-6 h-6 mr-2" />
+                                                        Documents
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="document-input"
+                                                        accept=".pdf,.doc,.docx,.txt"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
+                                                </div>
+                                            )}
+                                            {showSelectedMedia && (
+                                                <div className='absolute bottom-20 p-2'>
+                                                    {
+                                                        showSelectedMedia.isVideo ? (
+                                                            <div className=' relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
 
-                                </div>
-                            </>) :
-                                (<span className='noConversation'>Open a conversation to start a chat </span>)
-                            }
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <iframe src={showSelectedMedia?.url} className='overflow-hidden' />
+                                                            </div>
+                                                        ) : showSelectedMedia.isImage ? (
+                                                            <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <img src={showSelectedMedia?.url} alt="" />
+                                                            </div>
+                                                        ) : showSelectedMedia.isDocument ? (
+                                                            <div className=' relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 shadow-sm shadow-black rounded'>
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
+
+                                                            </div>
+                                                        ) : (null)
+
+                                                    }
+                                                    {mediaError ?
+                                                        (
+                                                            <div className='bg-red-100 mt-2 p-3 shadow-sm shadow-black rounded'>
+                                                                {mediaError}
+                                                            </div>
+                                                        ) : null
+                                                    }
+
+                                                </div>
+                                            )
+                                            }
+                                        </div>
+
+                                        <input type='text' className='chatMessageInput rounded-full' placeholder='write something..' value={text} onChange={messageHandler} ></input>
+
+                                        {showSendButton ?
+                                            (
+                                                <button className='chatSubmitButton rounded-full ' style={{ fontSize: '30px', cursor: 'pointer', alignItems: 'center', justifyContent: "center", display: 'flex' }}
+                                                    onClick={sendMessage} >
+                                                    <IoIosSend />
+
+                                                </button>
+                                            ) : (null)}
+
+                                    </div>
+                                </>) :
+                                    (<span className='noConversation'>Open a conversation to start a chat </span>)
+                                }
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div className="chatOnline">
-                        <div className="chatOnlineWrapper  rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
-                            <span className='online'>Online</span>
-                            <ChatOnline
-                                onlineUsers={onlineUsers}
-                                currentId={currentUser?._id}
-                                setCurrentChat={setCurrentChat}
-                            />
+                        <div className="chatOnline">
+                            <div className="chatOnlineWrapper  rounded-md  bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                                <span className='online'>Online</span>
+                                <ChatOnline
+                                    onlineUsers={onlineUsers}
+                                    currentId={currentUser?._id}
+                                    setCurrentChat={setCurrentChat}
+                                />
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
-            ):(
+            ) : (
                 <>
 
-                <div className='flex flex-col items-center justify-center'>
-                <p className='mt-5 text-blue-gray-600 text-xl font-bold'>Messages will be available only after booking</p>
-                    <img src={noMsg} alt="" />
-                </div>
-            </>
+                    <div className='flex flex-col items-center justify-center'>
+                        <p className='mt-5 text-blue-gray-600 text-xl font-bold'>Messages will be available only after booking</p>
+                        <img src={noMsg} alt="" />
+                    </div>
+                </>
             )}
-            
+
             <Footer />
         </>
 

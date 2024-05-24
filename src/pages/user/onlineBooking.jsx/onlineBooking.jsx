@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 
 
 const OnlineBooking = () => {
-    const user = useSelector((state) => state.user.user);
+    const userData = useSelector((state) => state.user.user);
+    const [user,setUser] = useState('')
     const [bookinsData, setBookingsData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -28,6 +29,11 @@ const OnlineBooking = () => {
     useEffect(() => {
         const token = localStorage.getItem('usertoken')
         if (token) {
+            if(userData?.user?.isGoogle){
+                setUser(userData?.user)
+            }else{
+                setUser(userData)
+            }
             const decode = jwtDecode(token)
             if (decode.role !== "user") {
                 navigate('/login')
@@ -35,13 +41,17 @@ const OnlineBooking = () => {
         } else{
             navigate('/login')
         }
-    }, [navigate])
+    }, [navigate,userData])
+
+
 
     const fetchBookings = async (pageNumber) => {
         setLoading(true);
         try {
             // Make an API call to fetch bookings data from backend
+            console.log('user.email',user.email,);
             const response = await bookings(user.email, pageNumber, pageSize);
+            console.log('bookings--',response);
             if (pageNumber === 1) {
                 setBookingsData(response);
             } else {
@@ -64,8 +74,11 @@ const OnlineBooking = () => {
 
 
     useEffect(() => {
+        if(user?.email){
         fetchBookings(1);
-    }, []);
+
+        }
+    }, [user]);
 
     const loadMoreBookings = () => {
         setPage(page + 1);

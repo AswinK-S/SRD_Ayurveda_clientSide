@@ -8,16 +8,26 @@ import { getConversations } from '../../api/conversationApi'
 const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
     const [users, setUsers] = useState([])
     const [liveUsers, setLiveUsers] = useState([])
-
+    const [userData,setUserData] = useState([])
     //to find doctors from booking using userEmail
-    const userData = useSelector((state) => state.user.user)
+    const user = useSelector((state) => state.user.user)
+
+
+    useEffect(()=>{
+        if(user?.user?.isGoogle){
+            setUserData(user?.user)
+        }else{
+            setUserData(user)
+        }
+    },[user])
 
     //get doctors for chat
     useEffect(() => {
         const fetch = async () => {
-            const result = await getDoctors(userData?.email)
-            setUsers(result)
-
+            if(userData?.email){
+                const result = await getDoctors(userData?.email)
+                setUsers(result)
+            }
         }
         fetch()
     }, [userData])
@@ -32,7 +42,6 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
     const handleClick = async(onLineUser)=>{
         try {
             const result = await getConversations(currentId,onLineUser?._id)
-            console.log('current chat in chatOnline-->',result);
             setCurrentChat(result[0])
         } catch (error) {
             console.log(error.message);
