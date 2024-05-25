@@ -60,9 +60,9 @@ export const createSlot =async (slotData)=>{
 } 
 
 
-export const getSlots = async(id)=>{
+export const getSlots = async(id,pageNumber,pageSize)=>{
     try {
-        const result = await axiosApi.get(`${doctorRoute.getSlots}/${id}`,)
+        const result = await axiosApi.get(`${doctorRoute.getSlots}/${id}/${pageNumber}/${pageSize}`,)
         return result
     } catch (error) {
         console.log(error.message);

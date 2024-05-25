@@ -31,8 +31,8 @@ const Messages = ({ message, own }) => {
             // Render document component
             return (
                 <a href={message.media} target="_blank" rel="noopener noreferrer" className={own ?
-                    "messageMedia own flex items-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 p-3 rounded shadow-sm shadow-black" :
-                    "messageMedia"}>
+                    "messageMedia own flex items-center p-3 rounded shadow-sm shadow-black" :
+                    "messageMedia flex items-center   rounded shadow-sm shadow-black"}>
                     <span className='p-2'>{message.media.split('/').pop()}</span>
                     <img className="w-10" src={dwnld} alt="" />
                 </a>

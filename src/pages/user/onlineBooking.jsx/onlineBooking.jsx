@@ -41,7 +41,8 @@ const OnlineBooking = () => {
         } else{
             navigate('/login')
         }
-    }, [navigate,userData])
+    }, 
+    [navigate,userData])
 
 
 
@@ -49,9 +50,7 @@ const OnlineBooking = () => {
         setLoading(true);
         try {
             // Make an API call to fetch bookings data from backend
-            console.log('user.email',user.email,);
             const response = await bookings(user.email, pageNumber, pageSize);
-            console.log('bookings--',response);
             if (pageNumber === 1) {
                 setBookingsData(response);
             } else {
@@ -75,20 +74,17 @@ const OnlineBooking = () => {
 
     useEffect(() => {
         if(user?.email){
-        fetchBookings(1);
-
+          fetchBookings(1);
         }
     }, [user]);
 
     const loadMoreBookings = () => {
         setPage(page + 1);
         fetchBookings(page + 1);
-
     };
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value)
-
     }
 
 
