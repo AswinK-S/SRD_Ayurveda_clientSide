@@ -55,7 +55,7 @@ const DocMessage = () => {
     const socket = useRef()
     //conecting socket
     useEffect(() => {
-        socket.current = io('ws://localhost:3001')
+        socket.current = io('ws://localhost:3000')
 
         socket?.current.on('getMessage', data => {
             console.log('get message in doc-->', data);
@@ -283,9 +283,11 @@ const DocMessage = () => {
                     <div className='messenger  p-10 gap-5 '>
 
                         <div className="chatMenu ">
-                            <div className="chatMenuWrapper rounded-md bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
+                            <div className="chatMenuWrapper rounded-md bg-gradient-to-r from-lime-100 via-lime-50
+                             to-lime-100 shadow-md shadow-black overflow-y-scroll 
+                             ">
                                 <span className='chatlist'>Chat List</span>
-                                <input placeholder='search' className='chatMenuInput' />
+                                {/* <input placeholder='search' className='chatMenuInput' /> */}
                                 {conversation?.map((c) => (
                                     <div key={c?._id} onClick={() => { getCurrentChatId(c) }}>
                                         <Conversation conversation={c} currentUser={currentUser} />

@@ -20,7 +20,10 @@ const DocChatOnline = ({onlineUsers, currentId, setCurrentChat}) => {
 
     //get online users
     useEffect(() => {
+        if(users){
         setLiveUsers(users?.filter((online) => onlineUsers.some(onlineUser =>online?._id ===onlineUser?._id )))
+
+        }
     }, [users, onlineUsers])
 
     //get the conversation of each doctor
