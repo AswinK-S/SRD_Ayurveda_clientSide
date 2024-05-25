@@ -32,7 +32,6 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
     useEffect(() => {
         const fetchData = async () => {
             const result = await bookingDetail(bookingData?.doctorId, bookingData?.treatmentId, bookingData?.subTreatmentId)
-            console.log('result----bb', result,'user--',user);
             result.email = user.email
             result.consultingDate=bookingData?.consultingDate
             result.userId =bookingData?.user_Id || user?._id
@@ -48,9 +47,8 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
     const handleBooking = async()=>{
         const updatedBkngDetail = {...bkngDetail, consultingDate: bookingData?.consultingDate };
 
-            await loadStripe('pk_test_51P2yGBSGV6hrQc7cK3KHLXeHHyd9h645uNtMyMIfJoP8QH7Lz6PR1GD5BxLoZarWVNYlKXDiwXp3QqihCB0QOjdW00Kjf8FBNx')
+            await loadStripe(import.meta.env.VITE_STRIPE_KEY)
             const result = await payment(updatedBkngDetail)
-            console.log('bkng rslt-->',result);
             const data= result.data
             window.location=data
     }
