@@ -76,7 +76,6 @@ const Message = () => {
     //connect to socket server
     useEffect(() => {
         socket.current = io(import.meta.env.VITE_WEBSOCKET)
-
         socket?.current.on("getMessage", data => {
             setArrivalMessage({
                 sender: data?.senderId,

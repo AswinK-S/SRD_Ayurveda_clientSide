@@ -34,7 +34,6 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
     //get online users
     useEffect(() => {
-        console.log('cht online--',users);
         if(users){
         setLiveUsers(users?.filter((online) => onlineUsers?.some(onlineUser =>online?._id ===onlineUser?._id )))
 
