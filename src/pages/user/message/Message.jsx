@@ -51,7 +51,7 @@ const Message = () => {
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
-    const webSocket = import.meta.env.VITE_WEBSOCKET
+    // const webSocket = import.meta.env.VITE_WEBSOCKET
 
     useEffect(() => {
         const token = localStorage.getItem('usertoken')
@@ -76,7 +76,7 @@ const Message = () => {
     const socket = useRef()
     //connect to socket server
     useEffect(() => {
-        socket.current = io(webSocket)
+        socket.current = io('ws://localhost:3000')
         socket?.current.on("getMessage", data => {
             setArrivalMessage({
                 sender: data?.senderId,

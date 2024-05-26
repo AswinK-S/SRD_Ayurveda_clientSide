@@ -15,7 +15,6 @@ const BookSlotModal = ({ setShowModal, bookingData }) => {
     const userData = useSelector((state)=>state.user.user)
     
 
-    console.log('bookingData in BookSlotModal-->',bookingData);
 
     useEffect(()=>{
         const token = localStorage.getItem('usertoken')
