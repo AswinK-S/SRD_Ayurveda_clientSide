@@ -76,7 +76,6 @@ const Message = () => {
     const socket = useRef()
     //connect to socket server
     useEffect(() => {
-        console.log('socket---',webSocket);
         socket.current = io(webSocket)
         socket?.current.on("getMessage", data => {
             setArrivalMessage({
