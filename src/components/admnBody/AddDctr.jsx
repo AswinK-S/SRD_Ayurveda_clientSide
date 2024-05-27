@@ -100,7 +100,6 @@ const AddDctr = () => {
         e.preventDefault();
 
         // Validate form data
-        console.log('form data to send for vldtn----', formData);
         const validationErrors = formValidation(formData)
 
         if (Object.keys(validationErrors).length > 0) {
@@ -133,7 +132,6 @@ const AddDctr = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        console.log('formData---', formData);
     };
     return (
         <>
