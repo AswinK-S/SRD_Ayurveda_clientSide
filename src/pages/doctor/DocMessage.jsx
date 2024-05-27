@@ -95,7 +95,6 @@ const DocMessage = () => {
         socket.current.on("getUsers", users => {
             setOnlineUsers(usersForChat?.filter((item) => users?.some((user) => user?.userId === item?._id)))
         })
-        socket.current.emit('disconnectUser')
     }, [text, usersForChat])
 
     const scrollRef = useRef()
