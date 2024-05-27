@@ -55,7 +55,7 @@ const DocMessage = () => {
     const socket = useRef()
     //conecting socket
     useEffect(() => {
-        socket.current = io('ws://localhost:3000')
+        socket.current = io(import.meta.env.VITE_WEBSOCKET)
 
         socket?.current.on('getMessage', data => {
             setArrivalMessage({
