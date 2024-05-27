@@ -6,7 +6,9 @@ import messagesRoute from "../services/endpoints/messageRoute";
 //get userDetails
 export const getUserData = async(userId)=>{
     try {
+        console.log('message  user id--',userId,);
         const result = await axiosApi.get(`${conversationRoute.getUser}/${userId}`)
+        console.log('msgnr data',result);
         return result.data
     } catch (error) {
         console.log(error.message);

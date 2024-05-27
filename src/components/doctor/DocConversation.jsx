@@ -13,7 +13,7 @@ const DocConversation = ({ conversation, currentUser }) => {
     const getMessenger = async () => {
       try {
         const result = await getUserData(messengerId)
-        // console.log('msngr dtls-->', result);
+        console.log('msngr dtls-->', result);
         setMessenger(result)
       } catch (error) {
         console.log(error.message);

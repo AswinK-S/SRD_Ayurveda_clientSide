@@ -58,7 +58,6 @@ const DocMessage = () => {
         socket.current = io('ws://localhost:3000')
 
         socket?.current.on('getMessage', data => {
-            console.log('get message in doc-->', data);
             setArrivalMessage({
                 sender: data?.senderId,
                 text: data?.text,
@@ -94,9 +93,9 @@ const DocMessage = () => {
     useEffect(() => {
         socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            // console.log('users in doc---',users ,'users for chat --',usersForChat);
             setOnlineUsers(usersForChat?.filter((item) => users?.some((user) => user?.userId === item?._id)))
         })
+        socket.current.emit('disconnectUser')
     }, [text, usersForChat])
 
     const scrollRef = useRef()
@@ -107,7 +106,7 @@ const DocMessage = () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
-                    console.log('conversation in doc',result);
+                    // console.log('conversatin--',result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -126,7 +125,6 @@ const DocMessage = () => {
             try {
                 if (conversationId) {
                     const res = await getMessages(conversationId)
-                    console.log('messages--', res);
                     setMessages(res)
                 }
               
@@ -139,7 +137,6 @@ const DocMessage = () => {
 
     // get id of the currentChat user
     const getCurrentChatId = (c) => {
-        console.log('current chat--', c);
         const rcvrId = c?.members.find((item) => item !== currentUser?._id)
         setReceiverId(rcvrId)
         setCurrentChat(c)
@@ -272,7 +269,6 @@ const DocMessage = () => {
         }
     };
 
-    console.log('userSfor chat ', usersForChat, 'conversationId ', conversationId);
 
     return (
         <>

@@ -100,11 +100,9 @@ const Message = () => {
         const fetch = async () => {
             try {
 
-                console.log('currentUser email', currentUser);
                 if (currentUser?.email) {
                     const result = await getDoctors(currentUser?.email)
-                    console.log('doctors--', result);
-                    if (result.length) {
+                    if (result?.length) {
                         setDoctors(result)
                     }
                 }
@@ -120,7 +118,6 @@ const Message = () => {
         if(doctors.length ){
             socket.current.emit('addUser', currentUser?._id)
         socket.current.on("getUsers", users => {
-            console.log('users in user--',users,'doctors for chat--',doctors);
 
             setOnlineUsers(doctors?.filter((doc) => users?.some((user) => user.userId === doc?._id)))
         })
@@ -136,10 +133,8 @@ const Message = () => {
     useEffect(() => {
         const fetch = async () => {
             try {
-                console.log('userId 3333==', currentUser?._id);
 
                 if (currentUser) {
-                    console.log('userId ==', currentUser?._id);
                     const result = await getConversation(currentUser?._id)
                     setConverstion(result)
                 } else {
@@ -305,7 +300,7 @@ const Message = () => {
     return (
         <>
             <Nav />
-            {doctors && conversation ? (
+            {doctors.length ? (
                 <div className='flex justify-center'>
                     <div className='messenger   p-10 gap-5 '>
 
