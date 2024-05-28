@@ -17,7 +17,7 @@ const Footer = () => {
 
     return (
         <div className="flex flex-col lg:flex-row">
-            <div className="  items-center p-5 bg-[#78350f] lg:h-[250px] lg:w-2/3 w-full">
+            <div className="  items-center p-2 bg-[#78350f] lg:h-[250px] lg:w-2/3 w-full">
                 <div className="address bg-transparent text-white rounded-md p-2 ">
                     <ul className="text-wrap bg-transparent font-bold p-2 rounded-lg">
                         <li className="bg-transparent">SRD AYURVEDICS & NURSING HOME</li>
