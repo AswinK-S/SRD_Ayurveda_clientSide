@@ -17,7 +17,7 @@ const Footer = () => {
 
     return (
         <div className="flex flex-col lg:flex-row">
-            <div className="  items-center p-2 bg-[#78350f] lg:h-[250px] lg:w-2/3 w-full">
+            <div className="  items-center p-3 bg-[#78350f] lg:h-[250px] lg:w-2/3 w-full">
                 <div className="address bg-transparent text-white rounded-md p-2 ">
                     <ul className="text-wrap bg-transparent font-bold p-2 rounded-lg">
                         <li className="bg-transparent">SRD AYURVEDICS & NURSING HOME</li>
@@ -30,7 +30,7 @@ const Footer = () => {
 
                 </div>
 
-                <div className=" p-5 text-center">
+                <div className=" p-2 text-center">
                     <span className="text-xs text-white">© 2024 Copyright :</span>
                     <a className="font-extralight text-xs  font-sans text-white" href="">
                         protected
