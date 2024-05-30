@@ -5,16 +5,6 @@ const Footer = () => {
 
 
 
-    // const backgroundImage = {
-    //     backgroundImage: 'url("footer-bg.jpg")',
-    //     backgroundSize: 'cover',
-    //     backgroundPosition: 'center',
-    //     width: '100%',
-    //     position: 'relative',
-
-    // };
-    // style={backgroundImage}
-
     return (
         <div className="flex flex-col lg:flex-row">
             <div className="  items-center p-3 bg-[#78350f] lg:h-[250px] lg:w-2/3 w-full">
@@ -23,7 +13,7 @@ const Footer = () => {
                         <li className="bg-transparent">SRD AYURVEDICS & NURSING HOME</li>
                         <li className="bg-transparent">PULAMANTHOLE</li>
                         <li className="bg-transparent">Pulamanthole (PO)</li>
-                        <li className="bg-transparent">Malappuram</li>
+                        <li className="bg-transparent">Kannur</li>
                         <li className="bg-transparent">Kerala</li>
                         <li className="bg-transparent">Phone. +91 0000000006</li>
                     </ul>

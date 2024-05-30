@@ -215,7 +215,6 @@ const SignUp = () => {
     }
 
     //google auth
-
     const sendDataToBackend = async (decode) => {
         try {
 

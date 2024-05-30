@@ -62,9 +62,12 @@ export const send = async(conversationId,sender,text)=>{
 //upload media to cloudinary
 export const uploadMedia = async(formData)=>{
     try {   
+        console.log('uploading media to chat');
         const result = await axiosApi.post(messagesRoute.sendMedia,formData)
+        console.log('result--',result);
         return result.data
     } catch (error) {
+        console.log('media chat error--',error);
         return error.response
     }
 }
