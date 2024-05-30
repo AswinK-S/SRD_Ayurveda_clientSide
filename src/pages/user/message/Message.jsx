@@ -214,7 +214,7 @@ const Message = () => {
 
                 console.log('multer upload result--', uploadToMulter);
 
-                if(uploadToMulter.message ==='Network Error'){
+                if(uploadToMulter.message ===undefined){
                     setMediaError('something went wrong')
                     setShowSelectedMedia(null)
                     setLoading(false)

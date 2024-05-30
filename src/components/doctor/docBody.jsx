@@ -38,7 +38,6 @@ const DocBody =()=>{
 
             let loginData = { email, password }
             let response = await docLogin(loginData)
-            console.log('ressss ----------,');
 
             if(response ==='invalid password'){
                 setError("Invalid Password!")
