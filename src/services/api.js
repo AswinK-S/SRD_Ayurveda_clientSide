@@ -6,10 +6,6 @@ console.log('cldnry',import.meta.env.VITE_CLOUDINARY_ROUTE);
 
 const axiosApi = axios.create({
     baseURL:import.meta.env.VITE_BACKEND,withCredentials:true,
-    headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': import.meta.env.VITE_BACKEND
-      }
     // baseURL:"http://localhost:3000",withCredentials:true
     
 })
