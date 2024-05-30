@@ -213,6 +213,14 @@ const Message = () => {
                
 
                 console.log('multer upload result--', uploadToMulter);
+
+                if(uploadToMulter.message ==='Network Error'){
+                    setMediaError('something went wrong')
+                    setShowSelectedMedia(null)
+                    setLoading(false)
+                    return;
+                }
+                
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
                     setLoading(false)
