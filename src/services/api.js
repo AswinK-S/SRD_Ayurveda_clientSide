@@ -1,7 +1,7 @@
 import axios from "axios";
 
 console.log('bcknd',import.meta.env.VITE_BACKEND)
-console.log('cldnry',import.meta.env.VITE_BACKEND);
+console.log('cldnry',import.meta.env.VITE_CLOUDINARY_ROUTE);
 
 
 const axiosApi = axios.create({
