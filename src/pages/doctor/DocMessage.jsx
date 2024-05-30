@@ -6,6 +6,8 @@ import Nav from '../../components/doctor/docNav'
 import '../user/message/Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send, storeMedia, uploadMedia } from '../../api/conversationApi'
+import toast from 'react-toastify'
+
 
 import { io } from "socket.io-client"
 import data from '@emoji-mart/data'
@@ -190,8 +192,7 @@ const DocMessage = () => {
                 console.log('multer upload result--', uploadToMulter);
 
                 if(uploadToMulter.message ==='Network Error' || uploadToMulter === undefined){
-                    console.log('something went wrong');
-                    setMediaError('something went wrong')
+                    toast.error('Network Error!please try after sometime')
                     setShowSelectedMedia('')
                     setLoading(false)
                     return;
