@@ -42,10 +42,12 @@ const EditUserPro = () => {
 
         const imageUpload = async (image) => {
             const result = await profileImageUpload(image)
+            console.log('pro img upld result',result);
             if (result) {
                 setUploading('Uploaded')
                 toast.success('Profile image updated')
                 dispatch(loginSuccess(result))
+                setProfileImage(null)
             }
         }
 
