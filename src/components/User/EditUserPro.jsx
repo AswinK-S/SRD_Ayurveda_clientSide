@@ -49,7 +49,7 @@ const EditUserPro = () => {
                 dispatch(loginSuccess(result))
                 setProfileImage(null)
             }
-            if(result =='Network Error'){
+            if(result.message =='Network Error'){
                 toast.error('Something went wrong')
                 setUploading('')
                 return
