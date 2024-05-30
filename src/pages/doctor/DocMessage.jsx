@@ -188,6 +188,14 @@ const DocMessage = () => {
 
                
                 console.log('multer upload result--', uploadToMulter);
+
+                if(uploadToMulter ===undefined){
+                    setMediaError('something went wrong')
+                    setShowSelectedMedia(null)
+                    setLoading(false)
+                    return;
+                }
+
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
                     setLoading(false)
