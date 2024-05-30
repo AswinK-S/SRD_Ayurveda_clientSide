@@ -117,6 +117,7 @@ export const profileImageUpload =async(image)=>{
         return result?.data
     } catch (error) {
         console.log(error.message);
+        return error
     }
 }
 
