@@ -67,7 +67,7 @@ export const uploadMedia = async(formData)=>{
         return result.data
     } catch (error) {
         console.log('media chat error--',error);
-        return error
+        return error.response
     }
 }
 

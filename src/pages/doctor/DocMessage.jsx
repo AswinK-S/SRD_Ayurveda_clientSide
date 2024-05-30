@@ -186,14 +186,7 @@ const DocMessage = () => {
                 formData.append('medias', file)
                 const uploadToMulter = await uploadMedia(formData)
 
-                if(uploadToMulter === undefined){
-                    setMediaError('something went wrong!')
-                    setLoading(false)
-                    setShowSendButton(false)
-                    setShowSelectedMedia(null)
-
-                }
-
+               
                 console.log('multer upload result--', uploadToMulter);
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
