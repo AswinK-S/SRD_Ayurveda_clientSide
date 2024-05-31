@@ -6,7 +6,7 @@ import Nav from '../../components/doctor/docNav'
 import '../user/message/Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send, storeMedia, uploadMedia } from '../../api/conversationApi'
-import toast from 'react-toastify'
+import { toast } from 'react-toastify';
 
 
 import { io } from "socket.io-client"

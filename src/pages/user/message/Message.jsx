@@ -7,7 +7,7 @@ import Nav from '../../../components/navbar/nav'
 import './Message.css'
 import { useEffect, useRef, useState } from 'react'
 import { getConversation, getMessages, send, storeMedia, uploadMedia } from '../../../api/conversationApi'
-import toast from 'react-toastify'
+import { toast } from 'react-toastify';
 
 import { io } from 'socket.io-client'
 import data from '@emoji-mart/data'
