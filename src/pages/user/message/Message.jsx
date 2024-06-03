@@ -19,6 +19,8 @@ import addIcon from '../../../../public/app.png'
 import imgIcon from '../../../../public/image.png'
 import videoIcon from '../../../../public/video.png'
 import docsIcon from '../../../../public/google-docs.png'
+import audioIcon from '../../../../public/mic.png'
+import volume from '../../../../public/volume.png'
 
 import ReactLoading from 'react-loading'
 
@@ -219,15 +221,26 @@ const Message = () => {
                     setLoading(false)
                     return;
                 }
+
+                if(uploadToMulter?.response?.data?.error ==='File size exceeds the limit'){
+                    console.log('exeeds the limit');
+                    setMediaError('File size exceeds the limit')
+                    setLoading(false)
+                    return;
+
+                }
                 
                 if (uploadToMulter?.data?.error === 'File size exceeds the limit.') {
                     setMediaError('File size exceeds the limit')
                     setLoading(false)
+                    return;
+
 
                 }
                 else if (uploadToMulter?.data?.error === 'No media file found.') {
                     setMediaError('No media file found.')
                     setLoading(false)
+                    return;
 
                 }
 
@@ -298,9 +311,10 @@ const Message = () => {
             const fileType = file.type;
             const isImage = fileType.startsWith('image/');
             const isVideo = fileType.startsWith('video/');
+            const isAudio = fileType.startsWith('audio/')
             const isDocument = fileType === 'application/pdf' || fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'text/plain';
 
-            setShowSelectedMedia({ url: mediaLink, type: fileType, isImage, isVideo, isDocument });
+            setShowSelectedMedia({ url: mediaLink, type: fileType, isImage, isVideo, isDocument,isAudio });
             setFile(file);
             setShowSendButton(true);
             setShowPopUp(false);
@@ -394,6 +408,17 @@ const Message = () => {
                                                         style={{ display: 'none' }}
                                                         onChange={handleFileSelection}
                                                     />
+                                                     <label className="cursor-pointer flex items-center" htmlFor="audio-input">
+                                                        <img src={audioIcon} alt="audo Icon" className="w-6 h-6 mr-2" />
+                                                        Audio
+                                                    </label>
+                                                    <input
+                                                        type="file"
+                                                        id="audio-input"
+                                                        accept="audio/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileSelection}
+                                                    />
                                                 </div>
                                             )}
                                             {showSelectedMedia && (
@@ -434,7 +459,22 @@ const Message = () => {
                                                                 <span className='p-5'>  {showSelectedMedia.url.split('/').pop()}</span>
 
                                                             </div>
-                                                        ) : (null)
+                                                        ) : showSelectedMedia.isAudio ?(
+                                                            <div className='relative bg-gradient-to-r from-lime-100 flex h-full items-center
+                                                        via-lime-50 to-lime-100 py-2 shadow-sm shadow-black rounded'>
+                                                                {loading ? (
+                                                                    <div className='flex justify-center h-full bg-black bg-opacity-50 w-full items-center p-2 absolute '>
+                                                                        <ReactLoading type="bars" color="white" height={50} width={25} />
+                                                                    </div>
+                                                                ) : (null)
+                                                                }
+                                                                <span className='p-5 flex gap-2'>  {showSelectedMedia.url.split('/').pop()}
+                                                                <img src={volume} className='w-7' alt="" />
+
+                                                                </span>
+
+                                                            </div>
+                                                        ):(null)
 
                                                     }
                                                     {mediaError ?

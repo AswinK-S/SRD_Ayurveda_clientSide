@@ -10,9 +10,13 @@ const Messages = ({ message, own }) => {
 
         // Check the media type using file extension or MIME type
         const fileExtension = message.media.split('.').pop().toLowerCase();
+        console.log('fl extn',fileExtension);
+
         const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExtension);
         const isVideo = ['mp4', 'mov', 'avi', 'mkv'].includes(fileExtension);
         const isDocument = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip'].includes(fileExtension);
+        const isAudio = ['mp3', 'wav', 'ogg', 'flac','aiff','alac'].includes(fileExtension)
+
 
         if (isImage) {
             // Render image component
@@ -36,6 +40,14 @@ const Messages = ({ message, own }) => {
                     <span className='p-2'>{message.media.split('/').pop()}</span>
                     <img className="w-10" src={dwnld} alt="" />
                 </a>
+            );
+        }else if(isAudio){
+            return (
+                    <audio controls className={own ? 'messageMedia own rounded-md ' : 'messageMedia'}>
+                        <source src={message?.media} type={`audio/${fileExtension}`} />
+                        Your browser does not support the audio element.
+                    </audio>
+
             );
         } else {
             // Render default component for unsupported media types
