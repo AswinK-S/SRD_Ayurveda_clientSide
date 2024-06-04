@@ -12,7 +12,8 @@ const doctorRoute ={
     updatePassword:'doctor/updatePassword',
     getPatients:'doctor/getDocPatients',
     getDateForOverview:'doctor/overview',
-    confirmConsultation:'doctor/confirmC'
+    confirmConsultation:'doctor/confirmC',
+    addPrescription:'doctor/addPres'
 }
 
 export default doctorRoute

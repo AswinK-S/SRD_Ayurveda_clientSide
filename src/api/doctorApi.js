@@ -109,6 +109,17 @@ export const getPatients = async(docId,page,limit)=>{
     }
 }
 
+//add prescription
+export const addPrescription =async(prescription,docId,userEmail)=>{
+    try {
+        console.log('pr--',prescription,'dId--',docId,'email--',userEmail);
+        const result = await axiosApi.post(doctorRoute.addPrescription,{prescription,docId,userEmail})
+        console.log('result--',result);
+        return result
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 //get data for overview
 export const getDataForOverview = async(id)=>{

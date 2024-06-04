@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { FaSearch } from "react-icons/fa";
 
 const Patients = () => {
-    const tableHeadings = [' Name', 'Treatment', 'Sub-Trt', 'Checkup-Date', 'Status','Id'];
-    const dataKeys = ['userName', 'treatmentName', 'subTrtmntName', 'consultingDate', 'status','bookingId'];
+    const tableHeadings = [' Name', 'Treatment', 'Sub-Trt', 'Checkup-Date', 'Status','Prescription','Id'];
+    const dataKeys = ['userName', 'treatmentName', 'subTrtmntName', 'consultingDate', 'status','btn','bookingId'];
     const text = "PATIENTS"
 
     const [currentPage, setCurrentPage] = useState(1)

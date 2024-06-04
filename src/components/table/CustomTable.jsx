@@ -1,14 +1,17 @@
 
 import PropTypes from 'prop-types';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { confirmConsultation } from '../../api/doctorApi';
+import PrescriptionModal from '../doctor/PrescriptionModal';
 
-const CustomTable = ({ data, tableHeadings, dataKeys, doctor,setData }) => {
+const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState('')
-  const [id,setId] = useState('')
- 
-  const handleModalOpen = (status,bId) => {
+  const [id, setId] = useState('')
+  const [pModal,setPmodal] =useState(false)
+  const [uEmail,setUemail] = useState('')
+
+  const handleModalOpen = (status, bId) => {
     let content = '';
     switch (status) {
       case 'Pending':
@@ -28,16 +31,20 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor,setData }) => {
     setModalOpen(true);
   };
 
- 
+const handlePmodal =(email)=>{
+  setPmodal(true)
+  setUemail(email)
+}
+
 
   const handleConsultaion = async () => {
     const doc = JSON.parse(doctor)
     const docId = doc?._id
     try {
-      const result = await confirmConsultation(docId,id)
-      if(result){
-        const updatedData = data.map((item)=>{
-          if(item?.bookingId === id){
+      const result = await confirmConsultation(docId, id)
+      if (result) {
+        const updatedData = data.map((item) => {
+          if (item?.bookingId === id) {
             return { ...item, status: result?.status }
           }
           return item;
@@ -74,28 +81,35 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor,setData }) => {
                       <button
                         className={`px-3 py-1 rounded ${item[key] === 'Consulted' ? 'bg-green-500' : item[key] === 'Pending' ? 'bg-orange-500' : 'bg-red-500'
                           } text-white`}
-                        onClick={() => handleModalOpen(item[key],item['bookingId'])}
+                        onClick={() => handleModalOpen(item[key], item['bookingId'])}
                       >
                         {item[key]}
+                      </button>
+                    ):key ==='btn'?(
+                      <button className='px-3 py-1 rounded bg-blue-500 text-white' onClick={()=>handlePmodal(item?.email)}>
+                        Add Prescription
                       </button>
                     ) : (
                       item[key]
                     )}
                   </td>
+
                 ))}
               </tr>
+
             ))
-          ) : (
-            <tr>
-              <td colSpan={tableHeadings.length}>
-                <div className="flex flex-col items-center justify-center bg-white h-96 ">
-                  <img className='h-full' src="/noData.jpg" alt="" />
-                </div>
-              </td>
-            </tr>
+          ) :(
+          <tr>
+            <td colSpan={tableHeadings.length}>
+              <div className="flex flex-col items-center justify-center bg-white h-96 ">
+                <img className='h-full' src="/noData.jpg" alt="" />
+              </div>
+            </td>
+          </tr>
           )}
         </tbody>
       </table>
+
       {
         modalOpen && (
           <div className="fixed  inset-0 z-10 flex items-center justify-center bg-gray-800 bg-opacity-50">
@@ -105,28 +119,31 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor,setData }) => {
               </div>
               <p className='text-gray-700'>{modalContent}</p>
 
-              {modalContent ==='Do you want to complete consultation?'?(<div className="mt-4 flex justify-center">
+              {modalContent === 'Do you want to complete consultation?' ? (<div className="mt-4 flex justify-center">
                 <button className="mr-2 px-4 py-2 bg-green-500 text-white rounded-md" onClick={() => handleConsultaion()}>
                   Confirm
                 </button>
                 <button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setModalOpen(false)}>
                   Cancel
                 </button>
-              </div>): modalContent ==='Consulted'?(
+              </div>) : modalContent === 'Consulted' ? (
                 <button className=" mt-2 px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setModalOpen(false)}>
-                Cancel
-              </button>
-              ): modalContent ==="Booking cancelled by the user." ? (
+                  Cancel
+                </button>
+              ) : modalContent === "Booking cancelled by the user." ? (
                 <button className=" mt-2 px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => setModalOpen(false)}>
-                Cancel
-              </button>
-              ):<></>}
-              
+                  Cancel
+                </button>
+              ) : <></>}
+
             </div>
           </div>
 
         )
       }
+
+    {pModal&&<PrescriptionModal setPmodal={setPmodal} uEmail={uEmail}/>}
+
     </div>
   );
 };
@@ -136,7 +153,7 @@ CustomTable.propTypes = {
   tableHeadings: PropTypes.array.isRequired,
   dataKeys: PropTypes.array.isRequired,
   doctor: PropTypes.string.isRequired,
-  setData:PropTypes.array.isRequired
+  setData: PropTypes.array.isRequired
 };
 
 export default CustomTable;
