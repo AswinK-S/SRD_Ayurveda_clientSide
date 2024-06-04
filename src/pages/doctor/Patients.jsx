@@ -22,7 +22,6 @@ const Patients = () => {
         try {
             const doc = JSON.parse(doctor)
             const result = await getPatients(doc?._id, currentPage, limit)
-            console.log('patient---', result);
             setData(result)
         } catch (error) {
             console.log(error.message);

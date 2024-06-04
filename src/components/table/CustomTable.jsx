@@ -10,6 +10,7 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData }) => {
   const [id, setId] = useState('')
   const [pModal,setPmodal] =useState(false)
   const [uEmail,setUemail] = useState('')
+  const [uStatus,uSetStatus] = useState('')
 
   const handleModalOpen = (status, bId) => {
     let content = '';
@@ -31,9 +32,10 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData }) => {
     setModalOpen(true);
   };
 
-const handlePmodal =(email)=>{
+const handlePmodal =(email,status)=>{
   setPmodal(true)
   setUemail(email)
+  uSetStatus(status)
 }
 
 
@@ -86,7 +88,7 @@ const handlePmodal =(email)=>{
                         {item[key]}
                       </button>
                     ):key ==='btn'?(
-                      <button className='px-3 py-1 rounded bg-blue-500 text-white' onClick={()=>handlePmodal(item?.email)}>
+                      <button className='px-3 py-1 rounded bg-blue-500 text-white' onClick={()=>handlePmodal(item?.email,item?.status)}>
                         Add Prescription
                       </button>
                     ) : (
@@ -142,7 +144,7 @@ const handlePmodal =(email)=>{
         )
       }
 
-    {pModal&&<PrescriptionModal setPmodal={setPmodal} uEmail={uEmail}/>}
+    {pModal&&<PrescriptionModal setPmodal={setPmodal} uEmail={uEmail} uStatus={uStatus}/>}
 
     </div>
   );

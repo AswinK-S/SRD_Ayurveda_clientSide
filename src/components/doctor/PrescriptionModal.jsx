@@ -2,22 +2,50 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { addPrescription } from '../../api/doctorApi';
+import {toast} from 'react-toastify'
 
-const PrescriptionModal = ({ setPmodal,uEmail }) => {
+const PrescriptionModal = ({ setPmodal, uEmail, uStatus }) => {
 
-    const doctor = useSelector((state)=>state.doctor.doctor)
-    const [prescription,setPrescription] =useState()
+    const doctor = useSelector((state) => state.doctor.doctor)
+    const [prescription, setPrescription] = useState()
+    const [error, setError] = useState('')
 
-    const handleChange =(e)=>{
+    const handleChange = (e) => {
         setPrescription(e.target.value)
+        setError('');
+
     }
 
-    const handleSubmit=async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        setError('');
+        if(prescription){
+            const prescriptionTrimmed = prescription.trim();
+        if (prescriptionTrimmed === '' || prescriptionTrimmed.length < 5) {
+            setError('Please enter a valid prescription with at least 5 characters');
+            return;
+        }
+        }else{
+            setError('Please enter a valid prescription with at least 5 characters');
+            return;
+        }
+        
+
         try {
             const docId = JSON.parse(doctor)
-            if(prescription){
-                const result = await addPrescription(prescription,uEmail,docId?._id)
+
+            if (prescription) {
+                const result = await addPrescription(prescription, docId?._id, uEmail)
+                console.log('result', result);
+                if (result?.data?.message === 'Prescription added') {
+                    toast.success('Prescription added')
+                    setPmodal(false)
+                }
+
+                if(result?.data?.message ==='There is no Patient'){
+                    toast.error('There is no Patient')
+                    
+                }
             }
         } catch (error) {
             console.log(error.message);
@@ -33,9 +61,15 @@ const PrescriptionModal = ({ setPmodal,uEmail }) => {
 
                 <div className='w-full flex justify-center p-5'>
                     <textarea className='w-full' name="text" id=""
-                    onChange={handleChange}
+                        onChange={handleChange}
                     ></textarea>
                 </div>
+                {error && <span className='text-sm text-red-500'>{error}</span>}
+
+                {uStatus === 'Pending' || uStatus === 'Cancelled' ? (<span className='text-sm text-red-500'>
+                    Prescription can be added only for Patients who completed consultation</span>) : (null)}
+
+
                 <div className="text-center p-2 flex-auto justify-center">
                     <div className="p-3 mt-2 text-center space-x-4 md:block">
                         <button
@@ -45,13 +79,15 @@ const PrescriptionModal = ({ setPmodal,uEmail }) => {
                         >
                             Cancel
                         </button>
+                        {uStatus === 'Consulted' ? (
+                            <button className="mb-2 md:mb-0 bg-green-600 px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider 
+                            border text-white rounded-full hover:shadow-lg hover:bg-green-400"
+                                onClick={handleSubmit}
+                            >
+                                Add Prescription
+                            </button>
+                        ) : (null)}
 
-                        <button className="mb-2 md:mb-0 bg-green-600 px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider 
-                        border text-white rounded-full hover:shadow-lg hover:bg-green-400"
-                        onClick={handleSubmit}
-                        >
-                            Add Prescription
-                        </button>
                     </div>
                 </div>
             </div>
@@ -61,7 +97,8 @@ const PrescriptionModal = ({ setPmodal,uEmail }) => {
 
 PrescriptionModal.propTypes = {
     setPmodal: PropTypes.func.isRequired,
-    uEmail:PropTypes.string.isRequired
+    uEmail: PropTypes.string.isRequired,
+    uStatus: PropTypes.string.isRequired
 };
 
 export default PrescriptionModal;
