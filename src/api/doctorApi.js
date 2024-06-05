@@ -110,12 +110,13 @@ export const getPatients = async(docId,page,limit)=>{
 }
 
 //add prescription
-export const addPrescription =async(prescription,docId,userEmail)=>{
+export const addPrescription =async(prescription,docId,bookingId,userEmail)=>{
     try {
-        const result = await axiosApi.post(doctorRoute.addPrescription,{prescription,docId,userEmail})
+        console.log('sndimg');
+        const result = await axiosApi.post(doctorRoute.addPrescription,{prescription,docId,bookingId,userEmail})
         return result
     } catch (error) {
-        console.log(error.message)
+        console.log('dsfsd',error)
     }
 }
 

@@ -31,6 +31,9 @@ const Patients = () => {
     useEffect(() => {
         fetch()
     }, [currentPage])
+    const refreshData = () => {
+        fetch(); 
+    };
 
     const handleSearch = async (e) => {
         setSearchTerm(e.target.value)
@@ -76,7 +79,7 @@ const Patients = () => {
 
                     </div>
                     <CustomTable  data={filteredData} tableHeadings={tableHeadings} dataKeys={dataKeys} text={text} doctor={doctor} 
-                    setData={setData} />
+                    setData={setData} refreshData={refreshData} />
                     <div className="flex justify-center  m-4">
                         <button className="px-3 py-1 text-xs bg-blue-gray-100 rounded-md shadow-sm shadow-black" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
                             Prev

@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { confirmConsultation } from '../../api/doctorApi';
 import PrescriptionModal from '../doctor/PrescriptionModal';
 
-const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData }) => {
+const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData,refreshData }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState('')
   const [id, setId] = useState('')
   const [pModal,setPmodal] =useState(false)
   const [uEmail,setUemail] = useState('')
   const [uStatus,uSetStatus] = useState('')
+  const [prescrptn,setPrescrptn] =useState('')
 
   const handleModalOpen = (status, bId) => {
     let content = '';
@@ -32,12 +33,13 @@ const CustomTable = ({ data, tableHeadings, dataKeys, doctor, setData }) => {
     setModalOpen(true);
   };
 
-const handlePmodal =(email,status)=>{
+const handlePmodal =(email,status,prescription,bookingId)=>{
   setPmodal(true)
   setUemail(email)
   uSetStatus(status)
+  setPrescrptn(prescription)
+  setId(bookingId)
 }
-
 
   const handleConsultaion = async () => {
     const doc = JSON.parse(doctor)
@@ -88,7 +90,8 @@ const handlePmodal =(email,status)=>{
                         {item[key]}
                       </button>
                     ):key ==='btn'?(
-                      <button className='px-3 py-1 rounded bg-blue-500 text-white' onClick={()=>handlePmodal(item?.email,item?.status)}>
+                      <button className='px-3 py-1 rounded bg-blue-500 text-white' onClick={()=>handlePmodal(item?.email,item?.status,item?.prescription,item?.bookingId
+                      )}>
                         Add Prescription
                       </button>
                     ) : (
@@ -144,7 +147,7 @@ const handlePmodal =(email,status)=>{
         )
       }
 
-    {pModal&&<PrescriptionModal setPmodal={setPmodal} uEmail={uEmail} uStatus={uStatus}/>}
+    {pModal&&<PrescriptionModal setPmodal={setPmodal} uEmail={uEmail} uStatus={uStatus} prescrptn={prescrptn} id={id} refreshData={refreshData}/>}
 
     </div>
   );
@@ -155,7 +158,8 @@ CustomTable.propTypes = {
   tableHeadings: PropTypes.array.isRequired,
   dataKeys: PropTypes.array.isRequired,
   doctor: PropTypes.string.isRequired,
-  setData: PropTypes.array.isRequired
+  setData: PropTypes.array.isRequired,
+  refreshData:PropTypes.func.isRequired
 };
 
 export default CustomTable;

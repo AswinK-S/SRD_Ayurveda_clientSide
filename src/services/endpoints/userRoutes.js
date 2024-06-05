@@ -21,7 +21,8 @@ const userRoutes = {
     cancelBooking:'/user/canceBooking',
     changePassword:'/user/changePassword',
     uploadProfileImage:'/user/proImageUpload',
-    updateProfile:'/user/updateProfile'
+    updateProfile:'/user/updateProfile',
+    getPrescription:'/user/prescritpion'
 
 }
 

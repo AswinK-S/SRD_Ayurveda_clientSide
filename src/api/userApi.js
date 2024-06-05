@@ -220,3 +220,15 @@ export const cancelBooking =async(id,amount)=>{
         console.log(error.message);
     }
 }
+
+//get prescription pdf
+export const prescription =async(doctorName,treatmentName,subTreatmentName,consultationDate,userName,prescriptionId)=>{
+    try{
+        const data = {doctorName,treatmentName,subTreatmentName,consultationDate,userName,prescriptionId}
+        console.log('data---p',data);
+        const result = await axiosApi.get(`${userRoutes.getPrescription}`,{params:data})
+        
+    }catch(error){
+        console.log(error.message);
+    }
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImgComponent from "../../../components/imgCmpnt/ImgComponent";
 import Nav from "../../../components/navbar/nav";
 import { useSelector } from "react-redux";
-import { bookings, cancelBooking } from "../../../api/userApi";
+import { bookings, cancelBooking, prescription } from "../../../api/userApi";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from '../../../components/footer/footer'
 import PageNotFound from "../../../components/error/pageNotfound";
@@ -11,6 +11,7 @@ import 'ldrs/quantum'
 import { toast } from 'react-toastify';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import pdf from '../../../../public/pdf.png'
 
 
 const OnlineBooking = () => {
@@ -51,17 +52,20 @@ const OnlineBooking = () => {
         try {
             // Make an API call to fetch bookings data from backend
             const response = await bookings(user.email, pageNumber, pageSize);
-            if (pageNumber === 1) {
-                setBookingsData(response);
-            } else {
-                setBookingsData((prevData) => [...prevData, ...response]);
+            if(response){
+                if (pageNumber === 1) {
+                    setBookingsData(response);
+                } else {
+                    setBookingsData((prevData) => [...prevData, ...response]);
+                }
+    
+                if (response?.length < pageSize) {
+                    setHasMore(false);
+                } else {
+                    setHasMore(true);
+                }
             }
-
-            if (response?.length < pageSize) {
-                setHasMore(false);
-            } else {
-                setHasMore(true);
-            }
+           
         } catch (error) {
             console.log("Error fetching bookings:", error.message);
         } finally {
@@ -87,31 +91,34 @@ const OnlineBooking = () => {
         setSearchTerm(e.target.value)
     }
 
-
-    //search booking on the basis of doctor,treatment,status,subTreatment and filter on the amount
-    const filteredData = bookinsData?.filter((item) => {
-        const doctor = `${item.doctorName}`.toLowerCase()
-        const treatment = `${item.treatmentName}`.toLowerCase()
-        const status = `${item.status}`.toLowerCase()
-        const subTreatment = `${item.subTreatmentName}`.toLowerCase()
-        const searchItem = searchTerm.toLowerCase()
-
-        if (fiterValue) {
-            const [min, max] = fiterValue.split('-').map(Number);
-            const amount = Number(item.amount)
-
-            return amount >= min && amount <= max;
-        }
-
-        return (doctor.includes(searchItem) || treatment.includes(searchItem) || status.includes(searchItem)
-            || subTreatment.includes(searchItem))
-    })
-
     const handleFilterChange = (event) => {
         const selected = event.target.value;
         setfilterVallue(selected)
     };
 
+
+    //search booking on the basis of doctor,treatment,status,subTreatment and filter on the amount
+        const filteredData = bookinsData?.filter((item) => {
+            const doctor = `${item.doctorName}`.toLowerCase()
+            const treatment = `${item.treatmentName}`.toLowerCase()
+            const status = `${item.status}`.toLowerCase()
+            const subTreatment = `${item.subTreatmentName}`.toLowerCase()
+            const searchItem = searchTerm.toLowerCase()
+    
+            if (fiterValue) {
+                const [min, max] = fiterValue.split('-').map(Number);
+                const amount = Number(item.amount)
+    
+                return amount >= min && amount <= max;
+            }
+    
+            return (doctor.includes(searchItem) || treatment.includes(searchItem) || status.includes(searchItem)
+                || subTreatment.includes(searchItem))
+        })
+    
+        console.log('ddddatat---',filteredData);
+
+   
 
     function isWithin24Hours(consultationDate) {
         const currentDate = new Date();
@@ -132,6 +139,15 @@ const OnlineBooking = () => {
         }
     }
 
+    //get prescription
+    const getPrescription =async(doctorName,treatmentName,subTreatmentName,consultationDate,prescriptionId)=>{
+        try{
+
+            const result = await prescription(doctorName,treatmentName,subTreatmentName,consultationDate,user?.name,prescriptionId)
+        }catch(error){
+            console.log(error.message);
+        }
+    }
     return (
 
         <>
@@ -199,15 +215,15 @@ const OnlineBooking = () => {
                                         >
                                             <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                                 <div className="font-bold text-sm">Doctor Name : </div>
-                                                <h1 className="text-gray-700 text-base font-bold"> {booking.doctorName}</h1>
+                                                <h1 className="text-gray-700 text-base font-bold"> {booking?.doctorName}</h1>
                                             </div>
                                             <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                                 <div className="font-bold text-sm  ">Treatment :</div>
-                                                <p className="text-gray-700 text-base font-bold "> {booking.treatmentName}</p>
+                                                <p className="text-gray-700 text-base font-bold "> {booking?.treatmentName}</p>
                                             </div>
                                             <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                                 <div className="font-bold text-sm ">Sub-Treatment :</div>
-                                                <p className="text-gray-700 text-base font-bold">{booking.subTreatmentName}</p>
+                                                <p className="text-gray-700 text-base font-bold">{booking?.subTreatmentName}</p>
                                             </div>
                                             <div className="px-4  flex flex-row justify-center gap-2 items-center ">
                                                 <div className="font-bold text-sm ">Consulting Date:</div>
@@ -241,6 +257,20 @@ const OnlineBooking = () => {
                                                 <div className="font-bold text-sm ">Amount :</div>
                                                 <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
                                             </div>
+                                            {booking?.prescription !=='no prescription'?(
+                                                <div className="px-4  flex flex-row justify-center gap-2 items-center ">
+                                                <button className="font-medium text-sm bg-white p-3 rounded-md flex 
+                                                gap-2 justify-center hover:cursor-pointer hover:bg-blue-gray-50 "
+                                                onClick={()=>getPrescription(booking?.doctorName,
+                                                    booking?.treatmentName,booking?.subTreatmentName,
+                                                    booking?.consultationDate,booking?.prescription )}
+                                                >Prescription 
+                                                <img className="w-5" src={pdf} alt="" />
+                                                </button>
+                                                
+                                            </div>
+                                            ):(null)}
+                                            
 
                                             <div className="flex justify-center p-2">
                                                 <button

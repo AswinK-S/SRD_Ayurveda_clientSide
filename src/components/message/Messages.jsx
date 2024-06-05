@@ -10,7 +10,7 @@ const Messages = ({ message, own }) => {
 
         // Check the media type using file extension or MIME type
         const fileExtension = message.media.split('.').pop().toLowerCase();
-        console.log('fl extn',fileExtension);
+    
 
         const isImage = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExtension);
         const isVideo = ['mp4', 'mov', 'avi', 'mkv'].includes(fileExtension);
