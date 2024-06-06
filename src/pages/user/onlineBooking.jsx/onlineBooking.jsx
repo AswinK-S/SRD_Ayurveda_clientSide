@@ -18,7 +18,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.mjs',
     import.meta.url,
-  ).toString();
+).toString();
 
 
 const OnlineBooking = () => {
@@ -156,10 +156,10 @@ const OnlineBooking = () => {
     //get prescription
     const getPrescription = async (doctorName, treatmentName, subTreatmentName, consultationDate, prescriptionId) => {
         try {
-          const result = await prescription(doctorName, treatmentName, subTreatmentName, consultationDate, user?.name, prescriptionId);
-          const pdfBlob = new Blob([result], { type: 'application/pdf' });
-          const pdfUrl = URL.createObjectURL(pdfBlob);
-          const newWindow = window.open();
+            const result = await prescription(doctorName, treatmentName, subTreatmentName, consultationDate, user?.name, prescriptionId);
+            const pdfBlob = new Blob([result], { type: 'application/pdf' });
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            const newWindow = window.open();
             if (newWindow) {
                 newWindow.document.write(`
                     <html>
@@ -181,14 +181,14 @@ const OnlineBooking = () => {
                     </html>
                 `);
             }
-          setPdfUrl(pdfUrl);
-          setBookId(prescriptionId);
+            setPdfUrl(pdfUrl);
+            setBookId(prescriptionId);
         } catch (error) {
-          console.log(error.message);
+            console.log(error.message);
         }
-      }
+    }
 
-    
+
 
     return (
 
@@ -232,7 +232,7 @@ const OnlineBooking = () => {
 
             </div >
 
-           
+
 
             <div className="mb-4  p-3 flex flex-col   items-center ">
 
