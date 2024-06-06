@@ -58,7 +58,7 @@ export const send = async(conversationId,sender,text)=>{
 
 //upload media to cloudinary
 export const uploadMedia = async(formData)=>{
-    try {   
+    try {  
         const result = await axiosApi.post(messagesRoute.sendMedia,formData)
         return result.data
     } catch (error) {

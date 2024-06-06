@@ -186,10 +186,9 @@ const DocMessage = () => {
                 setLoading(true)
 
                 const formData = new FormData()
+                formData.append('medias', file)
                 const uploadToMulter = await uploadMedia(formData)
-
                
-
                 if(uploadToMulter.message ==='Network Error' || uploadToMulter === undefined){
                     toast.error('Network Error!please try after sometime')
                     setShowSelectedMedia('')
