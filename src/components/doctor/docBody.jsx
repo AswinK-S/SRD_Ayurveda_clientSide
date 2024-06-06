@@ -21,7 +21,6 @@ const DocBody =()=>{
         if(token){
             const decode = jwtDecode(token)
             if(decode.role ==="doctor"){
-                console.log('ionosdjknfksdf---',decode.role);
                 navigate('/doctor/overView')
                 return
             }
@@ -50,14 +49,12 @@ const DocBody =()=>{
             }
 
             if (response?.data.message==='doctor logged in') {
-                console.log('login success --doctor',response.data.doctor);
                  dispatch(docloginSuccess(response.data.doctor))
                 localStorage.setItem('doctorDetails',JSON.stringify(response.data.doctor))
                 localStorage.setItem('doctortoken',response.data.token)
                 navigate('/doctor/overView')
 
             } else {
-                console.log('invalid',response?.data?.message);
                 navigate('/doctor')
             }
         } catch (err) {

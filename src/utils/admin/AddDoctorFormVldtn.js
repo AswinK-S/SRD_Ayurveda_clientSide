@@ -5,10 +5,6 @@ export const formValidation = (formData) => {
     const mobRegex = /^\d{10}$/;
     const amountRegex = /^\d{3}$/
 
-    console.log(formData.treatment ," trtmnt ",);
-    console.log(formData.doctor_id ," id ",);
-    console.log(formData.subTreatment ," subtrtmnt ",);
-
 
     if (!formData.name) {
         errors.name = 'Name cannot be empty.';

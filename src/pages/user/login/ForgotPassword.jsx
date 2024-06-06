@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { submitOtp, verifyEmail } from "../../../api/userApi";
 import Footer from "../../../components/footer/footer";
 import Nav from "../../../components/navbar/nav";
-import {  useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from "react-redux";
 import { emailToChngePsswrd } from "../../../featuers/user/emailSlice";
 
@@ -15,8 +15,8 @@ const ForgotPassword = () => {
 
 
     const [emailError, setEmailError] = useState('')
-    const [otp,setOtp] =  useState('')
-    const [otpError,setOtpError] = useState('')
+    const [otp, setOtp] = useState('')
+    const [otpError, setOtpError] = useState('')
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
             }, 1000)
         }
 
-        if(timer === 0){
+        if (timer === 0) {
             setOtpField(false)
             setOtp('')
             setOtpError('')
@@ -57,7 +57,7 @@ const ForgotPassword = () => {
     const getOtp = async (e) => {
         e.preventDefault()
         try {
-            if (!email || email.trim() ==='') {
+            if (!email || email.trim() === '') {
                 setEmailError('Please enter a valid Email Address!')
                 return
             }
@@ -79,26 +79,25 @@ const ForgotPassword = () => {
     }
 
 
-    const handleChangeOtp=(e)=>{
+    const handleChangeOtp = (e) => {
         setOtp(e.target.value)
         setOtpError("")
 
     }
 
-    const handleSubmitOtp = async(e)=>{
+    const handleSubmitOtp = async (e) => {
         e.preventDefault()
         try {
 
-            if(otp.trim()==='' || !otp){
+            if (otp.trim() === '' || !otp) {
                 setOtpError('Otp field cannot be empty')
                 return
             }
-            console.log('otp---',otp);
-            const response = await submitOtp(email,otp)
-            if(response==='otp matched'){
+            const response = await submitOtp(email, otp)
+            if (response === 'otp matched') {
                 navigate('/newPassword')
             }
-            else if(response ==='otp not matched'){
+            else if (response === 'otp not matched') {
                 setOtpError('wrong otp')
                 return
             }
@@ -160,7 +159,7 @@ const ForgotPassword = () => {
                                             className="block w-full px-4 py-2 mt-2 bg-[white] border rounded-md "
                                         />
                                     </div>
-                                    {otpError&& <p className="text-sm text-red-700">{otpError}</p>}
+                                    {otpError && <p className="text-sm text-red-700">{otpError}</p>}
                                     {timer ? (<p className="mt-2 p-2 flex items-center justify-center text-sm text-red-700 border">{timer} seconds left</p>) : null}{/* Show the timer */}
                                 </>
 
@@ -173,15 +172,12 @@ const ForgotPassword = () => {
                                 Get Otp
                             </button>
 
-                            {/* <button onClick='' className="mb-2 md:mb-0 bg-[#CEB047]  px-5 py-2 text-sm shadow-sm shadow-black font-medium tracking-wider  text-white  hover:shadow-lg ">
-                                Verify Otp
-                            </button> */}
 
                         </div>
 
                         {otpField && timer ? (<div className="mt-6 bg-transparent flex justify-center">
 
-                            <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md " 
+                            <button className=" bg-[#CEB047] px-4 py-2 tracking-wide font-semibold     text-black border rounded-md "
                                 onClick={handleSubmitOtp}
                             >
                                 verify

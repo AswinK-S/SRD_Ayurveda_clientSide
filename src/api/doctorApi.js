@@ -112,7 +112,6 @@ export const getPatients = async(docId,page,limit)=>{
 //add prescription
 export const addPrescription =async(prescription,docId,bookingId,userEmail)=>{
     try {
-        console.log('sndimg');
         const result = await axiosApi.post(doctorRoute.addPrescription,{prescription,docId,bookingId,userEmail})
         return result
     } catch (error) {
@@ -134,7 +133,6 @@ export const getDataForOverview = async(id)=>{
 //confirm patient confirmation
 export const confirmConsultation = async (docId,bookingId)=>{
     try {
-        console.log('bbbbbid',bookingId);
         const result = await axiosApi.post(doctorRoute.confirmConsultation,{docId,bookingId})
         return result?.data
     } catch (error) {

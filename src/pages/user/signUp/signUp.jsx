@@ -34,7 +34,6 @@ const SignUp = () => {
         if (token) {
             const decode = jwtDecode(token)
             if (decode.role == "user") {
-                console.log('user role',decode);
                 navigate('/')
             } 
         } 
@@ -142,7 +141,6 @@ const SignUp = () => {
             newErrors.confirmPassword = 'Password and Confirm Password do not match';
         }
 
-        console.log('errors--', Object.keys(newErrors).length);
         if (Object.keys(newErrors).length > 0) {
             // Update errors state with new error messages
             setErrors(newErrors);
@@ -154,10 +152,8 @@ const SignUp = () => {
             if (showOtpInput) {
 
                 // Process OTP submission logic here
-                console.log('Submitted OTP:', otpValue);
 
                 if (!otpValue) {
-                    console.log('no otp--', otpValue);
                     setOtpError('enter otp')
                     return
                 }
@@ -165,7 +161,6 @@ const SignUp = () => {
                 setOtpError('')
                 if (otpValue) {
                     const res = await registerUser(otpValue, formData.email)
-                    console.log('res--->', res);
 
                     if (res === 'Wrong verification code') {
                         setOtpError('Wrong verification code')
@@ -177,10 +172,8 @@ const SignUp = () => {
                 }
 
             } else {
-                console.log('submiting', formData);
                 const registerData = formData
                 const response = await signup(registerData)
-                console.log('res--->', response);
 
                 if (response === 'Request failed with status code 400') {
                     setSubmissionError('already existing email')
@@ -188,7 +181,6 @@ const SignUp = () => {
                 }
 
                 if (response.status === 200) {
-                    console.log('user data send to back end');
                     setShowOtpInput(true);
                     setTimer(60);
                 }
@@ -201,9 +193,7 @@ const SignUp = () => {
     //resend otp
     const handleResendOtp = async () => {
         try {
-            console.log('rsnd otp clkd');
             const result = await resendOtp(formData)
-            console.log('result --in sgnUp', result);
             if (result) {
                 setResendOtpTimer(true)
                 setTimer(60);
@@ -225,21 +215,18 @@ const SignUp = () => {
 
             }
             const result = await googleAuth(userDetail)
-            console.log('rslt-->', result);
             if (result.message === 'user already exist in this email') {
                 setGsignUpError('user already exist in this email')
                 return
             }
             if (result.message === 'user registered') {
                 if (result?.token) {
-                    console.log('token', result.token);
                     const tokn = result.token;
                     localStorage.setItem('usertoken', tokn)
                     const decode = jwtDecode(tokn)
                     if (decode?.role === 'user') {
                         dispatch(loginSuccess(result.userId))
 
-                        console.log('role', decode.role);
                         navigate('/')
 
                     }
@@ -413,7 +400,6 @@ const SignUp = () => {
                             <GoogleLogin
                                 onSuccess={credentialResponse => {
                                     const decode = jwtDecode(credentialResponse?.credential);
-                                    console.log(decode, '---oath');
                                     sendDataToBackend(decode)
 
                                 }}

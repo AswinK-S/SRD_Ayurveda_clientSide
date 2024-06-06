@@ -6,9 +6,7 @@ import messagesRoute from "../services/endpoints/messageRoute";
 //get userDetails
 export const getUserData = async(userId)=>{
     try {
-        console.log('message  user id--',userId,);
         const result = await axiosApi.get(`${conversationRoute.getUser}/${userId}`)
-        console.log('msgnr data',result);
         return result.data
     } catch (error) {
         console.log(error.message);
@@ -31,7 +29,7 @@ export const getConversations = async(firstId,secondId)=>{
         const result = await axiosApi.get(`${conversationRoute.getConversations}/${firstId}/${secondId}`)
         return result.data;
     } catch (error) {
-      console.log('pppppp',error.message);  
+      console.log(error.message);  
     }
 }
 
@@ -43,7 +41,6 @@ export const getMessages = async (converSationId)=>{
         const result = await axiosApi.get(`${messagesRoute.getMessages}/${converSationId}`)
         return result?.data
     } catch (error) {
-        console.log(error.message);
         return error.message
     }
 }
@@ -65,7 +62,6 @@ export const uploadMedia = async(formData)=>{
         const result = await axiosApi.post(messagesRoute.sendMedia,formData)
         return result.data
     } catch (error) {
-        console.log('media chat error--',error);
         return error
     }
 }

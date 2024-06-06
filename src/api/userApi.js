@@ -225,9 +225,8 @@ export const cancelBooking =async(id,amount)=>{
 export const prescription =async(doctorName,treatmentName,subTreatmentName,consultationDate,userName,prescriptionId)=>{
     try{
         const data = {doctorName,treatmentName,subTreatmentName,consultationDate,userName,prescriptionId}
-        console.log('data---p',data);
-        const result = await axiosApi.get(`${userRoutes.getPrescription}`,{params:data})
-        
+        const result = await axiosApi.get(`${userRoutes.getPrescription}`,{params:data,responseType: 'arraybuffer'})
+        return result.data
     }catch(error){
         console.log(error.message);
     }

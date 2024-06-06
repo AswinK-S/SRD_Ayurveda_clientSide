@@ -35,7 +35,6 @@ const ChngePsswrd = () => {
                 }
                 setErrorMessage('');
                 const result = await updatePassword(newPassword,decode.id)
-                console.log('result',result);
                 if(result.message==='success'){
                     localStorage.removeItem('doctorDetails')
                     localStorage.removeItem( 'doctortoken') 

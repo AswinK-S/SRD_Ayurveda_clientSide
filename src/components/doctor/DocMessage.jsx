@@ -5,7 +5,6 @@ import dwnld from '../../../public/download.png'
 
 const DocMessage = ({ message, own }) => {
 
-    // console.log('msg in docmsg --',message);
     const getMediaComponent = () => {
         
         if (!message?.media) return null;

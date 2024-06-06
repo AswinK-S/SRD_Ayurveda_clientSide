@@ -24,7 +24,6 @@ const AdmnNav = () => {
       if (decode.role === 'admin') {
         const adminDetails = localStorage.getItem('adminDetails')
         dispatch(loginSuccess(adminDetails))
-        console.log('admn--', admin);
         setTimeout(() => {
           setLoading(false)
 

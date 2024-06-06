@@ -129,7 +129,6 @@ const BookTrtmnt = () => {
 
 
     const modalConfirmation = (count) => {
-        console.log('user---',userId,'count--->',count);
 
         if(count<1){
             setSlotError('no slots available')

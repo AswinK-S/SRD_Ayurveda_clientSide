@@ -9,11 +9,9 @@ const DocConversation = ({ conversation, currentUser }) => {
   const [messenger, setMessenger] = useState(null)
   useEffect(() => {
     const messengerId = conversation?.members.find((m) => m !== currentUser?._id)
-    // console.log('msngr Id -->', messengerId);
     const getMessenger = async () => {
       try {
         const result = await getUserData(messengerId)
-        console.log('msngr dtls-->', result);
         setMessenger(result)
       } catch (error) {
         console.log(error.message);

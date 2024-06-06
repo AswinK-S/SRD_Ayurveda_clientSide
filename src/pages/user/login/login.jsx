@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { loginSuccess } from "../../../featuers/user/userSlice";
 import { useDispatch } from "react-redux";
-// import { GoogleLogin } from "@react-oauth/google";
 
 
 const Login = () => {
@@ -25,7 +24,6 @@ const Login = () => {
         if (token) {
             const decode = jwtDecode(token)
             if (decode.role == "user") {
-                console.log('user role',decode);
                 navigate('/')
             } else {
                 navigate('/login')
@@ -149,15 +147,7 @@ const Login = () => {
                             <button className=" bg-white  px-5 py-2 tracking-wide font-semibold     text-black border border-gray-400 rounded-md  ">
                                 Login
                             </button>
-                            {/* <GoogleLogin  
-                                onSuccess={credentialResponse => {
-                                    const decode = jwtDecode(credentialResponse?.credential);
-                                    console.log(decode,'---oath');
-                                }}
-                                onError={() => {
-                                    console.log('Login Failed');
-                                }}
-                            /> */}
+                           
                         </div>
                         <div className="flex justify-center p-2">
                             {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
@@ -174,9 +164,6 @@ const Login = () => {
                     </p>
 
                     <p className=" text-sm bg-transparent font-normal text-center text-gray-700">
-                        {/* {" "}
-                        Forgot Password?{" "} */}
-
                         <Link className="text-light-blue-900" to='/forgotPassword'> Forgot Password?  </Link>
                     </p>
                 </div>

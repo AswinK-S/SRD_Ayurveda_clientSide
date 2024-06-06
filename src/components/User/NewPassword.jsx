@@ -29,9 +29,7 @@ const NewPassword = () => {
                 return;
             }
             setErrorMessage('');
-            console.log('iiiiiiii----->',email);
             const result = await updatePassword(newPassword,email)
-            console.log('result', result);
             if(result ==='updated'){
                 dispatch(removeEmail())
                 navigate('/login')

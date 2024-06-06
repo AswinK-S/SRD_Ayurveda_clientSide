@@ -29,7 +29,6 @@ export function DoctorTable() {
   //get the users when the page is loaded
   const getDoctors = async () => {
     const res = await doctors()
-    console.log('res for table--', res.data);
     setDoctor(res.data)
     getPaginationData()
   }
@@ -41,8 +40,7 @@ export function DoctorTable() {
   const handleStatus = async () => {
     // console.log('usrSts id', id);
     const  result = await doctorStatus(editId)
-    console.log('rrrr', result);
-    setShowModal(false)
+    if(result)setShowModal(false)
   }
 
   //block modal
@@ -55,7 +53,6 @@ export function DoctorTable() {
   const handleVerify = async () => {
     try {
       const result = await verifyDoctor(vefifyId)
-      console.log('vefify result---', result);
 
       if (result.data.isVerified) {
         setVerifyModal(false)
@@ -74,11 +71,9 @@ export function DoctorTable() {
 
   //vefify modal
   const verifyModalConfirmation = (id, document) => {
-    console.log('verfy modal id', id);
 
     setVerifyModal(true)
     setVerifyId(id)
-    console.log('doc-->', document);
     setShowDoc(document)
 
 

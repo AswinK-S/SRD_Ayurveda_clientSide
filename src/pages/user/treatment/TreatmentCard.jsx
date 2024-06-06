@@ -64,9 +64,6 @@ const TreatmentCard = () => {
   })
 
 
-  console.log('treatment data-->', treatmentData);
-  console.log('filteredTreatments data-->', filteredTreatments);
-
   return (
     <>
 

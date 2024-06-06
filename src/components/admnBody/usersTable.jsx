@@ -32,7 +32,6 @@ export function UserTable() {
     setLoading(true);
     try {
       const res = await users(currentPage)
-      console.log('res for table--', res);
       setUsersData(res?.users);
       setTotalUsers(res?.totalUsers);
       setTotalPages(Math.ceil(res?.totalUsers / pageSize))
@@ -64,13 +63,12 @@ export function UserTable() {
   };
 
   const handleStatus = async () => {
+    
     const result = await userStatus(editId)
-    console.log('rrrr', result);
-    setShowModal(false)
+    if(result) setShowModal(false)
   }
 
   const modalConfirmation = (id) => {
-    console.log(id)
     setShowModal(true)
     setEditId(id)
   }
@@ -94,8 +92,7 @@ export function UserTable() {
     )
   })
 
-console.log('usersData--',usersData);  
-console.log('filtered Users',filteredusers);
+
 
 
   return (

@@ -34,7 +34,6 @@ const TreatmentTable = () => {
     const getTreatments = async () => {
       try {
         const res = await treatments();
-        // console.log('treatment list for table --', res.data);
         setTreatmentData(res.data);
         paginationData()
       } catch (error) {
@@ -69,7 +68,6 @@ const TreatmentTable = () => {
 
   // subTreatment edit status modal confirmation 
   const modalConfirmation = async (editId) => {
-    // console.log('id', editId);
     setId(editId)
     setShowModal(true)
   }
@@ -82,7 +80,6 @@ const TreatmentTable = () => {
 
   //subTreatment edit modal
   const editTrtmntModal = async (trtmntId) => {
-    // console.log('trtmnt id :',trtmntId);
     setTrtmntModal(true)
     setEditTrtmntId(trtmntId)
   }

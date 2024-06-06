@@ -109,7 +109,6 @@ const DocMessage = () => {
             try {
                 if (currentUser) {
                     const result = await getConversation(currentUser?._id)
-                    // console.log('conversatin--',result);
                     setConverstion(result)
                 } else {
                     console.log('no user');
@@ -187,11 +186,9 @@ const DocMessage = () => {
                 setLoading(true)
 
                 const formData = new FormData()
-                formData.append('medias', file)
                 const uploadToMulter = await uploadMedia(formData)
 
                
-                console.log('multer upload result--', uploadToMulter);
 
                 if(uploadToMulter.message ==='Network Error' || uploadToMulter === undefined){
                     toast.error('Network Error!please try after sometime')
@@ -201,7 +198,6 @@ const DocMessage = () => {
                 }
 
                 if(uploadToMulter?.response?.data?.error ==='File size exceeds the limit'){
-                    console.log('exeeds the limit');
                     setMediaError('File size exceeds the limit')
                     setLoading(false)
                 }

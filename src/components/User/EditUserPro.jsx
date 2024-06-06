@@ -42,17 +42,14 @@ const EditUserPro = () => {
 
         const imageUpload = async (image) => {
             const result = await profileImageUpload(image)
-            console.log('pro img upld result',result);
 
             if(result.message =='Network Error'){
-                console.log('nnnnnn');
                 toast.error('Something went wrong')
                 setUploading('')
                 return
             }
 
             if (result) {
-                console.log('rrrrrr');
                 setUploading('Uploaded')
                 toast.success('Profile image updated')
                 dispatch(loginSuccess(result))

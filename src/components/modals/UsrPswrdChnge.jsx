@@ -38,12 +38,10 @@ const UsrPswrdChnge = ({ setShowModal }) => {
 
             const result = await changePassword(user?._id, newPassword)
             if (result) {
-                console.log('result----', result);
                 toast.success("Successfully changed the password!");
                 setShowModal(false)
             } else {
                 toast.error('Something went Wrong')
-                // setShowModal(false)
             }
         } catch (error) {
             console.log(error.message);

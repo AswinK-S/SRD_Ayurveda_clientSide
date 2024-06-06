@@ -32,7 +32,6 @@ const DocAddSlot = () => {
     //slot submition
     const handleSubmit = async () =>{
 
-        console.log('value-->', value,"slctd-->",selectedShift);
         if (!value) {
             setDateError('Please select a date')
             return
@@ -50,12 +49,9 @@ const DocAddSlot = () => {
                 if (decode.role === 'doctor') {
                 const id = decode.id
                 const selectedDate = `${value.getFullYear()}-${(value.getMonth() + 1).toString().padStart(2, '0')}-${value.getDate().toString().padStart(2, '0')}`;
-                console.log('slctd dte --',selectedDate)
 
                     const slotInfo ={selectedShift,selectedDate,id}
-                    console.log('slotInfo',slotInfo);
                     const result = await createSlot(slotInfo)
-                    console.log('rslt --',result);
 
                     if(result.data.message ==="slot created"){
                         toast.success("slot created")

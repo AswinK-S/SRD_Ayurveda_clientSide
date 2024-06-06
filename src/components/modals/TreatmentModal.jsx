@@ -10,7 +10,6 @@ const TreatmentModal = ({setTreatmentModal ,editTrtmntId}) => {
 
     const fetch=async(id)=>{
         const result = await treatment(id)
-        console.log('trt---->',result);
         setTreatment(result?.data?.name)
     }
 
@@ -32,9 +31,7 @@ const TreatmentModal = ({setTreatmentModal ,editTrtmntId}) => {
             }
 
             const result = await editTrtmntName(trtmnt,editTrtmntId)
-            console.log('rslt-->',result);
             if(result?.status ===201){
-                console.log('updated');
                 setTreatmentModal(false)
             }
         } catch (error) {

@@ -49,7 +49,6 @@ const DocChngePswrdMdl = ({ setPswrdModal, doctorDetails }) => {
 
     // get otp 
     const handleChange =(e)=>{
-        console.log('trg--',e.target.value);
         setOtp(e.target.value)
         setOtpError('')
     }
@@ -61,9 +60,7 @@ const DocChngePswrdMdl = ({ setPswrdModal, doctorDetails }) => {
             if(timer> 0 && otp){
 
                 const email = doctorDetails.email
-                console.log('sending data to bcknd',{otp , email});
                 const result = await verifyOtp(otp,email)
-                console.log('mdl-->',result);
                 if(result.message ==='otp not matched'){
                     setOtpError('wrong otp')
                     return

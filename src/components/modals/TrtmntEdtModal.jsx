@@ -19,11 +19,8 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
 
     useEffect(() => {
-        console.log('modal---------');
         const fetchData = async (editTrtmntId) => {
-            console.log('010101');
             const result = await treatment(editTrtmntId)
-            console.log('trtmnt rslt----', result.data);
             setTreatment(result.data)
         }
 
@@ -42,7 +39,6 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
     //subTreatment remove confirmation modal
     const modalConfirmation = async (trtmntId, subTrtmntName) => {
-        console.log('id ->', trtmntId, "  name ->", subTrtmntName);
         setShowModal(true)
         setId(trtmntId)
         setSubName(subTrtmntName)
@@ -85,8 +81,6 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
         if (sub_trtmnt.length + getTreatment.subTreatments.length >= 5) {
             setArr1(prevArr1 => new Set([...prevArr1, newSubTreatment]));
-            // setSub_trtmnt([...sub_trtmnt, '']);
-            console.log('arr1 ',arr1,'---sub trt',sub_trtmnt);
 
             setErrorMessage('Reached sub-treatments limit!');
             return;
@@ -105,15 +99,12 @@ export function TrtmntEdtModal({ setTrtmntModal, editTrtmntId, }) {
 
 const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('trt id',getTreatment._id);
     const newTreatmentData = {
         id: getTreatment._id,
         subTreatments: sub_trtmnt.map(subTreatment => ({ name: subTreatment })),
       }
-      console.log('ne trt dta',newTreatmentData);
 
    const result = await updateTreatment( newTreatmentData )
-   console.log('reslt-->5555',result);
    if(result.data.message ==='empty data is not allowed'){
     setErrorMessage('empty submission not allowded')
     return
@@ -123,15 +114,12 @@ const handleSubmit = async(e) => {
     return
    }
    if(result.data.message ==='cannot add more  than five!'){
-    console.log('more than five----');
     setErrorMessage('cannot add more  than five!')
     return
    }
    if(result.data.message ==='success'){
-   console.log('ssssss');
    toast.success('updated')
    setTrtmntModal(false)
-//    navigate('/admin/treatments')
    }
 
 
@@ -139,12 +127,9 @@ const handleSubmit = async(e) => {
 
 
     const handelRemove = async () => {
-        console.log('id 2222 ->', id, "  name 2222 ->", subName);
         const editData = { id, subName }
         const result = await removeSubTreatment(editData)
-        console.log('remove----', result);
         if (result?.status === 200) {
-            // navigate('/admin/treatments')
             setShowModal(false)
             setTrtmntModal(false)
             toast.success('Sub treatment removed')

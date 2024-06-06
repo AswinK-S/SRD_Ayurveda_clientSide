@@ -13,16 +13,31 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import pdf from '../../../../public/pdf.png'
 
+import { Document, Page, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+  ).toString();
+
 
 const OnlineBooking = () => {
     const userData = useSelector((state) => state.user.user);
-    const [user,setUser] = useState('')
+    const [user, setUser] = useState('')
     const [bookinsData, setBookingsData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [searchTerm, setSearchTerm] = useState('')
+
     const pageSize = 6;
+
+    //pdf
+    const [pdfUrl, setPdfUrl] = useState(null);
+    const [numPages, setNumPages] = useState(null);
+    const [bookId, setBookId] = useState('')
+
+
 
     const [fiterValue, setfilterVallue] = useState(null)
     const navigate = useNavigate()
@@ -30,20 +45,20 @@ const OnlineBooking = () => {
     useEffect(() => {
         const token = localStorage.getItem('usertoken')
         if (token) {
-            if(userData?.user?.isGoogle){
+            if (userData?.user?.isGoogle) {
                 setUser(userData?.user)
-            }else{
+            } else {
                 setUser(userData)
             }
             const decode = jwtDecode(token)
             if (decode.role !== "user") {
                 navigate('/login')
-            } 
-        } else{
+            }
+        } else {
             navigate('/login')
         }
-    }, 
-    [navigate,userData])
+    },
+        [navigate, userData])
 
 
 
@@ -52,20 +67,20 @@ const OnlineBooking = () => {
         try {
             // Make an API call to fetch bookings data from backend
             const response = await bookings(user.email, pageNumber, pageSize);
-            if(response){
+            if (response) {
                 if (pageNumber === 1) {
                     setBookingsData(response);
                 } else {
                     setBookingsData((prevData) => [...prevData, ...response]);
                 }
-    
+
                 if (response?.length < pageSize) {
                     setHasMore(false);
                 } else {
                     setHasMore(true);
                 }
             }
-           
+
         } catch (error) {
             console.log("Error fetching bookings:", error.message);
         } finally {
@@ -77,8 +92,8 @@ const OnlineBooking = () => {
 
 
     useEffect(() => {
-        if(user?.email){
-          fetchBookings(1);
+        if (user?.email) {
+            fetchBookings(1);
         }
     }, [user]);
 
@@ -98,27 +113,26 @@ const OnlineBooking = () => {
 
 
     //search booking on the basis of doctor,treatment,status,subTreatment and filter on the amount
-        const filteredData = bookinsData?.filter((item) => {
-            const doctor = `${item.doctorName}`.toLowerCase()
-            const treatment = `${item.treatmentName}`.toLowerCase()
-            const status = `${item.status}`.toLowerCase()
-            const subTreatment = `${item.subTreatmentName}`.toLowerCase()
-            const searchItem = searchTerm.toLowerCase()
-    
-            if (fiterValue) {
-                const [min, max] = fiterValue.split('-').map(Number);
-                const amount = Number(item.amount)
-    
-                return amount >= min && amount <= max;
-            }
-    
-            return (doctor.includes(searchItem) || treatment.includes(searchItem) || status.includes(searchItem)
-                || subTreatment.includes(searchItem))
-        })
-    
-        console.log('ddddatat---',filteredData);
+    const filteredData = bookinsData?.filter((item) => {
+        const doctor = `${item.doctorName}`.toLowerCase()
+        const treatment = `${item.treatmentName}`.toLowerCase()
+        const status = `${item.status}`.toLowerCase()
+        const subTreatment = `${item.subTreatmentName}`.toLowerCase()
+        const searchItem = searchTerm.toLowerCase()
 
-   
+        if (fiterValue) {
+            const [min, max] = fiterValue.split('-').map(Number);
+            const amount = Number(item.amount)
+
+            return amount >= min && amount <= max;
+        }
+
+        return (doctor.includes(searchItem) || treatment.includes(searchItem) || status.includes(searchItem)
+            || subTreatment.includes(searchItem))
+    })
+
+
+
 
     function isWithin24Hours(consultationDate) {
         const currentDate = new Date();
@@ -140,14 +154,42 @@ const OnlineBooking = () => {
     }
 
     //get prescription
-    const getPrescription =async(doctorName,treatmentName,subTreatmentName,consultationDate,prescriptionId)=>{
-        try{
-
-            const result = await prescription(doctorName,treatmentName,subTreatmentName,consultationDate,user?.name,prescriptionId)
-        }catch(error){
-            console.log(error.message);
+    const getPrescription = async (doctorName, treatmentName, subTreatmentName, consultationDate, prescriptionId) => {
+        try {
+          const result = await prescription(doctorName, treatmentName, subTreatmentName, consultationDate, user?.name, prescriptionId);
+          const pdfBlob = new Blob([result], { type: 'application/pdf' });
+          const pdfUrl = URL.createObjectURL(pdfBlob);
+          const newWindow = window.open();
+            if (newWindow) {
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Prescription PDF</title>
+                        </head>
+                        <body>
+                            <iframe src="${pdfUrl}" width="100%" height="100%"></iframe>
+                            <button onclick="downloadPDF()">Download PDF</button>
+                            <script>
+                                function downloadPDF() {
+                                    const link = document.createElement('a');
+                                    link.href = "${pdfUrl}";
+                                    link.download = "prescription_${prescriptionId}.pdf";
+                                    link.click();
+                                }
+                            </script>
+                        </body>
+                    </html>
+                `);
+            }
+          setPdfUrl(pdfUrl);
+          setBookId(prescriptionId);
+        } catch (error) {
+          console.log(error.message);
         }
-    }
+      }
+
+    
+
     return (
 
         <>
@@ -190,7 +232,10 @@ const OnlineBooking = () => {
 
             </div >
 
+           
+
             <div className="mb-4  p-3 flex flex-col   items-center ">
+
                 <div
                     id="parentScrollDiv"
                     className="w-1/2 p-4 bg-[#f4fbdb] rounded-md shadow-sm shadow-black h-[500px]
@@ -257,20 +302,20 @@ const OnlineBooking = () => {
                                                 <div className="font-bold text-sm ">Amount :</div>
                                                 <p className="text-gray-700 text-base font-bold">{booking.amount}</p>
                                             </div>
-                                            {booking?.prescription !=='no prescription'?(
+                                            {booking?.prescription !== 'no prescription' ? (
                                                 <div className="px-4  flex flex-row justify-center gap-2 items-center ">
-                                                <button className="font-medium text-sm bg-white p-3 rounded-md flex 
+                                                    <button className="font-medium text-sm bg-white p-3 rounded-md flex 
                                                 gap-2 justify-center hover:cursor-pointer hover:bg-blue-gray-50 "
-                                                onClick={()=>getPrescription(booking?.doctorName,
-                                                    booking?.treatmentName,booking?.subTreatmentName,
-                                                    booking?.consultationDate,booking?.prescription )}
-                                                >Prescription 
-                                                <img className="w-5" src={pdf} alt="" />
-                                                </button>
-                                                
-                                            </div>
-                                            ):(null)}
-                                            
+                                                        onClick={() => getPrescription(booking?.doctorName,
+                                                            booking?.treatmentName, booking?.subTreatmentName,
+                                                            booking?.consultationDate, booking?.prescription)}
+                                                    >Prescription
+                                                        <img className="w-5" src={pdf} alt="" />
+                                                    </button>
+
+                                                </div>
+                                            ) : (null)}
+
 
                                             <div className="flex justify-center p-2">
                                                 <button

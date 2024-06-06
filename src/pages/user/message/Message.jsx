@@ -213,7 +213,6 @@ const Message = () => {
                 formData.append('medias', file)
                 const uploadToMulter = await uploadMedia(formData)
 
-                console.log('multer upload result--', uploadToMulter);
 
                 if(uploadToMulter?.message ==='Network Error' || uploadToMulter === undefined){
                     toast.error('Network Error!please try after sometime')
@@ -223,7 +222,6 @@ const Message = () => {
                 }
 
                 if(uploadToMulter?.response?.data?.error ==='File size exceeds the limit.'){
-                    console.log('exeeds the limit');
                     setMediaError('File size exceeds the limit')
                     setLoading(false)
                     return;
@@ -279,7 +277,6 @@ const Message = () => {
                 })
 
                 const result = await send(conversationId, currentUser._id, text)
-                // console.log('rrrrsslt--->', result);
                 setMessages(prevMessages => [...prevMessages, result])
                 setText('')
                 setEmoji(null)
@@ -305,7 +302,6 @@ const Message = () => {
         if (files.length > 0) {
             const file = files[0];
             const mediaLink = URL.createObjectURL(file);
-            console.log('link', mediaLink);
 
             // Check the file type using the 'type' property
             const fileType = file.type;
@@ -333,9 +329,7 @@ const Message = () => {
                             <div className="chatMenuWrapper rounded-md overflow-y-scroll
                              bg-gradient-to-r from-lime-100 via-lime-50 to-lime-100 shadow-md shadow-black">
                                 <span className='chatlist'>Chat List</span>
-                                {/* <input placeholder='search' className='chatMenuInput' /> */}
                                 {doctors?.map((c) => (
-                                    // <div key={c?._id} onClick={() =>  setCurrentChat(c) }>
                                     <div key={c?._id} onClick={() => getCurrentChatId(c)}>
                                         <Conversation conversation={c} currentUser={currentUser} />
                                     </div>

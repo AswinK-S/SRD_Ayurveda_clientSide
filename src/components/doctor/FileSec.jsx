@@ -55,7 +55,6 @@ const FileSec = () => {
 
             }
         }else{
-            console.log('no token');
             navigate('/doctor')
         }
     }, [dispatch, setDoctorDetails, setProfileImage, setUploading, setFileUpload,navigate])
@@ -96,7 +95,6 @@ const FileSec = () => {
 
             if (token) {
                 const decode = jwtDecode(token)
-                console.log('token ', decode);
                 const id = decode.id
                 const formData = new FormData();
                 formData.append('image', fileUpload);
@@ -116,7 +114,6 @@ const FileSec = () => {
     //image uploading state change
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        console.log(file)
         if (file) {
             setProfileImage(file)
         } else {

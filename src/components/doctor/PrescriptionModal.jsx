@@ -52,7 +52,6 @@ const PrescriptionModal = ({ setPmodal, uEmail, uStatus ,id,prescrptn,refreshDat
             console.log(error.message);
         }
     }
-console.log('pr id-',prescrptn);
     return (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div className="bg-[#E7EE9D] p-6 rounded-md w-1/3 flex flex-col justify-center items-center">

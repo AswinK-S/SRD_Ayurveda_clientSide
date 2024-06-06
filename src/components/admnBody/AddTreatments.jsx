@@ -25,7 +25,6 @@ const AddTreatments = () => {
     } else {
       setErrorMessage('')
     }
-    console.log('nw subTrtmnts:----', newSubTreatments);
     newSubTreatments[index] = value;
     if (subTreatments.length <= 5) setSubTreatments(newSubTreatments);
 
@@ -33,15 +32,12 @@ const AddTreatments = () => {
 
   //limiting the length of subtreatments and prevent add empty fields
   const handleAddSubTreatment = () => {
-    console.log('sub trtmnts---------- :', subTreatments);
     if (subTreatments.length == 5) {
-      console.log('subT lngth----', subTreatments.length);
       setErrorMessage('SubTreatments limit is only five')
     }
 
     // show error message when we enter an empty treatment 
     const subtrtmnt = subTreatments.some((element) => element.trim() == '')
-    console.log('ssss---', subtrtmnt);
     if (subtrtmnt) setErrorMessage('fields should not be empty')
 
     if (treatmentName.trim() !== '' && subTreatments.every(subTreatment => subTreatment.trim() !== '') && subTreatments.length <= 5) {
@@ -60,11 +56,9 @@ const AddTreatments = () => {
         subTreatments: subTreatments.map(subTreatment => ({ name: subTreatment })),
       }
 
-      console.log('New Treatment Data:', newTreatmentData);
       const sendData = async (newTreatmentData) => {
         try {
           const res = await addTreatments(newTreatmentData)
-          console.log('data added--', res);
           if (res) {
             navigate('/admin/treatments')
           }

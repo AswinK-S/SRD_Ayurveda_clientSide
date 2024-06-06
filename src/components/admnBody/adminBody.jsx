@@ -18,11 +18,9 @@ const AdmnBody = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('admintoken')
-        console.log('admn nav tkn :',token);
         
         if (token) {
           const decode = jwtDecode(token)
-          console.log('admn token :', decode.role);
           if (decode.role === 'admin') {
             navigate('/admin/dashboard')
             return
@@ -39,7 +37,6 @@ const AdmnBody = () => {
             let loginData = { email, password }
             let response = await login(loginData)
             if (response?.status == 200) {
-                console.log('login success --admin',response);
                 localStorage.setItem('admintoken',response.data.token)
                 localStorage.setItem('adminDetails',JSON.stringify(response.data))
                 
