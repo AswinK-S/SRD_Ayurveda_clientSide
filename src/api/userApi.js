@@ -72,7 +72,7 @@ export const verifyEmail = async(email)=>{
     } catch (error) {
         if(error.response){
             console.log(error?.response);
-
+            return error?.response
         }
     }
 }

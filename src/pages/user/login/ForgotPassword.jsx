@@ -72,6 +72,10 @@ const ForgotPassword = () => {
                 setOtpField(true)
                 setTimer(60)
             }
+            if(result?.data?.message==='You are blocked by admin!'){
+                setEmailError('You are blocked by admin!')
+                return
+            }
 
         } catch (error) {
             console.log(error.message);

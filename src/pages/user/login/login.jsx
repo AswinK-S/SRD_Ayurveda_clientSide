@@ -69,6 +69,11 @@ const Login = () => {
                 return
             }
 
+            if(response ==='You are blocked by admin!'){
+                setError('You are blocked by admin!')
+                return
+            }
+
             if (response?.status == 200) {
                 dispatch(loginSuccess(response.data.user))
                 localStorage.setItem('usertoken', response.data.token)

@@ -19,9 +19,9 @@ const NewPassword = () => {
         e.preventDefault();
 
         try {
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
             if (!passwordRegex.test(newPassword)) {
-                setErrorMessage('Password must be at least 6 characters long, include at least one uppercase letter, one lowercase letter, and one number.');
+                setErrorMessage('Password must be at least 6 characters long, include at least one uppercase letter, one lowercase letter, one special symbol and one number.');
                 return;
             }
             if (newPassword !== confirmPassword) {
